@@ -31,18 +31,34 @@ Updating the Galaxy S25 Edge to **One UI 9.0 (Android 17)** often results in acu
 
 ## 🔧 What it does
 
-### Disabled Bloatware (35+ packages)
+### 🛑 "Zero Samsung Services" Mode (Complete Breakdown & Explanations)
 
-| Category | Packages | Reason |
+For a clean, Pixel/AOSP-style experience with **zero Samsung proprietary services**, read the dedicated guide:  
+👉 **[Full "Zero Samsung Services" Guide with Explanations](SAMSUNG_ZERO_SERVICES_GUIDE.md)**
+
+Every single disabled service is documented with:
+- **Factory role**
+- **What happens when disabled** (consequences, trade-offs, and gains)
+- **Recommended Google alternative** (Gboard, Google Messages, Google Calendar, Google Keep, Google Wallet, etc.)
+- **Keyboard Safety Notice**: *Install Gboard from the Play Store before disabling Samsung Keyboard to prevent getting locked out!*
+- **Critical Safety Rule**: *Never disable `com.samsung.android.lool` (Device Care) to avoid One UI 9 RescueParty bootloops.*
+
+### Disabled Bloatware & Samsung Services
+
+| Category | Packages | Reason & Consequence |
 |---|---|---|
-| **Bixby & AI** | `bixby.agent`, `bixby.wakeup`, `bixbyvision.framework`, `visionintelligence`, 13 offline language packs | Always-listening microphone and background indexing |
-| **Samsung Services** | `game.gametools`, `game.gos`, `smartsuggestions`, `rubin.app`, `bbc.bbcagent`, `app.reminder`, `app.routines`, `app.routineplus`, `forest`, `liveeffectservice` | Background polling, analytics, and wake locks |
-| **OTA Experience Push** | `app.updatecenter`, `scpm`, `statsd` | Pushes app download recommendations and telemetry after updates |
-| **Knox Telemetry** | `knox.attestation`, `knox.kpecore`, `knox.pushmanager`, `knox.containercore`, `knox.analytics.uploader` | Continuous hardware attestation ping loops |
-| **Ecosystem (Optional)** | `oneconnect`, `stplatform`, `budsunitemgr`, `spayfw` | SmartThings, Buds manager, and Samsung Pay (Google Wallet unaffected) |
-| **Edge Display (Optional)** | `cocktailbarservice` | Edge Panel tools (disable if edge swipe panel is unused) |
-| **Social / Carrier Bloat** | Facebook (`katana`, `orca`, `services`, `system`, `appmanager`) | Heavy background wakelocks and analytics |
-| **Microsoft** | Edge browser, Excel, Word, OneDrive sync | Background account sync and telemetry |
+| **Bixby & AI** | `bixby.agent`, `bixby.wakeup`, `bixbyvision.framework`, `visionintelligence`, 13 offline language packs | Always-listening microphone and background indexing removed; use Gemini/Assistant & Lens |
+| **Account & Store** | `osp.app.signin` (Samsung Account), `samsungapps` (Galaxy Store), `updatecenter` | No ads, no push recommendations; use Google Play Store |
+| **Stock Suite** | `messaging`, `calendar`, `app.reminder`, `app.notes`, `weather`, `voicenote` | Replaced by Google Messages (full RCS), Calendar, Keep, and Google Weather |
+| **Keyboard (Opt.)**| `com.samsung.android.honeyboard` | Disabled only after Gboard is installed (saves ~150MB RAM) |
+| **Samsung Services** | `game.gametools`, `game.gos`, `smartsuggestions`, `rubin.app`, `bbc.bbcagent`, `app.routines`, `app.routineplus`, `forest`, `liveeffectservice` | Background polling, analytics, and wake locks eliminated |
+| **Payments & Pass** | `spayfw` (Samsung Pay), `samsungpass` | No lock-in; Google Wallet & Google Password Manager 100% active |
+| **Ecosystem & Hub** | `oneconnect` (SmartThings), `stplatform`, `budsunitemgr`, `mcfds`, `sharelive` | Halts constant Bluetooth/Wi-Fi sniffing for smart appliances |
+| **Health** | `com.sec.android.app.shealth` | Stops Samsung step-counter; use Google Fit / Health Connect |
+| **Edge Display** | `cocktailbarservice` | Disables edge side tab if unused; curved display and gestures 100% intact |
+| **Knox Telemetry** | `knox.attestation`, `knox.kpecore`, `knox.pushmanager`, `knox.containercore`, `knox.analytics.uploader` | Continuous hardware attestation ping loops halted |
+| **Social / Carrier** | Facebook (`katana`, `orca`, `services`, `system`, `appmanager`) | Heavy background wakelocks and analytics removed |
+| **Microsoft** | Edge browser, Excel, Word, OneDrive sync | Unused office sync and telemetry removed |
 
 ### ⚙️ System Settings (One UI 9 Community Recommendations)
 

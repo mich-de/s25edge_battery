@@ -1,62 +1,90 @@
 @echo off
 REM ═══════════════════════════════════════════════════════════════════
-REM S25 EDGE BATTERY OPTIMIZER — Full Restoration Script v3.0
-REM Reverts all changes back to Samsung One UI 9 factory defaults.
+REM S25 EDGE BATTERY OPTIMIZER — RIPRISTINO COMPLETO v3.1
+REM Riabilita tutti i pacchetti Samsung e ripristina le impostazioni di serie.
 REM ═══════════════════════════════════════════════════════════════════
 
+setlocal enabledelayedexpansion
 set ADB="%LOCALAPPDATA%\Android\Sdk\platform-tools\adb.exe"
 if not exist %ADB% set ADB="%USERPROFILE%\AppData\Local\Android\Sdk\platform-tools\adb.exe"
 if not exist %ADB% set ADB=adb
 
-echo [%DATE% %TIME%] === S25 EDGE RESTORATION v3.0 ===
-echo Re-enabling all packages and restoring system defaults...
+echo ===================================================================
+echo   S25 EDGE — RIPRISTINO VALORI DI FABBRICA (One UI 9)
+echo ===================================================================
+echo.
+echo Controllo connessione dispositivo ADB...
+%ADB% devices
 echo.
 
-REM ── 1. RE-ENABLE SAMSUNG BLOATWARE ─────────────────────────────────
-echo [1/4] Re-enabling Samsung bloatware and services...
-%ADB% shell pm enable com.samsung.android.bixby.agent
-%ADB% shell pm enable com.samsung.android.bixby.wakeup
-%ADB% shell pm enable com.samsung.android.bixbyvision.framework
-%ADB% shell pm enable com.samsung.android.visionintelligence
-%ADB% shell pm enable com.samsung.android.game.gametools
-%ADB% shell pm enable com.samsung.android.game.gos
-%ADB% shell pm enable com.samsung.android.smartsuggestions
-%ADB% shell pm enable com.samsung.android.rubin.app
-%ADB% shell pm enable com.samsung.android.bbc.bbcagent
-%ADB% shell pm enable com.samsung.android.app.reminder
-%ADB% shell pm enable com.samsung.android.app.routines
-%ADB% shell pm enable com.samsung.android.app.routineplus
-%ADB% shell pm enable com.samsung.android.forest
-%ADB% shell pm enable com.samsung.android.liveeffectservice
-%ADB% shell pm enable com.samsung.android.app.updatecenter
-%ADB% shell pm enable com.samsung.android.scpm
-%ADB% shell pm enable com.samsung.android.statsd
-%ADB% shell pm enable com.sec.enterprise.knox.attestation
-%ADB% shell pm enable com.samsung.android.knox.kpecore
-%ADB% shell pm enable com.samsung.android.knox.pushmanager
-%ADB% shell pm enable com.samsung.android.knox.containercore
-%ADB% shell pm enable com.samsung.android.knox.analytics.uploader
-%ADB% shell pm enable com.samsung.android.oneconnect
-%ADB% shell pm enable com.samsung.android.service.stplatform
-%ADB% shell pm enable com.samsung.accessory.budsunitemgr
-%ADB% shell pm enable com.samsung.android.spayfw
+echo [1/4] Riabilitazione servizi e app Samsung...
+for %%p in (
+    com.samsung.android.bixby.agent
+    com.samsung.android.bixby.wakeup
+    com.samsung.android.bixbyvision.framework
+    com.samsung.android.visionintelligence
+    com.samsung.android.game.gametools
+    com.samsung.android.game.gos
+    com.samsung.android.smartsuggestions
+    com.samsung.android.rubin.app
+    com.samsung.android.bbc.bbcagent
+    com.samsung.android.app.reminder
+    com.samsung.android.app.notes
+    com.samsung.android.calendar
+    com.samsung.android.messaging
+    com.samsung.android.honeyboard
+    com.sec.android.app.samsungapps
+    com.osp.app.signin
+    com.sec.android.daemonapp
+    com.samsung.android.weather
+    com.sec.android.app.voicenote
+    com.sec.android.app.shealth
+    com.samsung.android.spayfw
+    com.samsung.android.samsungpass
+    com.samsung.android.app.cocktailbarservice
+    com.samsung.android.oneconnect
+    com.samsung.android.service.stplatform
+    com.samsung.accessory.budsunitemgr
+    com.samsung.android.mcfds
+    com.samsung.android.app.sharelive
+    com.samsung.android.app.updatecenter
+    com.samsung.android.scpm
+    com.samsung.android.statsd
+    com.sec.enterprise.knox.attestation
+    com.samsung.android.knox.kpecore
+    com.samsung.android.knox.pushmanager
+    com.samsung.android.knox.containercore
+    com.samsung.android.knox.analytics.uploader
+    com.samsung.android.forest
+    com.samsung.android.liveeffectservice
+    com.samsung.android.arzone
+    com.samsung.android.aremoji
+    com.samsung.android.livestickers
+    com.samsung.android.kidsinstaller
+) do (
+    %ADB% shell pm enable %%p >nul 2>&1
+)
+echo   -> Servizi Samsung riabilitati.
 
-REM ── 2. RE-ENABLE THIRD-PARTY APPS ──────────────────────────────────
-echo [2/4] Re-enabling third-party apps...
-%ADB% shell pm enable com.facebook.katana
-%ADB% shell pm enable com.facebook.orca
-%ADB% shell pm enable com.facebook.services
-%ADB% shell pm enable com.facebook.system
-%ADB% shell pm enable com.facebook.appmanager
-%ADB% shell pm enable com.microsoft.emmx
-%ADB% shell pm enable com.microsoft.office.excel
-%ADB% shell pm enable com.microsoft.office.word
-%ADB% shell pm enable com.microsoft.skydrive
+echo [2/4] Riabilitazione bloatware Meta e Microsoft...
+for %%p in (
+    com.facebook.katana
+    com.facebook.orca
+    com.facebook.services
+    com.facebook.system
+    com.facebook.appmanager
+    com.microsoft.emmx
+    com.microsoft.office.excel
+    com.microsoft.office.word
+    com.microsoft.skydrive
+) do (
+    %ADB% shell pm enable %%p >nul 2>&1
+)
+echo   -> App terze riabilitate.
 
-REM ── 3. RESTORE DEFAULT SETTINGS ────────────────────────────────────
-echo [3/4] Restoring One UI 9 system settings...
+echo [3/4] Ripristino impostazioni di sistema One UI 9...
 %ADB% shell settings put global sem_low_power_mode 0
-%ADB% shell settings put global ram_expand_size 4
+%ADB% shell settings put global ram_expand_size 4096
 %ADB% shell settings put global window_animation_scale 1.0
 %ADB% shell settings put global transition_animation_scale 1.0
 %ADB% shell settings put global animator_duration_scale 1.0
@@ -64,15 +92,16 @@ echo [3/4] Restoring One UI 9 system settings...
 %ADB% shell settings put global wifi_scan_always_enabled 1
 %ADB% shell settings put system nearby_scanning_enabled 1
 %ADB% shell settings put global protect_battery 0
+echo   -> Impostazioni ripristinate (RAM Plus 4GB, profilo standard, animazioni 1.0x).
 
-REM ── 4. RESET APPOPS ────────────────────────────────────────────────
-echo [4/4] Resetting AppOps background restrictions...
-%ADB% shell cmd appops set com.instagram.android RUN_ANY_IN_BACKGROUND default
-%ADB% shell cmd appops set com.whatsapp RUN_ANY_IN_BACKGROUND default
-%ADB% shell cmd appops set com.zhiliaoapp.musically RUN_ANY_IN_BACKGROUND default
+echo [4/4] Ripristino restrizioni AppOps...
+%ADB% shell cmd appops set com.instagram.android RUN_ANY_IN_BACKGROUND default >nul 2>&1
+%ADB% shell cmd appops set com.whatsapp RUN_ANY_IN_BACKGROUND default >nul 2>&1
+%ADB% shell cmd appops set com.zhiliaoapp.musically RUN_ANY_IN_BACKGROUND default >nul 2>&1
+echo   -> AppOps reimpostati sui valori predefiniti.
 
 echo.
 echo ===================================================================
-echo Restoration Complete! Please reboot your Galaxy S25 Edge.
+echo   RIPRISTINO COMPLETATO! Riavvia il Galaxy S25 Edge.
 echo ===================================================================
 pause

@@ -31,17 +31,33 @@ Dopo il passaggio a **One UI 9.0 (Android 17)**, tantissimi utenti riscontrano u
 
 ## 🔧 Cosa fa la suite
 
-### Bloatware Disabilitati (35+ pacchetti)
+### 🛑 Modalità "Zero Servizi Samsung" (Guida Dettagliata & Spiegazioni)
 
-| Categoria | Pacchetti | Motivo |
+Se desideri un'esperienza completamente pulita stile **Google Pixel / AOSP**, eliminando il 100% dell'ecosistema proprietario Samsung, consulta la guida dedicata:
+👉 **[Guida Completa "Zero Servizi Samsung" con Spiegazioni](SAMSUNG_ZERO_SERVICES_GUIDE.md)**
+
+Ogni singolo servizio disabilitato è documentato con:
+- **Cosa fa di fabbrica**
+- **Cosa succede disabilitandolo** (conseguenze e cosa perdi/guadagni)
+- **L'alternativa Google da usare** (Gboard, Google Messaggi, Google Calendar, Google Keep, Google Wallet, ecc.)
+- **Avviso Tastiera**: *Prima di disabilitare la tastiera Samsung, installa Gboard dal Play Store per evitare di rimanere senza tastiera per il PIN!*
+- **Cosa NON toccare mai**: *`com.samsung.android.lool` (Device Care) deve rimanere attivo per scongiurare il bootloop di RescueParty su One UI 9.*
+
+### Bloatware e Servizi Samsung Disabilitati
+
+| Categoria | Pacchetti | Motivo & Conseguenza |
 |---|---|---|
-| **Bixby & IA** | `bixby.agent`, `bixby.wakeup`, `bixbyvision.framework`, `visionintelligence`, 13 pacchetti lingua | Microfono sempre in ascolto e indicizzazione costante |
-| **Servizi Samsung** | `game.gametools`, `game.gos`, `smartsuggestions`, `rubin.app`, `bbc.bbcagent`, `app.reminder`, `app.routines`, `app.routineplus`, `forest`, `liveeffectservice` | Polling in background, telemetria e wakelock |
-| **Aggiornamenti & Push** | `app.updatecenter`, `scpm`, `statsd` | Notifiche per installare app "consigliate" e raccolta dati analitici |
-| **Knox Telemetria** | `knox.attestation`, `knox.kpecore`, `knox.pushmanager`, `knox.containercore`, `knox.analytics.uploader` | Loop continui di attestazione hardware |
-| **Ecosistema (Opzionale)** | `oneconnect`, `stplatform`, `budsunitemgr`, `spayfw` | SmartThings, gestione Buds e Samsung Pay (Google Wallet resta attivo) |
-| **Pannello Edge (Opzionale)** | `cocktailbarservice` | Strumenti pannello laterale Edge (se non si usano le schede a scomparsa) |
-| **Social / Operatori** | Facebook (`katana`, `orca`, `services`, `system`, `appmanager`) | Wakelock continui e sincronizzazione pesante |
+| **Bixby & IA** | `bixby.agent`, `bixby.wakeup`, `bixbyvision.framework`, `visionintelligence`, 13 pacchetti lingua | Microfono sempre in ascolto rimosso; usa Google Assistant/Gemini e Lens |
+| **Account & Store** | `osp.app.signin` (Samsung Account), `samsungapps` (Galaxy Store), `updatecenter` | Stop a notifiche promozionali e sync proprietario; usa Google Play Store |
+| **Suite Base** | `messaging`, `calendar`, `app.reminder`, `app.notes`, `weather`, `voicenote` | Sostituiti nativamente da Google Messaggi, Calendar, Keep e Meteo |
+| **Tastiera (Opz.)** | `com.samsung.android.honeyboard` | Disabilitabile solo dopo aver installato Gboard (risparmia ~150MB RAM) |
+| **Servizi Samsung** | `game.gametools`, `game.gos`, `smartsuggestions`, `rubin.app`, `bbc.bbcagent`, `app.routines`, `app.routineplus`, `forest`, `liveeffectservice` | Polling in background, telemetria e wakelock eliminati |
+| **Pagamenti & Pass** | `spayfw` (Samsung Pay), `samsungpass` | Nessun lock-in; Google Wallet e Google Password Manager pienamente operativi |
+| **Ecosistema & Hub** | `oneconnect` (SmartThings), `stplatform`, `budsunitemgr`, `mcfds`, `sharelive` | Stop a scansioni Bluetooth/Wi-Fi continue per elettrodomestici |
+| **Salute & Benessere**| `com.sec.android.app.shealth` | Stop al contapassi Samsung; usa Google Fit / Health Connect |
+| **Pannello Edge** | `cocktailbarservice` | Disattivata linguetta laterale se non usata; display curvo e gesti intatti |
+| **Knox Telemetria** | `knox.attestation`, `knox.kpecore`, `knox.pushmanager`, `knox.containercore`, `knox.analytics.uploader` | Loop continui di attestazione hardware neutralizzati |
+| **Social / Meta** | Facebook (`katana`, `orca`, `services`, `system`, `appmanager`) | Wakelock continui eliminati |
 | **Microsoft** | Edge browser, Excel, Word, OneDrive sync | Sincronizzazioni e servizi non indispensabili |
 
 ### ⚙️ Impostazioni di Sistema (Consigliate dalla Community)

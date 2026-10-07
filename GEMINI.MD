@@ -31,3 +31,17 @@
     - Updated `AndroidManifest.xml` and Compose theme/strings
     - Enhanced `Optimizations.kt` with "Light Performance Profile", "RAM Plus 0GB", "Galaxy AI 2.0 debloat", and "Edge Panel / Cocktail Bar" toggle.
   - Authored multilingual user documentation: `README.md` (EN), `README-IT.md` (IT), `README-ES.md` (ES), `README-PT.md` (PT).
+
+## 2026-10-07 12:28 ("Zero Samsung Services" Mode Implementation)
+- **Goal**: Implement complete elimination of default Samsung services replacing them with Google/AOSP alternatives, while explicitly detailing for each package/setting what happens upon disabling, what is lost, what is gained, and critical safeguards.
+- **Actions Taken**:
+  - Authored [SAMSUNG_ZERO_SERVICES_GUIDE.md](file:///d:/s25edge/SAMSUNG_ZERO_SERVICES_GUIDE.md):
+    - Detailed catalog of every Samsung service (Bixby, Samsung Account, Galaxy Store, Samsung Keyboard, Messages, Calendar, Notes, Reminder, Weather, Health, SmartThings, Buds Manager, Samsung Pay, Samsung Pass, Edge panel).
+    - Clear explanation of what happens next, what you lose, and recommended Google alternatives (Gboard, Google Messages, Google Calendar, Google Keep, Google Wallet, Google Fit, Google Home).
+    - Prominent safety notice on keyboard dependencies (install Gboard first) and critical bootloop protection (`com.samsung.android.lool` must remain enabled).
+  - Enhanced [s25-optimize.bat](file:///d:/s25edge/releases/s25-optimize.bat) and [s25-optimize.sh](file:///d:/s25edge/releases/s25-optimize.sh):
+    - Added automated detection of Gboard before disabling Samsung Keyboard.
+    - Added verbose, informative console explanations outputting "COSA FA", "COSA SUCCEDE", "GUADAGNO" and "ALTERNATIVA" for every package.
+  - Enhanced [s25-restore.bat](file:///d:/s25edge/releases/s25-restore.bat) and [s25-restore.sh](file:///d:/s25edge/releases/s25-restore.sh) with all newly debloated packages.
+  - Updated [Optimizations.kt](file:///d:/s25edge/android-app/app/src/main/java/com/s25optimizer/data/Optimizations.kt) with Samsung Account, Galaxy Store, Samsung Keyboard, Samsung Messages, Samsung Calendar, Samsung Weather, and Samsung Pass.
+  - Updated [README.md](file:///d:/s25edge/README.md) and [README-IT.md](file:///d:/s25edge/README-IT.md).

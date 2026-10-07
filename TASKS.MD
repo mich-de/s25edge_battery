@@ -9,6 +9,7 @@
 - [x] **One UI 9 & Community Research Documentation**
   - [x] `[Backend-Agent]` Create `OneUI9_Community_Debloat_Guide.md` with package lists, safety warnings (RescueParty prevention), and XDA/Reddit consensus.
   - [x] `[Backend-Agent]` Create `S25_Edge_Battery_Optimization_Report.md` detailing hardware specs, benchmarks, and before/after metrics.
+  - [x] `[Backend-Agent]` Author `SAMSUNG_ZERO_SERVICES_GUIDE.md` detailing every single Samsung package, consequence when disabled, and Google alternative.
 
 - [x] **Scripts & Automation Suite**
   - [x] `[DevOps-Agent]` Create `releases/s25-optimize.bat` (Windows automated debloat & tuning).

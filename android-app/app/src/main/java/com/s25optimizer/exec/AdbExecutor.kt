@@ -1,4 +1,4 @@
-﻿package com.s25optimizer.exec
+package com.s25optimizer.exec
 
 import android.content.pm.PackageManager
 import android.os.Looper
@@ -18,7 +18,7 @@ class AdbExecutor private constructor() :
         /** Guard against a hung shell wedging whatever thread called us. */
         const val DEFAULT_TIMEOUT_MS = 10_000L
 
-        private const val SEP = "__S25 Edge_SEP__"
+        private const val SEP = "__S25_EDGE_SEP__"
 
         val instance: AdbExecutor by lazy {
             AdbExecutor().also { it.init() }

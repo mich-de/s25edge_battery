@@ -1,4 +1,4 @@
-﻿package com.s25optimizer.ui
+package com.s25optimizer.ui
 
 import android.os.Build
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -91,7 +91,7 @@ val AppShapes = Shapes(
 )
 
 @Composable
-fun S25 EdgeTheme(content: @Composable () -> Unit) {
+fun S25EdgeTheme(content: @Composable () -> Unit) {
     val colorScheme = if (Build.VERSION.SDK_INT >= 31) {
         // Dynamic Color: use wallpaper-derived dark palette for a native feel
         val dynamicColors = dynamicDarkColorScheme(LocalContext.current)

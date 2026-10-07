@@ -772,6 +772,16 @@ object Optimizations {
             selfHeals = true,
             group = "Network", groupIt = "Rete"),
 
+        opt("nr_5g_off", Optimization.Category.SYSTEM,
+            "Disable 5G Scanning (LTE/3G/2G Only)", "Disabilita Scansione 5G (Solo LTE/3G/2G)",
+            "Ticked: 5G (NR) radio scanning is disabled, forcing the modem to LTE/3G/2G. Prevents massive RF power amplifier battery drain when in weak signal / cell edge areas.",
+            "Spuntato: la scansione 5G (NR) è disattivata, forzando il modem su LTE/3G/2G. Evita il forte consumo dell'amplificatore RF quando il segnale è debole o a bordo cella.",
+            "cmd phone set-allowed-network-types-for-users -s 0 01001111101111111111; cmd phone set-allowed-network-types-for-users -s 1 01001111101111111111",
+            "cmd phone set-allowed-network-types-for-users -s 0 11001111101111111111; cmd phone set-allowed-network-types-for-users -s 1 11001111101111111111",
+            """cmd phone get-allowed-network-types-for-users -s 0 2>/dev/null | grep -qv "NR" && echo 1 || echo 0""",
+            icon = Icons.Default.NetworkCheck,
+            group = "Network", groupIt = "Rete"),
+
         opt("aod", Optimization.Category.SYSTEM,
             "Always On Display OFF", "Always On Display OFF",
             "Ticked: Always On Display is off, so the idle screen no longer shows clock and notifications. Saves ~3-5% battery/day.",

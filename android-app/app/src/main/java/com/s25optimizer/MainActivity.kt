@@ -1,4 +1,4 @@
-﻿package com.s25optimizer
+package com.s25optimizer
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -9,7 +9,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.s25optimizer.service.ScreenOffService
 import com.s25optimizer.ui.MainScreen
-import com.s25optimizer.ui.S25 EdgeTheme
+import com.s25optimizer.ui.S25EdgeTheme
 import com.s25optimizer.ui.SurfaceDark
 
 class MainActivity : ComponentActivity() {
@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContent {
-            S25 EdgeTheme {
+            S25EdgeTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = SurfaceDark,

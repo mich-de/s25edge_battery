@@ -101,8 +101,9 @@ Rilevamenti effettuati su **Galaxy S25 Edge · One UI 9.0 · Android 17**:
 ### Metodo 1: App Android Companion (Shizuku — Senza PC)
 1. Installa **[Shizuku v13.6+](https://github.com/RikkaApps/Shizuku/releases)** sul telefono.
 2. Avvia Shizuku tramite **Debug Wireless** o una tantum da PC via ADB.
-3. Installa e apri `releases/s25-battery-optimizer.apk`.
+3. Scarica e installa **[`s25-battery-optimizer.apk` da GitHub Releases](https://github.com/mich-de/s25edge_battery/releases/latest)**.
 4. Seleziona le categorie desiderate e tocca **Apply Selected**.
+
 
 ### Metodo 2: Script PC con 1 Clic (Windows / macOS / Linux)
 

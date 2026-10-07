@@ -101,8 +101,9 @@ Tested on **Galaxy S25 Edge · One UI 9.0 · Android 17**:
 ### Method 1: Android Companion App (Shizuku — No PC needed after initial setup)
 1. Install **[Shizuku v13.6+](https://github.com/RikkaApps/Shizuku/releases)** on your phone.
 2. Start Shizuku via **Wireless Debugging** or one-time PC ADB command.
-3. Install and open `releases/s25-battery-optimizer.apk` from this repository.
+3. Download and install **[`s25-battery-optimizer.apk` from GitHub Releases](https://github.com/mich-de/s25edge_battery/releases/latest)**.
 4. Select desired optimizations or tap **Apply Selected**.
+
 
 ### Method 2: One-Click PC Scripts (Windows / macOS / Linux)
 

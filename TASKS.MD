@@ -34,3 +34,7 @@
   - [x] `[DevOps-Agent]` Create `README-ES.md` (Spanish manual).
   - [x] `[DevOps-Agent]` Create `README-PT.md` (Portuguese manual).
   - [x] `[DevOps-Agent]` Update `GEMINI.MD` persistent memory log.
+
+- [x] **Repository & GitHub Deployment**
+  - [x] `[DevOps-Agent]` Link remote and push codebase with README to https://github.com/mich-de/s25edge_battery.
+

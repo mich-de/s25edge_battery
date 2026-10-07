@@ -45,3 +45,13 @@
   - Enhanced [s25-restore.bat](file:///d:/s25edge/releases/s25-restore.bat) and [s25-restore.sh](file:///d:/s25edge/releases/s25-restore.sh) with all newly debloated packages.
   - Updated [Optimizations.kt](file:///d:/s25edge/android-app/app/src/main/java/com/s25optimizer/data/Optimizations.kt) with Samsung Account, Galaxy Store, Samsung Keyboard, Samsung Messages, Samsung Calendar, Samsung Weather, and Samsung Pass.
   - Updated [README.md](file:///d:/s25edge/README.md) and [README-IT.md](file:///d:/s25edge/README-IT.md).
+
+## 2026-10-07 19:28 (GitHub Repository Deployment)
+- **Goal**: Publish complete project including multi-language documentation, Android APK, scripts, and Python tooling to GitHub repo `https://github.com/mich-de/s25edge_battery`.
+- **Actions Taken**:
+  - Configured git author identity as `mich-de` (`mic.deangelis@gmail.com`).
+  - Set active GitHub CLI account to `mich-de`.
+  - Added remote `origin` pointing to `https://github.com/mich-de/s25edge_battery.git`.
+  - Synchronized and verified default branch `main`.
+  - Pushed all files and commits to GitHub.
+

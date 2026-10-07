@@ -54,4 +54,6 @@
   - Added remote `origin` pointing to `https://github.com/mich-de/s25edge_battery.git`.
   - Synchronized and verified default branch `main`.
   - Pushed all files and commits to GitHub.
+  - Published GitHub Release `v1.0.0` with assets (`s25-battery-optimizer.apk`, `.bat`, `.sh` scripts) and release notes.
+
 

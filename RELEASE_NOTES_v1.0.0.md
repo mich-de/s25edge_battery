@@ -1,8 +1,18 @@
 # 🔋 S25 Edge Battery Optimizer & Debloat Suite — v1.0.0
 
+### 📥 Direct Download Links
+* 📱 **[👉 Download Android Companion APK (`s25-battery-optimizer.apk` — 61.15 MB)](https://github.com/mich-de/s25edge_battery/releases/download/v1.0.0/s25-battery-optimizer.apk)**
+* 💻 **[Download Windows 1-Click Optimizer (`s25-optimize.bat`)](https://github.com/mich-de/s25edge_battery/releases/download/v1.0.0/s25-optimize.bat)**
+* 🔄 **[Download Windows 1-Click Restore (`s25-restore.bat`)](https://github.com/mich-de/s25edge_battery/releases/download/v1.0.0/s25-restore.bat)**
+* 🐧 **[Download Linux/macOS Optimizer (`s25-optimize.sh`)](https://github.com/mich-de/s25edge_battery/releases/download/v1.0.0/s25-optimize.sh)**
+* 🔄 **[Download Linux/macOS Restore (`s25-restore.sh`)](https://github.com/mich-de/s25edge_battery/releases/download/v1.0.0/s25-restore.sh)**
+
+---
+
 Initial public release of the **S25 Edge Battery Optimizer & Debloat Suite**, tailored specifically for the **Samsung Galaxy S25 Edge** (and S25 / S25 Ultra / S24 / S23 series) running **One UI 9.0 / Android 17 (SDK 37)**.
 
 ---
+
 
 ### 📦 Included Release Assets
 * **`s25-battery-optimizer.apk`**: Native Android companion app with Shizuku integration. Toggle debloat, Knox services, AI background tasks, and thermal profiles directly from your phone (no PC needed after initial Shizuku setup).

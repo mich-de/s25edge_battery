@@ -1,0 +1,297 @@
+{
+  "D:\\s25edge\\execute_cleanup.py": {
+    "mtime": 1791368359.4597144,
+    "ast_hash": "3b4a95d5f8004ee47cfe7d11c4aaecec",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\parse_caches.py": {
+    "mtime": 1791368367.0052416,
+    "ast_hash": "e03e68f50de3d9f37582ed520214d43e",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\scan_s25_junk.py": {
+    "mtime": 1791368343.2133243,
+    "ast_hash": "0006a7ac2d43cf2661f2d0a12d49b30d",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\usb_proxy.py": {
+    "mtime": 1788449277.0024014,
+    "ast_hash": "cfad2fcd0c2183274da0821a2f48883d",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\build.gradle.kts": {
+    "mtime": 1785231207.4432688,
+    "ast_hash": "0b69aabcf43c248b7b2e0176cf248f51",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\settings.gradle.kts": {
+    "mtime": 1791368452.3452241,
+    "ast_hash": "da0efb364ec6e4ffc688ebba0c5b82e8",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\build.gradle.kts": {
+    "mtime": 1791368461.7619824,
+    "ast_hash": "e9899e221db0454d3fd9df4d3ba28e5f",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\java\\com\\s25optimizer\\MainActivity.kt": {
+    "mtime": 1791385350.3056226,
+    "ast_hash": "478acf48c25c470c2853bbe4105ea6ae",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\java\\com\\s25optimizer\\S25OptimizerApp.kt": {
+    "mtime": 1791368452.3294213,
+    "ast_hash": "51c1fc308cb0f8b5b39a9d956b8fcc6a",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\java\\com\\s25optimizer\\ShizukuBridgeProvider.kt": {
+    "mtime": 1791368452.330888,
+    "ast_hash": "757d633d48691cab3af6eb62b715f5da",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\java\\com\\s25optimizer\\data\\AppliedHistory.kt": {
+    "mtime": 1791368452.273937,
+    "ast_hash": "a5459cbb7de462a048a7619e32784acf",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\java\\com\\s25optimizer\\data\\BatteryHistory.kt": {
+    "mtime": 1791368452.2754812,
+    "ast_hash": "882e4fc1a845d78a7f751b808ff75e3e",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\java\\com\\s25optimizer\\data\\BatteryTelemetry.kt": {
+    "mtime": 1791368452.2770095,
+    "ast_hash": "d40aa458196655e7e4cbe10a7db6a00a",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\java\\com\\s25optimizer\\data\\ChargeSchedule.kt": {
+    "mtime": 1791368452.278009,
+    "ast_hash": "553fcaf551d9a06b52cb85c4b7c45c27",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\java\\com\\s25optimizer\\data\\Diagnostics.kt": {
+    "mtime": 1791368452.2807395,
+    "ast_hash": "98ea03bb9c7f175135ea61a4b94a8a98",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\java\\com\\s25optimizer\\data\\MasterSync.kt": {
+    "mtime": 1791368452.2909744,
+    "ast_hash": "0eba2870ad340b95f818bb924707804d",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\java\\com\\s25optimizer\\data\\Optimization.kt": {
+    "mtime": 1791368452.2919734,
+    "ast_hash": "f8f2940264d0d35ce6ad010dee02f29a",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\java\\com\\s25optimizer\\data\\OptimizationRunner.kt": {
+    "mtime": 1791368452.292973,
+    "ast_hash": "d01984f52c207c492fd21d0ecd2df710",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\java\\com\\s25optimizer\\data\\Optimizations.kt": {
+    "mtime": 1791393794.782305,
+    "ast_hash": "f106ccc75b717d495fdde23fead8ec27",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\java\\com\\s25optimizer\\data\\PerAppRRState.kt": {
+    "mtime": 1791368452.2965953,
+    "ast_hash": "fe4b67c4119c95c330cbbf9f3adec151",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\java\\com\\s25optimizer\\data\\RestartSchedule.kt": {
+    "mtime": 1791368452.297611,
+    "ast_hash": "3361864410b8914e5f642bd21934e516",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\java\\com\\s25optimizer\\exec\\AdbExecutor.kt": {
+    "mtime": 1791385369.637853,
+    "ast_hash": "f3e771804d22edef0baf9a7ba25c0adf",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\java\\com\\s25optimizer\\service\\BootReceiver.kt": {
+    "mtime": 1791368452.3004284,
+    "ast_hash": "0ccbb3b51103aaf398462ccf726d6344",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\java\\com\\s25optimizer\\service\\ChargeScheduleReceiver.kt": {
+    "mtime": 1791368452.3014278,
+    "ast_hash": "004dd581bc430804b884f458e6982da0",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\java\\com\\s25optimizer\\service\\PerAppRefreshRateService.kt": {
+    "mtime": 1791368452.3024275,
+    "ast_hash": "83c7a9724b97ad2a6a3da1f6fca9ae38",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\java\\com\\s25optimizer\\service\\RestartScheduleReceiver.kt": {
+    "mtime": 1791368452.303946,
+    "ast_hash": "9f8beca9e53821a6c3fb28e7858b051e",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\java\\com\\s25optimizer\\service\\ScreenOffService.kt": {
+    "mtime": 1791368452.304951,
+    "ast_hash": "7621cd3355324810a21ccf29fa74b5dc",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\java\\com\\s25optimizer\\service\\SelfMaintenance.kt": {
+    "mtime": 1791368452.3059509,
+    "ast_hash": "ae4fbae6a85975e06efa5f7c6eeb2ccb",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\java\\com\\s25optimizer\\service\\WhatsAppCallOptimizer.kt": {
+    "mtime": 1791368452.3069508,
+    "ast_hash": "0a216637adb8e0fd3672dbbe9a00e89c",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\java\\com\\s25optimizer\\ui\\MainScreen.kt": {
+    "mtime": 1791368452.321222,
+    "ast_hash": "cab1f153dfd0d0dc218275fbd0375d5c",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\java\\com\\s25optimizer\\ui\\PerAppRRDialog.kt": {
+    "mtime": 1791368452.322525,
+    "ast_hash": "2902ae41259057f78dcb89fd323b34e1",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\java\\com\\s25optimizer\\ui\\PerAppRRTab.kt": {
+    "mtime": 1791368452.3235412,
+    "ast_hash": "aac9cb4ab99e3e392ea6a1c57b9ce87a",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\java\\com\\s25optimizer\\ui\\QuickSettingsBar.kt": {
+    "mtime": 1791368452.3255405,
+    "ast_hash": "c231d3cb71267f7150a0882af25c362d",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\java\\com\\s25optimizer\\ui\\Theme.kt": {
+    "mtime": 1791385300.4137936,
+    "ast_hash": "a697904f240a452939a059695c5144b5",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\java\\com\\s25optimizer\\ui\\navigation\\AppNavigation.kt": {
+    "mtime": 1791368452.308953,
+    "ast_hash": "f2eaa4e8b4235db6cbb388675b046116",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\java\\com\\s25optimizer\\ui\\screens\\AppsScreen.kt": {
+    "mtime": 1791368452.3105216,
+    "ast_hash": "125f4c9116955dc93df60b7a0ef6d1ca",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\java\\com\\s25optimizer\\ui\\screens\\ChargeScheduleCard.kt": {
+    "mtime": 1791368452.3120782,
+    "ast_hash": "01dbb19b05ab275bd8c23837bfe48853",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\java\\com\\s25optimizer\\ui\\screens\\DiagnosticsScreen.kt": {
+    "mtime": 1791368452.3137116,
+    "ast_hash": "d552130ab6ec0e2080f128fdd6424106",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\java\\com\\s25optimizer\\ui\\screens\\HomeScreen.kt": {
+    "mtime": 1791368452.3147106,
+    "ast_hash": "8f2300057baf40bbde6e61fc0ffcb304",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\java\\com\\s25optimizer\\ui\\screens\\LogsScreen.kt": {
+    "mtime": 1791368452.3167162,
+    "ast_hash": "91de369ed54cdf2860fa96f84aae9cb5",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\java\\com\\s25optimizer\\ui\\screens\\OptimizeScreen.kt": {
+    "mtime": 1791368452.317716,
+    "ast_hash": "a29483f1b2d8e0d98a4e3084ae44d600",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\java\\com\\s25optimizer\\ui\\screens\\RestartScheduleCard.kt": {
+    "mtime": 1791368452.3197155,
+    "ast_hash": "e35b40379a6e797de483052b8e9c7e6a",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\gradle\\ssl-bypass.init.gradle": {
+    "mtime": 1784016416.0299723,
+    "ast_hash": "54c42a08c17edfe4af38e1a62b34d10e",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\releases\\s25-optimize.sh": {
+    "mtime": 1791368884.5839877,
+    "ast_hash": "43886fe0a84c820f091cc8b6b77d6b4d",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\releases\\s25-restore.sh": {
+    "mtime": 1791368899.3769095,
+    "ast_hash": "54e878b1fb612f6cd7a65d6052d85e8e",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\GEMINI.MD": {
+    "mtime": 1791394387.3513684,
+    "ast_hash": "4e2c1864168fa1dbe9268ebe63f8d750",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\IMPLEMENTATION_PLAN.MD": {
+    "mtime": 1791368191.2404823,
+    "ast_hash": "0a23a076cad07dda60fd05dc1f67eede",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\OneUI9_Community_Debloat_Guide.md": {
+    "mtime": 1791368241.9632807,
+    "ast_hash": "95396a1972bd2239e8efd324851d136a",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\README-ES.md": {
+    "mtime": 1791368627.5683355,
+    "ast_hash": "28fe9b522ed77c4e94750ae7334a6cdf",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\README-IT.md": {
+    "mtime": 1791394369.5717976,
+    "ast_hash": "5790b70e37f13d0defdc83d3b79cd46b",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\README-PT.md": {
+    "mtime": 1791368656.184778,
+    "ast_hash": "fb0c3a736d36e4360fac3e24f811b85e",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\README.md": {
+    "mtime": 1791394360.7055533,
+    "ast_hash": "cf4ec5bf9cccbdcc30b709a4c9805e40",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\RELEASE_NOTES_v1.0.0.md": {
+    "mtime": 1791452070.624115,
+    "ast_hash": "25ab903a51b93408aaffebe07c42a936",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\requirements.txt": {
+    "mtime": 1791368157.5342357,
+    "ast_hash": "bdfed6002a769dccec5b18308cb563e0",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\S25_Edge_Battery_Optimization_Report.md": {
+    "mtime": 1791368261.2509425,
+    "ast_hash": "e12831df147a2a406be8c2c439ef45da",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\SAMSUNG_ZERO_SERVICES_GUIDE.md": {
+    "mtime": 1791368798.973511,
+    "ast_hash": "ebc28cfbef74abf9ed848433059364b6",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\TASKS.MD": {
+    "mtime": 1791394113.4944987,
+    "ast_hash": "3795b801a79a122312f862ae37b55121",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\icona.png": {
+    "mtime": 1784202455.3655097,
+    "ast_hash": "f23468d55f405df141aeb2066e89fd95",
+    "semantic_hash": ""
+  },
+  "D:\\s25edge\\android-app\\app\\src\\main\\res\\drawable\\ic_launcher_foreground.png": {
+    "mtime": 1784202596.3474553,
+    "ast_hash": "2d25655559214031b28fc2c3f9d87b2f",
+    "semantic_hash": ""
+  }
+}

@@ -56,4 +56,14 @@
   - Pushed all files and commits to GitHub.
   - Published GitHub Release `v1.0.0` with assets (`s25-battery-optimizer.apk`, `.bat`, `.sh` scripts) and release notes.
 
-
+## Mappa di Contesto Condensata
+- **Architettura & Stack:**
+  - Companion App Android: Kotlin + Jetpack Compose + Material 3 + Shizuku IPC (`rikka.shizuku:api:13.1.5`). Package: `com.s25optimizer`.
+  - Automation Suite: `releases/s25-optimize.bat`, `s25-restore.bat`, `s25-optimize.sh`, `s25-restore.sh`.
+  - Tooling Python (.venv): `scan_s25_junk.py`, `execute_cleanup.py`, `usb_proxy.py`, `parse_caches.py`.
+- **Indice Semantico (Graphify):**
+  - Mappati 427 nodi, 555 archi, 44 community in `graphify-out/graph.json`.
+  - Report e viste generate: `graphify-out/GRAPH_REPORT.md`, `graphify-out/GRAPH_TREE.html`, `graphify-out/s25edge-callflow.html`.
+- **Regole di Riferimento Rapido:**
+  - Fare riferimento prioritario a `COMPACT_CONTEXT.MD` o `graphify-out/GRAPH_REPORT.md` per l'architettura complessiva, evitando letture massive dei sorgenti.
+  - Salvaguardia critica bootloop: MAI disattivare `com.samsung.android.lool` (`Device Care`).

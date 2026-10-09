@@ -150,6 +150,15 @@
   - Granted runtime audio permissions (`RECORD_AUDIO`, `READ_MEDIA_AUDIO`) and launched main activity (`com.sec.android.app.voicenote/.main.VNMainActivity`).
   - Updated and pushed `curate_s25_bloatware.py` to GitHub repo.
 
+## 2026-10-09 19:38 (Complete Battery Optimization Execution — 120Hz LTPO & Zero Samsung Services)
+- **Goal**: Apply full battery-saving optimization suite with Zero Samsung Services mode while strictly preserving 120Hz LTPO display fluidity.
+- **Actions Taken**:
+  - Authored and executed [apply_full_battery_optimization.py](file:///D:/s25edge/apply_full_battery_optimization.py).
+  - Confirmed Display & Refresh Rate: `secure refresh_rate_mode 1` (Adaptive 10-120Hz LTPO), `peak_refresh_rate 120.0`, `user_refresh_rate 120.0`, animations 0.5x, dark mode forced, extra brightness disabled, 30s screen timeout.
+  - Confirmed SoC & Power: Light Performance Profile active (`sem_low_power_mode 1`), RAM Plus disabled (`ram_expand_size 0`), Quick Doze 30s active (`device_idle_constants`), BLE always-scanning off, Wi-Fi scan throttling on.
+  - Confirmed Zero Samsung Services debloat: All redundant Samsung apps (Samsung Account background polling, Notes, Calendar, Reminders, Weather, Push Service, Studio, Edge panels, Tips, SmartThings) disabled and frozen.
+  - Confirmed strict guardrails: `com.samsung.android.lool` (Device Care) protected; `com.samsung.android.honeyboard` active; Community AI features (Circle to Search, Gemini, Photo Assist, OCR, Voice Recorder) 100% operational.
+
 ## Mappa di Contesto Condensata
 - **Architettura & Stack:**
   - Companion App Android: Kotlin + Jetpack Compose + Material 3 + Shizuku IPC (`rikka.shizuku:api:13.1.5`). Package: `com.s25optimizer`.

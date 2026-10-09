@@ -41,4 +41,6 @@
 - [x] **Device Arrival & Initial Health Check (Live Status)**
   - [x] `[RELIABILITY-DEVOPS]` Inspect hardware connection, USB PnP registry, and ADB daemon status.
   - [x] `[ENTERPRISE-ARCHITECT]` Author `s25edge_appenaarrivato.md` with factory baseline audit, stock risks, and step-by-step unboxing/tuning roadmap.
+  - [x] `[SECURITY-GOVERNANCE]` Full hardware & sensor audit for used device (Knox 0x0 verified, battery 5 cycles / 100% BSOH, 40 sensors operational).
+  - [x] `[ENTERPRISE-ARCHITECT]` Author `s25edge_diagnostica_usato.md` with in-depth battery fuel gauge, Knox, sensors, and UFS 4.0 analysis.
 

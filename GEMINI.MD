@@ -63,6 +63,29 @@
   - Authored comprehensive out-of-the-box status report: `s25edge_appenaarrivato.md`.
   - Documented initial factory conditions, post-setup indexing risks, RAM Plus swap thrashing, Light Performance Profile necessity, and immediate step-by-step connection & tuning sequence.
 
+## 2026-10-09 18:40 (Comprehensive Hardware & Used Device Diagnostic)
+- **Goal**: Execute deep hardware, sensor, Knox, battery, and storage diagnostics on the newly arrived used device.
+- **Actions Taken**:
+  - Connected and authorized via ADB (`SM-S937B`, serial `R5GL85VQHNJ`).
+  - Probed battery Fuel Gauge (`dumpsys battery`, `BSOH`, `BattInfo`):
+    - Confirmed 100% Genuine Samsung Battery (`IcAuthenticationResults: [true]`).
+    - First use date: `2026-09-23` (activated only 16 days ago).
+    - Battery health (`BSOH` / `ASOC`): **100% / 99%**.
+    - Cumulative discharge: 508% = **5.08 full charge cycles**!
+  - Verified Knox Security & Bootloader:
+    - `ro.boot.warranty_bit = 0` (Knox 0x0 untripped, full Samsung Pay/Pass/Secure Folder functionality).
+    - `ro.boot.flash.locked = 1` (Locked bootloader, never modified).
+    - `ro.boot.verifiedbootstate = green` (Official signed firmware).
+    - Zero previous accounts or FRP lock (`dumpsys account` empty).
+  - Probed Sensors & Hardware:
+    - All 40 hardware sensors running and reporting `OK` (Accelerometer, Gyroscope, Magnetometer, Barometer Bosch bmp5, ALS Sensortek STK33F11/STK6D2X).
+    - Qualcomm Ultrasonic In-display Fingerprint (`QBT4000`) operational (`status: 0`).
+    - Haptic motor: Linear X-Axis actuator with wideband index support verified.
+    - Cameras: 10 hardware streams all in `STATUS_PRESENT`.
+    - Storage: 256GB UFS 4.0, 95% free space, 1ms I/O latency.
+  - Software bloat findings: RAM Plus active at 8GB (`ram_expand_size 8192`), Standard performance profile, radio background sniffers active.
+  - Authored comprehensive diagnostic artifact & report: [s25edge_diagnostica_usato.md](file:///D:/s25edge/s25edge_diagnostica_usato.md).
+
 ## Mappa di Contesto Condensata
 - **Architettura & Stack:**
   - Companion App Android: Kotlin + Jetpack Compose + Material 3 + Shizuku IPC (`rikka.shizuku:api:13.1.5`). Package: `com.s25optimizer`.

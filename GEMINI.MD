@@ -139,6 +139,17 @@
   - Ran `sm fstrim` across UFS 4.0 storage partitions.
   - Verified RAM: Available memory jumped from 4.8 GB to ~7.0 GB (+2.2 GB free RAM!).
 
+## 2026-10-09 19:30 (Targeted App Debloat & Samsung Voice Recorder Installation)
+- **Goal**: Disable YouTube, Chrome, Smart Switch, verify Samsung Browser/Health/Wallet, and install official Samsung Voice Recorder on S25 Edge.
+- **Actions Taken**:
+  - Disabled YouTube (`com.google.android.youtube`), YouTube Music (`com.google.android.apps.youtube.music`), Google Chrome (`com.android.chrome`), and Samsung Chrome Customizations (`com.sec.android.app.chromecustomizations`). Verified Brave Browser (`com.brave.browser`) and Android System WebView (`com.google.android.webview`) active.
+  - Verified Samsung Internet Browser (`sbrowser`) and Samsung Health (`shealth`) are not present on this factory ROM.
+  - Confirmed Samsung Wallet / Pay services (`spayfw`, `coldwalletservice`) disabled.
+  - Disabled Samsung Smart Switch suite: `com.sec.android.easyMover`, `com.sec.android.easyMover.Agent`, and `com.samsung.android.smartswitchassistant`.
+  - Downloaded official Samsung Voice Recorder `releases/voicenote.apk` (`com.sec.android.app.voicenote`) and installed via ADB (`Success`).
+  - Granted runtime audio permissions (`RECORD_AUDIO`, `READ_MEDIA_AUDIO`) and launched main activity (`com.sec.android.app.voicenote/.main.VNMainActivity`).
+  - Updated and pushed `curate_s25_bloatware.py` to GitHub repo.
+
 ## Mappa di Contesto Condensata
 - **Architettura & Stack:**
   - Companion App Android: Kotlin + Jetpack Compose + Material 3 + Shizuku IPC (`rikka.shizuku:api:13.1.5`). Package: `com.s25optimizer`.

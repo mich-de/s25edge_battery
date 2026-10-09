@@ -95,6 +95,13 @@
   - Updated headers in `releases/s25-optimize.bat` and `releases/s25-optimize.sh` to explicitly target One UI 8.5 & 9.0 cross-version.
   - Updated `COMPACT_CONTEXT.MD`.
 
+## 2026-10-09 18:50 (Factory Data Reset Initiation)
+- **Goal**: Clean wipe and factory reset before One UI 9.0 OTA update.
+- **Actions Taken**:
+  - Invoked `com.android.settings.Settings$ResetDashboardFragmentActivity` and woke up device into `FactoryResetActivity`.
+  - Disconnected and rebooted into recovery/wipe sequence for cryptographic storage erasure and clean factory state.
+  - Device undergoing UFS 4.0 data formatting and preparing for initial OOBE wizard.
+
 ## Mappa di Contesto Condensata
 - **Architettura & Stack:**
   - Companion App Android: Kotlin + Jetpack Compose + Material 3 + Shizuku IPC (`rikka.shizuku:api:13.1.5`). Package: `com.s25optimizer`.

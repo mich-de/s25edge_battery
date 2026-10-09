@@ -250,7 +250,7 @@ object Optimizations {
             "Contapassi, monitoraggio sonno, allenamenti. Tienilo se lo usi!",
             "pm disable-user --user 0 com.sec.android.app.shealth",
             "pm enable com.sec.android.app.shealth",
-            """pm list packages -d 2>/dev/null | grep -cFx "package:com.sec.android.app.shealth"""",
+            """if pm list packages 2>/dev/null | grep -qF "package:com.sec.android.app.shealth"; then pm list packages -d 2>/dev/null | grep -cFx "package:com.sec.android.app.shealth"; else echo 1; fi"""",
             group = "Samsung Apps", groupIt = "App Samsung"),
 
         opt("chrome_custom", Optimization.Category.BLOAT,
@@ -378,7 +378,7 @@ object Optimizations {
             "App SMS di serie Samsung. Sicuro da disabilitare: usa Google Messaggi per supporto completo RCS e crittografia.",
             "pm disable-user --user 0 com.samsung.android.messaging",
             "pm enable com.samsung.android.messaging",
-            """pm list packages -d 2>/dev/null | grep -cFx "package:com.samsung.android.messaging"""",
+            """if pm list packages 2>/dev/null | grep -qF "package:com.samsung.android.messaging"; then pm list packages -d 2>/dev/null | grep -cFx "package:com.samsung.android.messaging"; else echo 1; fi"""",
             group = "Samsung Apps", groupIt = "App Samsung"),
 
         opt("samsung_calendar", Optimization.Category.BLOAT,
@@ -436,11 +436,11 @@ object Optimizations {
 
         opt("samsung_statsd", Optimization.Category.BLOAT,
             "Samsung Analytics (statsd)", "Analytics Samsung (statsd)",
-            "Samsung telemetry and usage statistics collection. ⚠️ May break battery settings page.",
-            "Raccolta telemetria e statistiche d'uso Samsung. ⚠️ Può rompere pagina impostazioni batteria.",
-            "pm disable-user --user 0 com.samsung.android.statsd",
-            "pm enable com.samsung.android.statsd",
-            """pm list packages -d 2>/dev/null | grep -cFx "package:com.samsung.android.statsd"""",
+            "Samsung telemetry and usage statistics collection.",
+            "Raccolta telemetria e statistiche d'uso Samsung.",
+            "pm disable-user --user 0 com.samsung.android.statsd; pm disable-user --user 0 com.samsung.android.knox.analytics.uploader; pm disable-user --user 0 com.sec.android.diagmonagent",
+            "pm enable com.samsung.android.statsd; pm enable com.samsung.android.knox.analytics.uploader; pm enable com.sec.android.diagmonagent",
+            """if pm list packages 2>/dev/null | grep -qF "package:com.samsung.android.statsd"; then pm list packages -d 2>/dev/null | grep -cFx "package:com.samsung.android.statsd"; else pm list packages -d 2>/dev/null | grep -cFx "package:com.samsung.android.knox.analytics.uploader"; fi""",
             group = "Knox & Telemetry", groupIt = "Knox e telemetria"),
 
         opt("theme_designer", Optimization.Category.BLOAT,
@@ -449,7 +449,7 @@ object Optimizations {
             "Strumento creazione temi Samsung separato dal Theme Store. Resta inattivo in background.",
             "pm disable-user --user 0 com.samsung.android.themedesigner",
             "pm enable com.samsung.android.themedesigner",
-            """pm list packages -d 2>/dev/null | grep -cFx "package:com.samsung.android.themedesigner"""",
+            """if pm list packages 2>/dev/null | grep -qF "package:com.samsung.android.themedesigner"; then pm list packages -d 2>/dev/null | grep -cFx "package:com.samsung.android.themedesigner"; else echo 1; fi""",
             group = "Samsung Apps", groupIt = "App Samsung"),
 
         opt("share_live", Optimization.Category.BLOAT,
@@ -485,7 +485,7 @@ object Optimizations {
             "Ottimizza prestazioni app pre-compilando. Esegue una volta poi resta inattivo. Spesso spinto da Esperienza Samsung.",
             "pm disable-user --user 0 com.samsung.android.appbooster",
             "pm enable com.samsung.android.appbooster",
-            """pm list packages -d 2>/dev/null | grep -cFx "package:com.samsung.android.appbooster"""",
+            """if pm list packages 2>/dev/null | grep -qF "package:com.samsung.android.appbooster"; then pm list packages -d 2>/dev/null | grep -cFx "package:com.samsung.android.appbooster"; else echo 1; fi""",
             group = "Samsung Apps", groupIt = "App Samsung"),
 
         // ── GOOGLE ──

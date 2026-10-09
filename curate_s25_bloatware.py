@@ -140,6 +140,10 @@ DEBLOAT_CATALOG = [
     ("com.google.android.feedback", "Google", "Google Feedback Bug Reporter", "Stops system crash reports uploading to Google"),
     ("com.google.android.gms.supervision", "Google", "Google Family Link Supervision", "Eliminates parental supervision listener"),
     ("com.google.android.glasses.core", "Google", "Google Glasses Core Service", "Removes unused smart glasses framework"),
+    ("com.google.android.youtube", "Google", "YouTube App", "Disables YouTube app (use Brave or web/NewPipe)"),
+    ("com.google.android.apps.youtube.music", "Google", "YouTube Music", "Disables YouTube Music service"),
+    ("com.android.chrome", "Google", "Google Chrome Browser", "Disables Chrome (Brave browser is default)"),
+    ("com.sec.android.app.chromecustomizations", "Google", "Chrome Customizations Partner", "Disables Samsung Chrome partner hooks"),
 ]
 
 def run_adb(cmd_list):

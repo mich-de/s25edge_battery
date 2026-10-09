@@ -1,7 +1,7 @@
 @echo off
 REM ═══════════════════════════════════════════════════════════════════
-REM S25 EDGE BATTERY OPTIMIZER — MODALITÀ "ZERO SERVIZI SAMSUNG" v3.1
-REM Target: Galaxy S25 Edge / S25 Series | One UI 9.0 (Android 17)
+REM S25 EDGE BATTERY OPTIMIZER -- MODALITA' "ZERO SERVIZI SAMSUNG" v3.1
+REM Target: Galaxy S25 Edge / S25 Series | One UI 8.5 & 9.0 (Android 16 / 17)
 REM ═══════════════════════════════════════════════════════════════════
 REM Questo script disabilita TUTTI i servizi Samsung di default,
 REM sostituendo l'esperienza proprietaria con i servizi standard Google/AOSP.
@@ -15,7 +15,7 @@ if not exist %ADB% set ADB="%USERPROFILE%\AppData\Local\Android\Sdk\platform-too
 if not exist %ADB% set ADB=adb
 
 echo ===================================================================
-echo   S25 EDGE BATTERY OPTIMIZER — ZERO SERVIZI SAMSUNG (One UI 9)
+echo   S25 EDGE BATTERY OPTIMIZER -- ZERO SERVIZI SAMSUNG (One UI 8.5 / 9.0)
 echo ===================================================================
 echo.
 echo Controllo connessione dispositivo ADB...

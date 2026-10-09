@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # ═══════════════════════════════════════════════════════════════════
-# S25 EDGE BATTERY OPTIMIZER — MODALITÀ "ZERO SERVIZI SAMSUNG" v3.1
+# S25 EDGE BATTERY OPTIMIZER -- MODALITA' "ZERO SERVIZI SAMSUNG" v3.1
+# Target: Galaxy S25 Edge / S25 Series | One UI 8.5 & 9.0 (Android 16 / 17)
 # Linux & macOS Bash Automation Script
 # ═══════════════════════════════════════════════════════════════════
 
@@ -17,7 +18,7 @@ else
     exit 1
 fi
 
-echo "=== S25 EDGE BATTERY OPTIMIZER — ZERO SERVIZI SAMSUNG (One UI 9) ==="
+echo "=== S25 EDGE BATTERY OPTIMIZER -- ZERO SERVIZI SAMSUNG (One UI 8.5 / 9.0) ==="
 "$ADB" devices
 
 echo "-------------------------------------------------------------------"

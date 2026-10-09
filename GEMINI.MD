@@ -86,6 +86,15 @@
   - Software bloat findings: RAM Plus active at 8GB (`ram_expand_size 8192`), Standard performance profile, radio background sniffers active.
   - Authored comprehensive diagnostic artifact & report: [s25edge_diagnostica_usato.md](file:///D:/s25edge/s25edge_diagnostica_usato.md).
 
+## 2026-10-09 18:46 (One UI 8.5 Firmware Confirmation & Compatibility Alignment)
+- **Goal**: Confirm and align optimization suite to One UI 8.5 (`ro.build.version.oneui = 80500`, Android 16, build `BP4A.251205.006.S937BXXSACZH1`).
+- **Actions Taken**:
+  - Verified live device properties: `ro.build.version.release = 16`, `ro.build.version.oneui = 80500`.
+  - Confirmed 100% compatibility of core optimizations (`sem_low_power_mode 1`, `ram_expand_size 0`, `bg-dexopt-job`, `lool` bootloop safeguards, and Zero Samsung Services package debloat).
+  - Executed live hardware test suite [test_hardware_sensors_live.py](file:///D:/s25edge/test_hardware_sensors_live.py) achieving 8/8 `[PASS]`.
+  - Updated headers in `releases/s25-optimize.bat` and `releases/s25-optimize.sh` to explicitly target One UI 8.5 & 9.0 cross-version.
+  - Updated `COMPACT_CONTEXT.MD`.
+
 ## Mappa di Contesto Condensata
 - **Architettura & Stack:**
   - Companion App Android: Kotlin + Jetpack Compose + Material 3 + Shizuku IPC (`rikka.shizuku:api:13.1.5`). Package: `com.s25optimizer`.

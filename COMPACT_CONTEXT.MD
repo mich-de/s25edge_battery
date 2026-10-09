@@ -1,8 +1,8 @@
 # 🧠 COMPACT_CONTEXT.MD — S25 Edge Battery Optimizer
 
 ## 🏗️ 1. Architettura & Stack Tecnologico
-* **Target Hardware:** Samsung Galaxy S25 Edge (`SM-S936x`), S25 (`SM-S931x`), S25 Ultra (`SM-S938x`) su Snapdragon 8 Elite / Exynos 2500.
-* **Target OS:** One UI 9.0 / Android 17 (SDK 37).
+* **Target Hardware:** Samsung Galaxy S25 Edge (`SM-S936x` / `SM-S937B`), S25 (`SM-S931x`), S25 Ultra (`SM-S938x`) su Snapdragon 8 Elite / Exynos 2500.
+* **Target OS:** One UI 8.5 & One UI 9.0 / Android 16 & Android 17 (SDK 36/37). Rilevato su device fisico: One UI 8.5 (`80500` / Android 16).
 * **Componenti Principali:**
   1. **Companion App Nativa (`android-app/`):** Kotlin, Jetpack Compose, Material 3, Shizuku IPC (`rikka.shizuku:api:13.1.5`). Package: `com.s25optimizer`.
   2. **Automazione Batch/Shell (`releases/`):**

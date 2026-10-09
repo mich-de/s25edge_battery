@@ -56,6 +56,13 @@
   - Pushed all files and commits to GitHub.
   - Published GitHub Release `v1.0.0` with assets (`s25-battery-optimizer.apk`, `.bat`, `.sh` scripts) and release notes.
 
+## 2026-10-09 18:30 (Physical Device Arrival & Initial Assessment)
+- **Goal**: Immediate status assessment upon device arrival and generation of `s25edge_appenaarrivato.md`.
+- **Actions Taken**:
+  - Executed PnP and ADB diagnostics: confirmed previous pairing history (`USB\VID_04E8&PID_6860\RFCX30T8WBL`), ADB daemon listening on port 5037, device pending USB connection / debugging authorization.
+  - Authored comprehensive out-of-the-box status report: `s25edge_appenaarrivato.md`.
+  - Documented initial factory conditions, post-setup indexing risks, RAM Plus swap thrashing, Light Performance Profile necessity, and immediate step-by-step connection & tuning sequence.
+
 ## Mappa di Contesto Condensata
 - **Architettura & Stack:**
   - Companion App Android: Kotlin + Jetpack Compose + Material 3 + Shizuku IPC (`rikka.shizuku:api:13.1.5`). Package: `com.s25optimizer`.

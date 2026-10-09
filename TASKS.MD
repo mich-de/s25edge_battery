@@ -38,3 +38,7 @@
 - [x] **Repository & GitHub Deployment**
   - [x] `[DevOps-Agent]` Link remote and push codebase with README to https://github.com/mich-de/s25edge_battery.
 
+- [x] **Device Arrival & Initial Health Check (Live Status)**
+  - [x] `[RELIABILITY-DEVOPS]` Inspect hardware connection, USB PnP registry, and ADB daemon status.
+  - [x] `[ENTERPRISE-ARCHITECT]` Author `s25edge_appenaarrivato.md` with factory baseline audit, stock risks, and step-by-step unboxing/tuning roadmap.
+

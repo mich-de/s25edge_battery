@@ -116,6 +116,15 @@
     - Documentation: `SAMSUNG_ZERO_SERVICES_GUIDE.md`.
   - Re-verified critical guardrail: `com.samsung.android.lool` strictly untouched across all files.
 
+## 2026-10-09 19:10 (Internet Forwarding & One UI 9.0 Confirmation)
+- **Goal**: Forward PC Gigabit internet to S25 Edge smartphone and verify live OS version.
+- **Actions Taken**:
+  - Re-established ADB connection to `SM-S937B` (`R5GL85VQHNJ`).
+  - Activated high-speed Internet sharing via PC Intel Wi-Fi 6E hotspot: SSID `ITCRWWRK3556`, connected at 648 Mbps, 5GHz, 25ms RTT, 0% packet loss.
+  - Initialized USB reverse proxy tunnel via `usb_proxy.py` and `adb reverse tcp:8888 tcp:8888`.
+  - Discovered and confirmed device is running official **One UI 9.0 (Android 17, SDK 37, Build `CP2A.260605.016.S937BXXUADZIF`, security patch 2026-09-05)**!
+  - Confirmed One UI 9 default conditions: RAM Plus active at 8GB (`ram_expand_size 8192`), standard performance mode, background scanners. Ready for optimization execution.
+
 ## Mappa di Contesto Condensata
 - **Architettura & Stack:**
   - Companion App Android: Kotlin + Jetpack Compose + Material 3 + Shizuku IPC (`rikka.shizuku:api:13.1.5`). Package: `com.s25optimizer`.

@@ -79,7 +79,7 @@ object Optimizations {
                 + "pm enable com.samsung.android.bixby.ondevice.svse; "
                 + "pm enable com.samsung.android.bixby.ondevice.trtr; "
                 + "pm enable com.samsung.android.bixby.ondevice.zhhk",
-            """pm list packages -d 2>/dev/null | grep -cFx "package:com.samsung.android.bixby.ondevice.itit"""",
+            """if pm list packages 2>/dev/null | grep -qF "package:com.samsung.android.bixby.ondevice.itit"; then pm list packages -d 2>/dev/null | grep -cFx "package:com.samsung.android.bixby.ondevice.itit"; else echo 1; fi"""",
             group = "Bixby"),
 
         opt("vision_intel", Optimization.Category.BLOAT,

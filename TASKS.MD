@@ -45,5 +45,12 @@
   - [x] `[ENTERPRISE-ARCHITECT]` Author `s25edge_diagnostica_usato.md` with in-depth battery fuel gauge, Knox, sensors, and UFS 4.0 analysis.
   - [x] `[RELIABILITY-DEVOPS]` Launch Factory Data Reset flow via Settings Activity for clean slate before One UI 9 OTA upgrade.
   - [x] `[DOMAIN-MODELER]` Analyze live running services from S25 Edge telemetry (spage 240MB RAM, aicore, wifi.ai, mhs.ai) and synchronize Android companion app (Optimizations.kt), scripts, and guides.
-  - [x] `[RELIABILITY-DEVOPS]` Pass PC Gigabit internet connection to smartphone via Wi-Fi 6 (648 Mbps, 0% packet loss) and ADB tunnel. Confirmed device running One UI 9.0 (Android 17, SDK 37, build CP2A.260605.016.S937BXXUADZIF).
+  - [x] **Live S25 Edge Tuning & Curated AI Debloat (One UI 9.0 / Android 17)**
+  - [x] `[RELIABILITY-DEVOPS]` Downloaded Shizuku v13.6.0 official APK from GitHub (`RikkaApps/Shizuku`), installed on device, deployed executable `/data/local/tmp/shizuku`, and started `shizuku_server` daemon.
+  - [x] `[RELIABILITY-DEVOPS]` Installed companion app `s25-battery-optimizer.apk` (`com.s25optimizer`) and granted Shizuku permission (`API_V23`).
+  - [x] `[ENTERPRISE-ARCHITECT]` Authored and executed `curate_s25_bloatware.py`: disabled 86 packages (Meta, Microsoft, Spotify, LinkedIn, Hiya, Samsung Shop/TV Plus, Gaming Hub/GOS, Rubin profiling, Bixby suite, Smart Suggestions, Wi-Fi/Hotspot AI).
+  - [x] `[DOMAIN-MODELER]` Strictly preserved community-approved AI features (Circle to Search, Gemini, Generative Photo Editing & Eraser, Photo Remaster, Vision Model, OCR, Live Call Translate, Interpreter, Offline Language Models, Voice Recorder transcription).
+  - [x] `[SECURITY-GOVERNANCE]` Strictly protected `com.samsung.android.lool` (Device Care) and `com.samsung.android.honeyboard` (Keyboard).
+  - [x] `[SCALABILITY-PERF]` Executed `sm fstrim` on UFS 4.0 storage and verified available RAM expansion (+2.2 GB free RAM, now ~7.0 GB available).
+
 

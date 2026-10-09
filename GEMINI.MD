@@ -125,6 +125,20 @@
   - Discovered and confirmed device is running official **One UI 9.0 (Android 17, SDK 37, Build `CP2A.260605.016.S937BXXUADZIF`, security patch 2026-09-05)**!
   - Confirmed One UI 9 default conditions: RAM Plus active at 8GB (`ram_expand_size 8192`), standard performance mode, background scanners. Ready for optimization execution.
 
+## 2026-10-09 19:20 (Shizuku Deployment & Curated Community AI Debloat)
+- **Goal**: Install Shizuku from official GitHub release, configure privileged ADB server, install companion app, and execute curated debloat disabling all bloatware while strictly keeping only the AI features loved by the community.
+- **Actions Taken**:
+  - Downloaded latest official Shizuku release `v13.6.0` (`shizuku-v13.6.0.r1086.2650830c-release.apk`) via GitHub API into `releases/shizuku.apk`.
+  - Installed `moe.shizuku.privileged.api` onto live device via ADB.
+  - Deployed standalone starter binary to `/data/local/tmp/shizuku` (chmod 755) and started `shizuku_server` daemon (running as user `shell`).
+  - Installed companion app `releases/s25-battery-optimizer.apk` (`com.s25optimizer`) and granted `moe.shizuku.manager.permission.API_V23`.
+  - Authored and executed [curate_s25_bloatware.py](file:///D:/s25edge/curate_s25_bloatware.py):
+    - Disabled 86 bloatware and telemetry packages: Facebook/Meta, Microsoft, Spotify, LinkedIn, Hiya, Samsung Shop, Samsung TV Plus, Gaming Hub/GOS, Rubin profiling engine, Bixby agent/wakeup/vision, Smart Suggestions, Wi-Fi/Hotspot AI, AR Emoji/Zone, and Samsung Continuity BLE scanners.
+    - Strictly protected system stability: `com.samsung.android.lool` (Device Care) and `com.samsung.android.honeyboard` (Keyboard) remain 100% active.
+    - Strictly preserved community-approved AI features: Circle to Search (`googlequicksearchbox`), Google AICore (`aicore` / Gemini Nano), Google Gemini (`bard`), Generative Object Eraser (`photoretouching`), AI Photo Remaster (`photoremasterservice`), Vision Model (`vision.model`), System OCR (`sdk.ocr`), Live Call Translate (`telephonyui`), Voice Interpreter (`interpreter`), Offline Language Models (`offline.languagemodel`), and Voice Recorder transcriptions (`voicenote`).
+  - Ran `sm fstrim` across UFS 4.0 storage partitions.
+  - Verified RAM: Available memory jumped from 4.8 GB to ~7.0 GB (+2.2 GB free RAM!).
+
 ## Mappa di Contesto Condensata
 - **Architettura & Stack:**
   - Companion App Android: Kotlin + Jetpack Compose + Material 3 + Shizuku IPC (`rikka.shizuku:api:13.1.5`). Package: `com.s25optimizer`.

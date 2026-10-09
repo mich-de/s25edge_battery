@@ -70,7 +70,7 @@ echo   -> COSA FA: Feed multimediale e notizie a sinistra della home screen.
 echo   -> COSA SUCCEDE: Liberati ~240MB di RAM residente ed eliminato il download background di news.
 %ADB% shell pm disable-user --user 0 com.samsung.android.app.spage >nul 2>&1
 
-echo [Wi-Fi & Hotspot AI] Disabilitazione wifi.ai e mhs.ai...
+echo [Wi-Fi e Hotspot AI] Disabilitazione wifi.ai e mhs.ai...
 echo   -> COSA FA: Telemetria continua sulla qualita' delle connessioni wireless.
 echo   -> COSA SUCCEDE: Zero risvegli parassiti del modem; Wi-Fi e Hotspot funzionano normalmente.
 %ADB% shell pm disable-user --user 0 com.samsung.android.wifi.ai >nul 2>&1
@@ -103,11 +103,11 @@ echo   -> COSA FA: Mostra popup dopo gli aggiornamenti OTA per installare app sp
 echo   -> COSA SUCCEDE: Mai piu' consigli per installare app partner dopo gli aggiornamenti.
 %ADB% shell pm disable-user --user 0 com.samsung.android.app.updatecenter
 
-echo [SCPM & Telemetry] Disabilitazione com.samsung.android.scpm e statsd...
+echo [SCPM e Telemetry] Disabilitazione com.samsung.android.scpm e statsd...
 echo   -> COSA FA: Raccolta telemetria e abitudini di utilizzo del telefono.
 echo   -> COSA SUCCEDE: Bloccato l'invio di statistiche d'uso verso server remoti a schermo spento.
-%ADB% shell pm disable-user --user 0 com.samsung.android.scpm
-%ADB% shell pm disable-user --user 0 com.samsung.android.statsd
+%ADB% shell pm disable-user --user 0 com.samsung.android.scpm >nul 2>&1
+%ADB% shell pm disable-user --user 0 com.samsung.android.statsd >nul 2>&1
 
 REM ───────────────────────────────────────────────────────────────────
 REM SEZIONE 3: APPLICAZIONI GIORNALIERE E SUITE SAMSUNG (SOSTITUIBILI DA GOOGLE)
@@ -126,7 +126,7 @@ if %ERRORLEVEL% EQU 0 (
 ) else (
     echo [AVVISO TASTIERA] Gboard NON rilevata. Manteniamo la tastiera Samsung attiva
     echo   per evitare che tu non possa digitare la password al riavvio!
-    echo   (Per sostituirla: installa prima Gboard dal Play Store, poi riesegui).
+    echo   Per sostituirla: installa prima Gboard dal Play Store, poi riesegui.
 )
 
 echo [Messaggi Samsung] Disabilitazione com.samsung.android.messaging...

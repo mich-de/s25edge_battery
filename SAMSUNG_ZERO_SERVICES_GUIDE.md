@@ -48,6 +48,21 @@ La community di XDA e Reddit ha individuato alcuni componenti Samsung legati a O
 * **Cosa succede**: Non puoi usare Bixby senza connessione internet. Se non usi Bixby, sono file completamente morti.
 * **Cosa guadagni**: Spazio flash liberato e zero controlli periodici di aggiornamento dizionari.
 
+### `com.samsung.android.aicore`
+* **Cosa fa**: Runtime on-device dei modelli linguistici proprietari Samsung (Galaxy AI per suggerimenti di scrittura e riassunti).
+* **Cosa succede**: I modelli Samsung non vengono precaricati in RAM cache. Circle to Search e Google Gemini rimangono attivi al 100% (usano `com.google.android.aicore`).
+* **Cosa guadagni**: Circa 150-200 MB di RAM fisica liberata e stop alle sincronizzazioni IA proprietarie.
+
+### `com.samsung.android.app.spage` (Samsung Free / Daily)
+* **Cosa fa**: Pagina multimediale e feed notizie/podcast sul pannello a sinistra della schermata Home.
+* **Cosa succede**: Eliminato il pannello Samsung Free. Puoi usare Google Discover o disattivare del tutto la pagina sinistra.
+* **Cosa guadagni**: **Circa 240 MB di RAM fisica liberata** e azzeramento del prefetching in background di notizie pubblicitarie.
+
+### `com.samsung.android.wifi.ai` & `com.samsung.android.mhs.ai`
+* **Cosa fa**: Analizzatori euristici basati su machine learning per il monitoraggio della qualità Wi-Fi e gestione hotspot.
+* **Cosa succede**: Le connessioni Wi-Fi e l'hotspot tethering continuano a funzionare regolarmente con lo stack di rete standard Android.
+* **Cosa guadagni**: Zero risvegli parassiti dei controller radio e minore consumo in mobilità.
+
 ---
 
 ## 2. Account Samsung, Telemetria e Notifiche OTA

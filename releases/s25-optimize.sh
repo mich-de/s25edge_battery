@@ -32,6 +32,11 @@ done
 for lang in arae dede enus eses esmx itit plpl ptbr roro ruxx svse trtr zhhk; do
     "$ADB" shell pm disable-user --user 0 "com.samsung.android.bixby.ondevice.$lang" 2>/dev/null || true
 done
+for pkg in com.samsung.android.aicore com.samsung.android.app.spage \
+           com.samsung.android.wifi.ai com.samsung.android.mhs.ai; do
+    echo "Disabilitazione $pkg..."
+    "$ADB" shell pm disable-user --user 0 "$pkg" 2>/dev/null || true
+done
 
 echo "-------------------------------------------------------------------"
 echo "[2/8] ACCOUNT SAMSUNG, GALAXY STORE E TELEMETRIA"

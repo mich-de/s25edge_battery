@@ -60,6 +60,23 @@ for %%p in (arae dede enus eses esmx itit plpl ptbr roro ruxx svse trtr zhhk) do
     %ADB% shell pm disable-user --user 0 com.samsung.android.bixby.ondevice.%%p >nul 2>&1
 )
 
+echo [Galaxy AI Core] Disabilitazione com.samsung.android.aicore...
+echo   -> COSA FA: Runtime on-device dei modelli IA Samsung per scrittura e riassunti.
+echo   -> COSA SUCCEDE: Liberati ~200MB di RAM cache. Circle to Search e Gemini restano attivi al 100%%.
+%ADB% shell pm disable-user --user 0 com.samsung.android.aicore >nul 2>&1
+
+echo [Samsung Free / spage] Disabilitazione com.samsung.android.app.spage...
+echo   -> COSA FA: Feed multimediale e notizie a sinistra della home screen.
+echo   -> COSA SUCCEDE: Liberati ~240MB di RAM residente ed eliminato il download background di news.
+%ADB% shell pm disable-user --user 0 com.samsung.android.app.spage >nul 2>&1
+
+echo [Wi-Fi & Hotspot AI] Disabilitazione wifi.ai e mhs.ai...
+echo   -> COSA FA: Telemetria continua sulla qualita' delle connessioni wireless.
+echo   -> COSA SUCCEDE: Zero risvegli parassiti del modem; Wi-Fi e Hotspot funzionano normalmente.
+%ADB% shell pm disable-user --user 0 com.samsung.android.wifi.ai >nul 2>&1
+%ADB% shell pm disable-user --user 0 com.samsung.android.mhs.ai >nul 2>&1
+
+
 REM ───────────────────────────────────────────────────────────────────
 REM SEZIONE 2: ACCOUNT SAMSUNG, GALAXY STORE E AGGIORNAMENTI OTA
 REM ───────────────────────────────────────────────────────────────────

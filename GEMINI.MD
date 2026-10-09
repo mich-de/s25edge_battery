@@ -102,6 +102,20 @@
   - Disconnected and rebooted into recovery/wipe sequence for cryptographic storage erasure and clean factory state.
   - Device undergoing UFS 4.0 data formatting and preparing for initial OOBE wizard.
 
+## 2026-10-09 19:00 (Live Running Services Audit & App/Script Synchronization)
+- **Goal**: Deep audit of active background processes on the S25 Edge hardware and synchronize the companion Android app (`Optimizations.kt`), batch/bash automation scripts, and guides.
+- **Findings & Actions**:
+  - Uncovered specific memory hogs on live device:
+    - `com.samsung.android.app.spage` (Samsung Free / Media Page): consuming 240,612 KB (~240MB) of RAM resident!
+    - `com.samsung.android.aicore`: on-device LLM model runtime resident in memory.
+    - `com.samsung.android.wifi.ai` & `com.samsung.android.mhs.ai`: background Wi-Fi and Mobile Hotspot AI sniffers waking radio modem.
+  - Integrated all 4 services into:
+    - Android app: `android-app/app/src/main/java/com/s25optimizer/data/Optimizations.kt` (`galaxy_aicore`, `samsung_spage`, `wifi_hotspot_ai`).
+    - Windows scripts: `releases/s25-optimize.bat` and `releases/s25-restore.bat`.
+    - Linux/macOS scripts: `releases/s25-optimize.sh` and `releases/s25-restore.sh`.
+    - Documentation: `SAMSUNG_ZERO_SERVICES_GUIDE.md`.
+  - Re-verified critical guardrail: `com.samsung.android.lool` strictly untouched across all files.
+
 ## Mappa di Contesto Condensata
 - **Architettura & Stack:**
   - Companion App Android: Kotlin + Jetpack Compose + Material 3 + Shizuku IPC (`rikka.shizuku:api:13.1.5`). Package: `com.s25optimizer`.

@@ -44,4 +44,5 @@
   - [x] `[SECURITY-GOVERNANCE]` Full hardware & sensor audit for used device (Knox 0x0 verified, battery 5 cycles / 100% BSOH, 40 sensors operational).
   - [x] `[ENTERPRISE-ARCHITECT]` Author `s25edge_diagnostica_usato.md` with in-depth battery fuel gauge, Knox, sensors, and UFS 4.0 analysis.
   - [x] `[RELIABILITY-DEVOPS]` Launch Factory Data Reset flow via Settings Activity for clean slate before One UI 9 OTA upgrade.
+  - [x] `[DOMAIN-MODELER]` Analyze live running services from S25 Edge telemetry (spage 240MB RAM, aicore, wifi.ai, mhs.ai) and synchronize Android companion app (Optimizations.kt), scripts, and guides.
 

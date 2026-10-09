@@ -27,6 +27,10 @@ for %%p in (
     com.samsung.android.game.gos
     com.samsung.android.smartsuggestions
     com.samsung.android.rubin.app
+    com.samsung.android.aicore
+    com.samsung.android.app.spage
+    com.samsung.android.wifi.ai
+    com.samsung.android.mhs.ai
     com.samsung.android.bbc.bbcagent
     com.samsung.android.app.reminder
     com.samsung.android.app.notes

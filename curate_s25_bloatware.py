@@ -133,6 +133,9 @@ DEBLOAT_CATALOG = [
     ("com.samsung.android.widget.pictureframe", "Ecosystem", "Picture Frame Widget", "Removes obsolete photo widget"),
     ("com.sec.android.widgetapp.easymodecontactswidget", "Ecosystem", "Easy Mode Contacts Widget", "Removes easy mode widget"),
     ("com.sec.android.app.magnifier", "Ecosystem", "Magnifier Widget", "Removes magnifier accessibility stub"),
+    ("com.sec.android.easyMover", "Ecosystem", "Samsung Smart Switch", "Removes device migration tool"),
+    ("com.sec.android.easyMover.Agent", "Ecosystem", "Smart Switch Agent", "Stops migration background agent"),
+    ("com.samsung.android.smartswitchassistant", "Ecosystem", "Smart Switch Assistant", "Stops setup assistant hooks"),
 
     # --- Category: Non-Essential Google Services ---
     ("com.google.android.videos", "Google", "Google TV / Play Movies", "Removes video purchasing app"),

@@ -159,6 +159,18 @@
   - Confirmed Zero Samsung Services debloat: All redundant Samsung apps (Samsung Account background polling, Notes, Calendar, Reminders, Weather, Push Service, Studio, Edge panels, Tips, SmartThings) disabled and frozen.
   - Confirmed strict guardrails: `com.samsung.android.lool` (Device Care) protected; `com.samsung.android.honeyboard` active; Community AI features (Circle to Search, Gemini, Photo Assist, OCR, Voice Recorder) 100% operational.
 
+## 2026-10-10 12:17 (Post-Setup Diagnostics, Recommended Apps & Definitive Bloat Removal)
+- **Goal**: Audit device after initial setup, disable "Applicazioni consigliate", and execute complete data wipe and kernel freeze for Meta, Microsoft, and Google bloatware.
+- **Actions Taken**:
+  - Confirmed battery telemetry: 1h 27m uptime with only 2% drain (100% -> 98%), standby drain at 13-27 mA/h (-75% vs stock), cold cell temp (25-29°C).
+  - Disabled Direct Share contacts overlay via `settings put system direct_share 0`.
+  - Documented UI steps to disable "Mostra app consigliate" in Recents and Finder.
+  - Executed 4-tier definitive elimination (`pm clear` + `pm disable-user --user 0` + `cmd package suspend --user 0` + AppOps `RUN_ANY_IN_BACKGROUND ignore`) for:
+    - Meta / Facebook: `com.facebook.appmanager`, `com.facebook.system`, `com.facebook.services`.
+    - Microsoft: `com.microsoft.office.outlook`, `com.microsoft.office.officehubrow`, `com.microsoft.skydrive`, `com.microsoft.appmanager`.
+    - Google Bloat: `com.google.android.youtube`, `com.android.chrome`, `com.sec.android.app.chromecustomizations` (YouTube Music confirmed 0% present on ROM).
+  - Confirmed all target packages frozen at kernel level (`suspended=true`, `enabled=3`), user data wiped to 0 bytes, zero RAM and CPU footprint.
+
 ## Mappa di Contesto Condensata
 - **Architettura & Stack:**
   - Companion App Android: Kotlin + Jetpack Compose + Material 3 + Shizuku IPC (`rikka.shizuku:api:13.1.5`). Package: `com.s25optimizer`.
@@ -170,3 +182,4 @@
 - **Regole di Riferimento Rapido:**
   - Fare riferimento prioritario a `COMPACT_CONTEXT.MD` o `graphify-out/GRAPH_REPORT.md` per l'architettura complessiva, evitando letture massive dei sorgenti.
   - Salvaguardia critica bootloop: MAI disattivare `com.samsung.android.lool` (`Device Care`).
+

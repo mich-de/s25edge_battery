@@ -1,0 +1,3 @@
+# Python dependencies for S25 Edge Battery Optimizer and ADB tooling
+# (Standard library used extensively; keeping dependencies lean and robust)
+requests>=2.31.0

@@ -1,0 +1,2204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>s25edge — Complete Call Flow &amp; Architecture Documentation</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<style>
+:root {
+  --bg: #0f172a; --surface: #1e293b; --border: #334155;
+  --text: #e2e8f0; --muted: #94a3b8; --accent: #38bdf8;
+  --warn: #fbbf24; --err: #f87171; --ok: #34d399;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+.container { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+h1 { font-size: 2.4rem; margin-bottom: 8px; background: linear-gradient(135deg, var(--accent), #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+h2 { font-size: 1.7rem; margin: 48px 0 16px; padding-bottom: 8px; border-bottom: 2px solid var(--accent); }
+h3 { font-size: 1.25rem; margin: 32px 0 12px; color: var(--accent); }
+h4 { font-size: 1.05rem; margin: 20px 0 8px; color: var(--warn); }
+p { margin: 8px 0; color: var(--muted); }
+.subtitle { color: var(--muted); font-size: 1.1rem; margin-bottom: 32px; }
+.mermaid { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin: 20px 0; overflow-x: auto; position: relative; }
+.mermaid.is-enhanced { padding: 0; overflow: hidden; min-height: 260px; }
+.mermaid-viewport { padding: 54px 24px 24px; overflow: hidden; cursor: grab; touch-action: none; min-height: 260px; }
+.mermaid-viewport.is-dragging { cursor: grabbing; }
+.mermaid-viewport svg { max-width: none !important; height: auto; transform-origin: 0 0; transition: transform 120ms ease; }
+.mermaid-toolbar { position: absolute; top: 10px; right: 10px; z-index: 3; display: flex; align-items: center; gap: 6px; padding: 6px; background: rgba(15,23,42,0.92); border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.28); }
+.mermaid-toolbar button, .mermaid-toolbar .zoom-level { height: 28px; min-width: 32px; border: 1px solid var(--border); border-radius: 6px; background: #1e293b; color: var(--text); font: 600 0.78rem system-ui, sans-serif; display: inline-flex; align-items: center; justify-content: center; }
+.mermaid-toolbar button { cursor: pointer; }
+.mermaid-toolbar button:hover { border-color: var(--accent); color: var(--accent); }
+.mermaid-toolbar .zoom-level { min-width: 52px; color: var(--muted); background: transparent; }
+.call-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.92rem; }
+.call-table th { background: #1a2744; color: var(--accent); text-align: left; padding: 10px 14px; border: 1px solid var(--border); }
+.call-table td { padding: 8px 14px; border: 1px solid var(--border); vertical-align: top; }
+.call-table tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+.tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; }
+.tag-async { background: #7c3aed33; color: #a78bfa; }
+.tag-class { background: #05966933; color: var(--ok); }
+.tag-func { background: #2563eb33; color: var(--accent); }
+.tag-cmd { background: #d9770633; color: var(--warn); }
+.tag-endpoint { background: #dc262633; color: var(--err); }
+.tag-hook { background: #db277733; color: #f472b6; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin: 16px 0; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; margin: 16px 0; }
+.arrow-chain { font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--accent); padding: 10px; background: rgba(56,189,248,0.06); border-radius: 6px; }
+code { font-family: 'Fira Code', 'Cascadia Code', monospace; background: rgba(255,255,255,0.06); padding: 1px 6px; border-radius: 3px; font-size: 0.88em; }
+ul, ol { margin: 8px 0 8px 24px; color: var(--muted); }
+li { margin: 4px 0; }
+a { color: var(--accent); }
+hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+.nav { position: sticky; top: 0; background: var(--bg); z-index: 10; padding: 12px 0; border-bottom: 1px solid var(--border); display: flex; gap: 20px; flex-wrap: wrap; font-size: 0.9rem; }
+.nav a { text-decoration: none; }
+.nav a:hover { text-decoration: underline; }
+@media (max-width: 768px) { .container { padding: 16px; } h1 { font-size: 1.8rem; } }
+
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>s25edge — Complete Call Flow &amp; Architecture Documentation</h1>
+<p class="subtitle">Generated from graphify knowledge graph: 427 nodes, 555 edges, 44 communities. Commit: 5fd37ec</p>
+
+<div class="nav">
+    <a href="#overview">Architecture Overview</a>
+    <a href="#extract-pipeline">Extraction Pipeline</a>
+    <a href="#build-graph">Graph Build</a>
+    <a href="#analysis-clustering">Analysis &amp; Clustering</a>
+    <a href="#community-17">Community 17</a>
+    <a href="#community-29">Community 29</a>
+    <a href="#community-30">Community 30</a>
+    <a href="#community-33">Community 33</a>
+    <a href="#community-34">Community 34</a>
+    <a href="#community-35">Community 35</a>
+    <a href="#community-37">Community 37</a>
+    <a href="#community-42">Community 42</a>
+    <a href="#community-43">Community 43</a>
+</div>
+
+<!-- ====== Architecture Overview ====== -->
+<h2 id="overview">1. Architecture Overview</h2>
+
+<div class="mermaid">
+
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    EXTRACT_PIPELINE_5F350230("Extraction Pipeline<br/><small>267 nodes</small>")
+    class EXTRACT_PIPELINE_5F350230 module;
+    BUILD_GRAPH_321CBB04("Graph Build<br/><small>54 nodes</small>")
+    class BUILD_GRAPH_321CBB04 module;
+    ANALYSIS_CLUSTERING_C79796DA("Analysis &amp; Clustering<br/><small>68 nodes</small>")
+    class ANALYSIS_CLUSTERING_C79796DA module;
+    COMMUNITY_17_648F8D7C("Community 17<br/><small>9 nodes</small>")
+    class COMMUNITY_17_648F8D7C module;
+    COMMUNITY_29_DAB74D83("Community 29<br/><small>5 nodes</small>")
+    class COMMUNITY_29_DAB74D83 module;
+    COMMUNITY_30_9CA2CA2E("Community 30<br/><small>5 nodes</small>")
+    class COMMUNITY_30_9CA2CA2E module;
+    COMMUNITY_33_03CF07C5("Community 33<br/><small>5 nodes</small>")
+    class COMMUNITY_33_03CF07C5 module;
+    COMMUNITY_34_80350725("Community 34<br/><small>4 nodes</small>")
+    class COMMUNITY_34_80350725 module;
+    COMMUNITY_35_B2C5BAA1("Community 35<br/><small>4 nodes</small>")
+    class COMMUNITY_35_B2C5BAA1 module;
+    COMMUNITY_37_489F9468("Community 37<br/><small>4 nodes</small>")
+    class COMMUNITY_37_489F9468 module;
+    COMMUNITY_42_BA46CB2A("Community 42<br/><small>1 nodes</small>")
+    class COMMUNITY_42_BA46CB2A module;
+    COMMUNITY_43_5DF3A0B0("Community 43<br/><small>1 nodes</small>")
+    class COMMUNITY_43_5DF3A0B0 module;
+    EXTRACT_PIPELINE_5F350230 -.-> BUILD_GRAPH_321CBB04
+    BUILD_GRAPH_321CBB04 -.-> ANALYSIS_CLUSTERING_C79796DA
+    ANALYSIS_CLUSTERING_C79796DA -.-> COMMUNITY_17_648F8D7C
+    COMMUNITY_17_648F8D7C -.-> COMMUNITY_29_DAB74D83
+    COMMUNITY_29_DAB74D83 -.-> COMMUNITY_30_9CA2CA2E
+    COMMUNITY_30_9CA2CA2E -.-> COMMUNITY_33_03CF07C5
+    COMMUNITY_33_03CF07C5 -.-> COMMUNITY_34_80350725
+    COMMUNITY_34_80350725 -.-> COMMUNITY_35_B2C5BAA1
+    COMMUNITY_35_B2C5BAA1 -.-> COMMUNITY_37_489F9468
+    COMMUNITY_37_489F9468 -.-> COMMUNITY_42_BA46CB2A
+    COMMUNITY_42_BA46CB2A -.-> COMMUNITY_43_5DF3A0B0
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<div class="grid">
+  <div class="card">
+    <h4>Architecture Layers</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>Layer</th><th>Nodes</th><th>Communities</th></tr>
+      <tr><td>Extraction Pipeline</td><td>267</td><td><code>0, 2, 5, 6, 8, 9, 10, 11, 12, 13, 14, 18, 19, 21, 22, 23, 24, 25, 26, 27, 28, 31, 32, 36, 38, 39</code></td></tr><tr><td>Graph Build</td><td>54</td><td><code>1, 15, 16, 40, 41</code></td></tr><tr><td>Analysis &amp; Clustering</td><td>68</td><td><code>3, 4, 7, 20</code></td></tr><tr><td>Community 17</td><td>9</td><td><code>17</code></td></tr><tr><td>Community 29</td><td>5</td><td><code>29</code></td></tr><tr><td>Community 30</td><td>5</td><td><code>30</code></td></tr><tr><td>Community 33</td><td>5</td><td><code>33</code></td></tr><tr><td>Community 34</td><td>4</td><td><code>34</code></td></tr><tr><td>Community 35</td><td>4</td><td><code>35</code></td></tr><tr><td>Community 37</td><td>4</td><td><code>37</code></td></tr><tr><td>Community 42</td><td>1</td><td><code>42</code></td></tr><tr><td>Community 43</td><td>1</td><td><code>43</code></td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Core Flow</h4>
+    <div class="arrow-chain">Extraction Pipeline -&gt; Graph Build -&gt; Analysis &amp; Clustering -&gt; Community 17 -&gt; Community 29 -&gt; Community 30 -&gt; Community 33</div>
+  </div>
+</div>
+<div class="grid">
+  <div class="card">
+    <h4>Graph Report Highlights</h4>
+    <ul>
+      <li>427 nodes · 555 edges · 44 communities (30 shown, 14 thin omitted)</li>
+      <li>Extraction: 95% EXTRACTED · 5% INFERRED · 0% AMBIGUOUS · INFERRED: 27 edges (avg confidence: 0.8)</li>
+      <li>Token cost: 0 input · 0 output</li>
+      <li>1. `t()` - 14 edges</li>
+      <li>2. `AdbExecutor` - 13 edges</li>
+      <li>3. `DiagnosticsScreen()` - 11 edges</li>
+    </ul>
+  </div>
+</div>
+<hr>
+<!-- ====== 2. Extraction Pipeline ====== -->
+<h2 id="extract-pipeline">2. Extraction Pipeline</h2>
+<p>Extraction Pipeline groups implementation around app, android, com, s25optimizer, mostly in s25optimizer/service/ScreenOffService.kt, s25optimizer/service/RestartScheduleReceiver.kt, s25optimizer/exec/AdbExecutor.kt. This section covers 267 nodes and 408 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Extraction Pipeline (267 nodes, 408 edges)
+    subgraph extract_pipeline_com_s25optimizer_ShizukuBridgeP_1967b851["com/s25optimizer/ShizukuBridgeProvider.kt"]
+        s25optimizer_shizukubridgeprovider_shizukubridge_1228857e("ShizukuBridgeProvider<br/><small>com/s25optimizer/ShizukuBridgeProvider.kt</small>")
+        s25optimizer_shizukubridgeprovider_shizukubridge_f72ebb57("ShizukuBridgeReceiver<br/><small>com/s25optimizer/ShizukuBridgeProvider.kt</small>")
+        s25optimizer_shizukubridgeprovider_shizukubridge_50e7405c("onReceive()<br/><small>com/s25optimizer/ShizukuBridgeProvider.kt</small>")
+        s25optimizer_shizukubridgeprovider_shizukubridge_16745e1f("onCreate()<br/><small>com/s25optimizer/ShizukuBridgeProvider.kt</small>")
+        s25optimizer_shizukubridgeprovider_shizukubridge_a37cd86c("callerAllowed()<br/><small>com/s25optimizer/ShizukuBridgeProvider.kt</small>")
+        s25optimizer_shizukubridgeprovider_shizukubridge_e533c15e("tryGetBinderFromManager()<br/><small>com/s25optimizer/ShizukuBridgeProvider.kt</small>")
+        s25optimizer_shizukubridgeprovider_shizukubridge_92da8bc2("call()<br/><small>com/s25optimizer/ShizukuBridgeProvider.kt</small>")
+    end
+    subgraph extract_pipeline_com_s25optimizer_MainActivity_k_293877de["com/s25optimizer/MainActivity.kt"]
+        s25optimizer_mainactivity_mainactivity_651cf52b("MainActivity<br/><small>com/s25optimizer/MainActivity.kt</small>")
+        s25optimizer_mainactivity_mainactivity_onresume_d8b35768("onResume()<br/><small>com/s25optimizer/MainActivity.kt</small>")
+        s25optimizer_mainactivity_mainactivity_oncreate_1391bd18("onCreate()<br/><small>com/s25optimizer/MainActivity.kt</small>")
+    end
+    subgraph extract_pipeline_com_s25optimizer_S25OptimizerAp_5b61b42e["com/s25optimizer/S25OptimizerApp.kt"]
+        s25optimizer_s25optimizerapp_s25optimizerapp_c0c4cb27("S25OptimizerApp<br/><small>com/s25optimizer/S25OptimizerApp.kt</small>")
+        s25optimizer_s25optimizerapp_s25optimizerapp_onc_918008d4("onCreate()<br/><small>com/s25optimizer/S25OptimizerApp.kt</small>")
+        s25optimizer_s25optimizerapp_s25optimizerapp_che_d2ba73a1("checkAndStartService()<br/><small>com/s25optimizer/S25OptimizerApp.kt</small>")
+    end
+    data_batteryhistory_batteryhistory_99a9b922("BatteryHistory<br/><small>s25optimizer/data/BatteryHistory.kt</small>")
+    data_chargeschedule_chargeschedule_414bbc7f("ChargeSchedule<br/><small>s25optimizer/data/ChargeSchedule.kt</small>")
+    data_diagnostics_diagnostics_bf58953c("Diagnostics<br/><small>s25optimizer/data/Diagnostics.kt</small>")
+    exec_adbexecutor_adbexecutor_ddcd21bd("AdbExecutor<br/><small>s25optimizer/exec/AdbExecutor.kt</small>")
+    screens_diagnosticsscreen_diagnosticsscreen_3a50c358("DiagnosticsScreen()<br/><small>ui/screens/DiagnosticsScreen.kt</small>")
+    s25optimizer_mainactivity_mainactivity_651cf52b -->|method| s25optimizer_mainactivity_mainactivity_onresume_d8b35768
+    s25optimizer_mainactivity_mainactivity_651cf52b -->|method| s25optimizer_mainactivity_mainactivity_oncreate_1391bd18
+    s25optimizer_s25optimizerapp_s25optimizerapp_c0c4cb27 -->|method| s25optimizer_s25optimizerapp_s25optimizerapp_onc_918008d4
+    s25optimizer_s25optimizerapp_s25optimizerapp_c0c4cb27 -->|method| s25optimizer_s25optimizerapp_s25optimizerapp_che_d2ba73a1
+    s25optimizer_s25optimizerapp_s25optimizerapp_onc_918008d4 -->|calls| s25optimizer_s25optimizerapp_s25optimizerapp_che_d2ba73a1
+    s25optimizer_shizukubridgeprovider_shizukubridge_f72ebb57 -->|method| s25optimizer_shizukubridgeprovider_shizukubridge_50e7405c
+    s25optimizer_shizukubridgeprovider_shizukubridge_f72ebb57 -->|calls| s25optimizer_shizukubridgeprovider_shizukubridge_16745e1f
+    s25optimizer_shizukubridgeprovider_shizukubridge_1228857e -->|method| s25optimizer_shizukubridgeprovider_shizukubridge_a37cd86c
+    s25optimizer_shizukubridgeprovider_shizukubridge_1228857e -->|method| s25optimizer_shizukubridgeprovider_shizukubridge_16745e1f
+    s25optimizer_shizukubridgeprovider_shizukubridge_1228857e -->|method| s25optimizer_shizukubridgeprovider_shizukubridge_e533c15e
+    s25optimizer_shizukubridgeprovider_shizukubridge_1228857e -->|method| s25optimizer_shizukubridgeprovider_shizukubridge_92da8bc2
+    s25optimizer_shizukubridgeprovider_shizukubridge_16745e1f -->|calls| s25optimizer_shizukubridgeprovider_shizukubridge_e533c15e
+    s25optimizer_shizukubridgeprovider_shizukubridge_e533c15e -->|calls| s25optimizer_shizukubridgeprovider_shizukubridge_92da8bc2
+    %% Omitted for readability: 249 nodes, 0 edges
+    class s25optimizer_shizukubridgeprovider_shizukubridge_1228857e klass;
+    class s25optimizer_shizukubridgeprovider_shizukubridge_f72ebb57 klass;
+    class s25optimizer_shizukubridgeprovider_shizukubridge_50e7405c function;
+    class s25optimizer_shizukubridgeprovider_shizukubridge_16745e1f function;
+    class s25optimizer_shizukubridgeprovider_shizukubridge_a37cd86c function;
+    class s25optimizer_shizukubridgeprovider_shizukubridge_e533c15e function;
+    class s25optimizer_shizukubridgeprovider_shizukubridge_92da8bc2 function;
+    class s25optimizer_mainactivity_mainactivity_651cf52b klass;
+    class s25optimizer_mainactivity_mainactivity_onresume_d8b35768 function;
+    class s25optimizer_mainactivity_mainactivity_oncreate_1391bd18 function;
+    class s25optimizer_s25optimizerapp_s25optimizerapp_c0c4cb27 klass;
+    class s25optimizer_s25optimizerapp_s25optimizerapp_onc_918008d4 function;
+    class s25optimizer_s25optimizerapp_s25optimizerapp_che_d2ba73a1 function;
+    class data_batteryhistory_batteryhistory_99a9b922 klass;
+    class data_chargeschedule_chargeschedule_414bbc7f klass;
+    class data_diagnostics_diagnostics_bf58953c klass;
+    class exec_adbexecutor_adbexecutor_ddcd21bd klass;
+    class screens_diagnosticsscreen_diagnosticsscreen_3a50c358 function;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>t()</code><br><small style="color:var(--muted)">s25optimizer/service/RestartScheduleReceiver.kt</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>AppsScreen()</code><br><small style="color:var(--muted)">ui/screens/AppsScreen.kt</small><br><code>blockingGuards()</code><br><small style="color:var(--muted)">s25optimizer/service/RestartScheduleReceiver.kt</small><br><code>ChargeScheduleCard()</code><br><small style="color:var(--muted)">ui/screens/ChargeScheduleCard.kt</small><br>+10 more</td>
+  <td>t() node in s25optimizer/service/RestartScheduleReceiver.kt.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>AppNavigation.kt</code><br><small style="color:var(--muted)">ui/navigation/AppNavigation.kt</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>AppNavigation.kt node in ui/navigation/AppNavigation.kt.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>Screen</code><br><small style="color:var(--muted)">ui/navigation/AppNavigation.kt</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Screen node in ui/navigation/AppNavigation.kt.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>AppNavigation()</code><br><small style="color:var(--muted)">ui/navigation/AppNavigation.kt</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>MainScreen()</code><br><small style="color:var(--muted)">s25optimizer/ui/MainScreen.kt</small></td>
+  <td><code>AppsScreen()</code><br><small style="color:var(--muted)">ui/screens/AppsScreen.kt</small><br><code>DiagnosticsScreen()</code><br><small style="color:var(--muted)">ui/screens/DiagnosticsScreen.kt</small><br><code>HomeScreen()</code><br><small style="color:var(--muted)">ui/screens/HomeScreen.kt</small><br>+2 more</td>
+  <td>AppNavigation() node in ui/navigation/AppNavigation.kt.</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td><code>AppsScreen.kt</code><br><small style="color:var(--muted)">ui/screens/AppsScreen.kt</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>AppsScreen.kt node in ui/screens/AppsScreen.kt.</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td><code>AppInfo</code><br><small style="color:var(--muted)">ui/screens/AppsScreen.kt</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>loadApps()</code><br><small style="color:var(--muted)">ui/screens/AppsScreen.kt</small></td>
+  <td>AppInfo node in ui/screens/AppsScreen.kt.</td>
+</tr>
+<tr>
+  <td>7</td>
+  <td><code>AppsScreen()</code><br><small style="color:var(--muted)">ui/screens/AppsScreen.kt</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>AppNavigation()</code><br><small style="color:var(--muted)">ui/navigation/AppNavigation.kt</small><br><code>t()</code><br><small style="color:var(--muted)">s25optimizer/service/RestartScheduleReceiver.kt</small></td>
+  <td><code>isAccServiceEnabled()</code><br><small style="color:var(--muted)">ui/screens/AppsScreen.kt</small><br><code>loadApps()</code><br><small style="color:var(--muted)">ui/screens/AppsScreen.kt</small></td>
+  <td>AppsScreen() node in ui/screens/AppsScreen.kt.</td>
+</tr>
+<tr>
+  <td>8</td>
+  <td><code>loadApps()</code><br><small style="color:var(--muted)">ui/screens/AppsScreen.kt</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>AppInfo</code><br><small style="color:var(--muted)">ui/screens/AppsScreen.kt</small><br><code>AppsScreen()</code><br><small style="color:var(--muted)">ui/screens/AppsScreen.kt</small></td>
+  <td>No direct outbound edge</td>
+  <td>loadApps() node in ui/screens/AppsScreen.kt.</td>
+</tr>
+<tr>
+  <td>9</td>
+  <td><code>isAccServiceEnabled()</code><br><small style="color:var(--muted)">ui/screens/AppsScreen.kt</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>AppsScreen()</code><br><small style="color:var(--muted)">ui/screens/AppsScreen.kt</small></td>
+  <td>No direct outbound edge</td>
+  <td>isAccServiceEnabled() node in ui/screens/AppsScreen.kt.</td>
+</tr>
+<tr>
+  <td>10</td>
+  <td><code>ChargeScheduleCard.kt</code><br><small style="color:var(--muted)">ui/screens/ChargeScheduleCard.kt</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>ChargeScheduleCard.kt node in ui/screens/ChargeScheduleCard.kt.</td>
+</tr>
+<tr>
+  <td>11</td>
+  <td><code>ChargeScheduleCard()</code><br><small style="color:var(--muted)">ui/screens/ChargeScheduleCard.kt</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>t()</code><br><small style="color:var(--muted)">s25optimizer/service/RestartScheduleReceiver.kt</small></td>
+  <td><code>HomeScreen()</code><br><small style="color:var(--muted)">ui/screens/HomeScreen.kt</small><br><code>QuickChip()</code><br><small style="color:var(--muted)">ui/screens/HomeScreen.kt</small><br><code>SectionHeader()</code><br><small style="color:var(--muted)">ui/screens/HomeScreen.kt</small><br>+1 more</td>
+  <td>ChargeScheduleCard() node in ui/screens/ChargeScheduleCard.kt.</td>
+</tr>
+<tr>
+  <td>12</td>
+  <td><code>TimeTile()</code><br><small style="color:var(--muted)">ui/screens/ChargeScheduleCard.kt</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>ChargeScheduleCard()</code><br><small style="color:var(--muted)">ui/screens/ChargeScheduleCard.kt</small></td>
+  <td><code>RestartScheduleCard()</code><br><small style="color:var(--muted)">ui/screens/RestartScheduleCard.kt</small></td>
+  <td>TimeTile() node in ui/screens/ChargeScheduleCard.kt.</td>
+</tr>
+<tr>
+  <td>13</td>
+  <td><code>DiagnosticsScreen.kt</code><br><small style="color:var(--muted)">ui/screens/DiagnosticsScreen.kt</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>DiagnosticsScreen.kt node in ui/screens/DiagnosticsScreen.kt.</td>
+</tr>
+<tr>
+  <td>14</td>
+  <td><code>DiagState</code><br><small style="color:var(--muted)">ui/screens/DiagnosticsScreen.kt</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>DiagnosticsScreen()</code><br><small style="color:var(--muted)">ui/screens/DiagnosticsScreen.kt</small></td>
+  <td>DiagState node in ui/screens/DiagnosticsScreen.kt.</td>
+</tr>
+<tr>
+  <td>15</td>
+  <td><code>DiagnosticsScreen()</code><br><small style="color:var(--muted)">ui/screens/DiagnosticsScreen.kt</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>AppNavigation()</code><br><small style="color:var(--muted)">ui/navigation/AppNavigation.kt</small><br><code>DiagState</code><br><small style="color:var(--muted)">ui/screens/DiagnosticsScreen.kt</small><br><code>t()</code><br><small style="color:var(--muted)">s25optimizer/service/RestartScheduleReceiver.kt</small></td>
+  <td><code>ConflictRow()</code><br><small style="color:var(--muted)">ui/screens/DiagnosticsScreen.kt</small><br><code>DiagCard()</code><br><small style="color:var(--muted)">ui/screens/DiagnosticsScreen.kt</small><br><code>duration()</code><br><small style="color:var(--muted)">ui/screens/DiagnosticsScreen.kt</small><br>+4 more</td>
+  <td>DiagnosticsScreen() node in ui/screens/DiagnosticsScreen.kt.</td>
+</tr>
+<tr>
+  <td>16</td>
+  <td><code>DiagCard()</code><br><small style="color:var(--muted)">ui/screens/DiagnosticsScreen.kt</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>DiagnosticsScreen()</code><br><small style="color:var(--muted)">ui/screens/DiagnosticsScreen.kt</small></td>
+  <td>No direct outbound edge</td>
+  <td>DiagCard() node in ui/screens/DiagnosticsScreen.kt.</td>
+</tr>
+<tr>
+  <td>17</td>
+  <td><code>MetricRow()</code><br><small style="color:var(--muted)">ui/screens/DiagnosticsScreen.kt</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>DiagnosticsScreen()</code><br><small style="color:var(--muted)">ui/screens/DiagnosticsScreen.kt</small></td>
+  <td>No direct outbound edge</td>
+  <td>MetricRow() node in ui/screens/DiagnosticsScreen.kt.</td>
+</tr>
+<tr>
+  <td>18</td>
+  <td><code>StatusRow()</code><br><small style="color:var(--muted)">ui/screens/DiagnosticsScreen.kt</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>DiagnosticsScreen()</code><br><small style="color:var(--muted)">ui/screens/DiagnosticsScreen.kt</small></td>
+  <td>No direct outbound edge</td>
+  <td>StatusRow() node in ui/screens/DiagnosticsScreen.kt.</td>
+</tr>
+<tr>
+  <td>19</td>
+  <td><code>ConflictRow()</code><br><small style="color:var(--muted)">ui/screens/DiagnosticsScreen.kt</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>DiagnosticsScreen()</code><br><small style="color:var(--muted)">ui/screens/DiagnosticsScreen.kt</small></td>
+  <td>No direct outbound edge</td>
+  <td>ConflictRow() node in ui/screens/DiagnosticsScreen.kt.</td>
+</tr>
+<tr>
+  <td>20</td>
+  <td><code>InfoBanner()</code><br><small style="color:var(--muted)">ui/screens/DiagnosticsScreen.kt</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>DiagnosticsScreen()</code><br><small style="color:var(--muted)">ui/screens/DiagnosticsScreen.kt</small></td>
+  <td>No direct outbound edge</td>
+  <td>InfoBanner() node in ui/screens/DiagnosticsScreen.kt.</td>
+</tr>
+<tr>
+  <td>21</td>
+  <td><code>healthColor()</code><br><small style="color:var(--muted)">ui/screens/DiagnosticsScreen.kt</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>DiagnosticsScreen()</code><br><small style="color:var(--muted)">ui/screens/DiagnosticsScreen.kt</small></td>
+  <td>No direct outbound edge</td>
+  <td>healthColor() node in ui/screens/DiagnosticsScreen.kt.</td>
+</tr>
+<tr>
+  <td>22</td>
+  <td><code>duration()</code><br><small style="color:var(--muted)">ui/screens/DiagnosticsScreen.kt</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>DiagnosticsScreen()</code><br><small style="color:var(--muted)">ui/screens/DiagnosticsScreen.kt</small></td>
+  <td>No direct outbound edge</td>
+  <td>duration() node in ui/screens/DiagnosticsScreen.kt.</td>
+</tr>
+<tr>
+  <td>23</td>
+  <td><code>HomeScreen.kt</code><br><small style="color:var(--muted)">ui/screens/HomeScreen.kt</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>HomeScreen.kt node in ui/screens/HomeScreen.kt.</td>
+</tr>
+<tr>
+  <td>24</td>
+  <td><code>PerfMode</code><br><small style="color:var(--muted)">ui/screens/HomeScreen.kt</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>PerfMode node in ui/screens/HomeScreen.kt.</td>
+</tr>
+<tr>
+  <td>25</td>
+  <td><code>QRefreshRate</code><br><small style="color:var(--muted)">ui/screens/HomeScreen.kt</small></td>
+  <td><span class="tag tag-class">Class</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>QRefreshRate node in ui/screens/HomeScreen.kt.</td>
+</tr>
+<tr>
+  <td>26</td>
+  <td><code>HomeScreen()</code><br><small style="color:var(--muted)">ui/screens/HomeScreen.kt</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>AppNavigation()</code><br><small style="color:var(--muted)">ui/navigation/AppNavigation.kt</small><br><code>ChargeScheduleCard()</code><br><small style="color:var(--muted)">ui/screens/ChargeScheduleCard.kt</small><br><code>t()</code><br><small style="color:var(--muted)">s25optimizer/service/RestartScheduleReceiver.kt</small></td>
+  <td><code>Canvas()</code><br><small style="color:var(--muted)">ui/screens/HomeScreen.kt</small><br><code>QuickSettingsSection()</code><br><small style="color:var(--muted)">ui/screens/HomeScreen.kt</small><br><code>RestartScheduleCard()</code><br><small style="color:var(--muted)">ui/screens/RestartScheduleCard.kt</small></td>
+  <td>HomeScreen() node in ui/screens/HomeScreen.kt.</td>
+</tr>
+<tr>
+  <td>27</td>
+  <td><code>QuickSettingsSection()</code><br><small style="color:var(--muted)">ui/screens/HomeScreen.kt</small></td>
+  <td><span class="tag tag-async">Async</span></td>
+  <td><code>HomeScreen()</code><br><small style="color:var(--muted)">ui/screens/HomeScreen.kt</small><br><code>t()</code><br><small style="color:var(--muted)">s25optimizer/service/RestartScheduleReceiver.kt</small></td>
+  <td><code>QuickChip()</code><br><small style="color:var(--muted)">ui/screens/HomeScreen.kt</small><br><code>SectionHeader()</code><br><small style="color:var(--muted)">ui/screens/HomeScreen.kt</small></td>
+  <td>QuickSettingsSection() node in ui/screens/HomeScreen.kt.</td>
+</tr>
+<tr>
+  <td>28</td>
+  <td><code>SectionHeader()</code><br><small style="color:var(--muted)">ui/screens/HomeScreen.kt</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>ChargeScheduleCard()</code><br><small style="color:var(--muted)">ui/screens/ChargeScheduleCard.kt</small><br><code>QuickSettingsSection()</code><br><small style="color:var(--muted)">ui/screens/HomeScreen.kt</small></td>
+  <td><code>RestartScheduleCard()</code><br><small style="color:var(--muted)">ui/screens/RestartScheduleCard.kt</small></td>
+  <td>SectionHeader() node in ui/screens/HomeScreen.kt.</td>
+</tr>
+<tr>
+  <td>29</td>
+  <td><code>QuickChip()</code><br><small style="color:var(--muted)">ui/screens/HomeScreen.kt</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>ChargeScheduleCard()</code><br><small style="color:var(--muted)">ui/screens/ChargeScheduleCard.kt</small><br><code>QuickSettingsSection()</code><br><small style="color:var(--muted)">ui/screens/HomeScreen.kt</small></td>
+  <td><code>RestartScheduleCard()</code><br><small style="color:var(--muted)">ui/screens/RestartScheduleCard.kt</small></td>
+  <td>QuickChip() node in ui/screens/HomeScreen.kt.</td>
+</tr>
+<tr>
+  <td>30</td>
+  <td><code>Canvas()</code><br><small style="color:var(--muted)">ui/screens/HomeScreen.kt</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>HomeScreen()</code><br><small style="color:var(--muted)">ui/screens/HomeScreen.kt</small></td>
+  <td>No direct outbound edge</td>
+  <td>Canvas() node in ui/screens/HomeScreen.kt.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>s25optimizer/service/ScreenOffService.kt</code></td><td>28 nodes</td></tr>
+<tr><td><code>s25optimizer/service/RestartScheduleReceiver.kt</code></td><td>21 nodes</td></tr>
+<tr><td><code>s25optimizer/exec/AdbExecutor.kt</code></td><td>16 nodes</td></tr>
+<tr><td><code>com/s25optimizer/ShizukuBridgeProvider.kt</code></td><td>13 nodes</td></tr>
+<tr><td><code>s25optimizer/service/ChargeScheduleReceiver.kt</code></td><td>13 nodes</td></tr>
+<tr><td><code>s25optimizer/data/BatteryHistory.kt</code></td><td>12 nodes</td></tr>
+<tr><td><code>s25optimizer/data/ChargeSchedule.kt</code></td><td>12 nodes</td></tr>
+<tr><td><code>s25optimizer/data/Diagnostics.kt</code></td><td>12 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: calls x149, contains x128, method x104. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 3. Graph Build ====== -->
+<h2 id="build-graph">3. Graph Build</h2>
+<p>Graph Build groups implementation around samsung, zero, services, guidemd, mostly in SAMSUNG_ZERO_SERVICES_GUIDE.md, S25_Edge_Battery_Optimization_Report.md, README-ES.md. This section covers 54 nodes and 49 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Graph Build (54 nodes, 49 edges)
+    subgraph build_graph_README_ES_md_55f1d5f2["README-ES.md"]
+        s25edge_readme_es_s25_edge_battery_optimizer_deb_e4afc917("S25 Edge Battery Optimizer &amp; Debloat Suite<br/><small>README-ES.md</small>")
+        s25edge_readme_es_c_mo_ejecutar_53e3bc6a("🚀 Cómo Ejecutar<br/><small>README-ES.md</small>")
+        s25edge_readme_es_scripts_para_pc_10ae848e("Scripts para PC:<br/><small>README-ES.md</small>")
+        s25edge_readme_es_aplicaci_n_android_shizuku_b9f13518("Aplicación Android (Shizuku):<br/><small>README-ES.md</small>")
+        readme_es_md_277b95e5("README-ES.md")
+        s25edge_readme_es_codeblock_1_ff98aa49("code:powershell ( Optimizar Galaxy S25...<br/><small>README-ES.md</small>")
+        s25edge_readme_es_consejos_de_la_comunidad_para_bcadd9b3("⚡ Consejos de la Comunidad para One UI 9<br/><small>README-ES.md</small>")
+    end
+    subgraph build_graph_SAMSUNG_ZERO_SERVICES_GUIDE_md_a979ef6d["SAMSUNG_ZERO_SERVICES_GUIDE.md"]
+        s25edge_samsung_zero_services_guide_guida_comple_6c4550b4("Guida Completa 'Zero Servizi Samsung' —...<br/><small>SAMSUNG_ZERO_SERVICES_GUIDE.md</small>")
+        s25edge_samsung_zero_services_guide_3_tastiera_m_c546879d("3. Tastiera, Messaggi e Applicazioni Gi...<br/><small>SAMSUNG_ZERO_SERVICES_GUIDE.md</small>")
+        s25edge_samsung_zero_services_guide_1_assistente_d8d58124("1. Assistente Vocale, Modelli IA e Bixby<br/><small>SAMSUNG_ZERO_SERVICES_GUIDE.md</small>")
+        s25edge_samsung_zero_services_guide_2_account_sa_4b9a7c28("2. Account Samsung, Telemetria e Notifi...<br/><small>SAMSUNG_ZERO_SERVICES_GUIDE.md</small>")
+        s25edge_samsung_zero_services_guide_4_ecosistema_7a35050d("4. Ecosistema, Condivisione e Dispositi...<br/><small>SAMSUNG_ZERO_SERVICES_GUIDE.md</small>")
+        s25edge_samsung_zero_services_guide_6_salute_gam_4b9ff33a("6. Salute, Gaming e Display Edge<br/><small>SAMSUNG_ZERO_SERVICES_GUIDE.md</small>")
+        s25edge_samsung_zero_services_guide_5_pagamenti_a0add9d3("5. Pagamenti e Gestione Password<br/><small>SAMSUNG_ZERO_SERVICES_GUIDE.md</small>")
+    end
+    subgraph build_graph_S25_Edge_Battery_Optimization_Report_2c2ad06c["S25_Edge_Battery_Optimization_Report.md"]
+        s25edge_s25_edge_battery_optimization_report_3_t_09689344("3. Top Culprits Identified and Resolved<br/><small>S25_Edge_Battery_Optimization_Report.md</small>")
+        s25edge_s25_edge_battery_optimization_report_sam_6b906ae2("Samsung Galaxy S25 Edge — Battery Optim...<br/><small>S25_Edge_Battery_Optimization_Report.md</small>")
+    end
+    android_app_app_build_gradle_kts_07f824e2("build.gradle.kts")
+    android_app_build_gradle_kts_bffe1096("build.gradle.kts")
+    readme_es_md_277b95e5 -->|contains| s25edge_readme_es_s25_edge_battery_optimizer_deb_e4afc917
+    s25edge_readme_es_s25_edge_battery_optimizer_deb_e4afc917 -->|contains| s25edge_readme_es_consejos_de_la_comunidad_para_bcadd9b3
+    s25edge_readme_es_s25_edge_battery_optimizer_deb_e4afc917 -->|contains| s25edge_readme_es_c_mo_ejecutar_53e3bc6a
+    s25edge_readme_es_c_mo_ejecutar_53e3bc6a -->|contains| s25edge_readme_es_scripts_para_pc_10ae848e
+    s25edge_readme_es_c_mo_ejecutar_53e3bc6a -->|contains| s25edge_readme_es_aplicaci_n_android_shizuku_b9f13518
+    s25edge_readme_es_scripts_para_pc_10ae848e -->|contains| s25edge_readme_es_codeblock_1_ff98aa49
+    s25edge_s25_edge_battery_optimization_report_sam_6b906ae2 -->|contains| s25edge_s25_edge_battery_optimization_report_3_t_09689344
+    s25edge_samsung_zero_services_guide_guida_comple_6c4550b4 -->|contains| s25edge_samsung_zero_services_guide_1_assistente_d8d58124
+    s25edge_samsung_zero_services_guide_guida_comple_6c4550b4 -->|contains| s25edge_samsung_zero_services_guide_2_account_sa_4b9a7c28
+    s25edge_samsung_zero_services_guide_guida_comple_6c4550b4 -->|contains| s25edge_samsung_zero_services_guide_3_tastiera_m_c546879d
+    s25edge_samsung_zero_services_guide_guida_comple_6c4550b4 -->|contains| s25edge_samsung_zero_services_guide_4_ecosistema_7a35050d
+    s25edge_samsung_zero_services_guide_guida_comple_6c4550b4 -->|contains| s25edge_samsung_zero_services_guide_5_pagamenti_a0add9d3
+    s25edge_samsung_zero_services_guide_guida_comple_6c4550b4 -->|contains| s25edge_samsung_zero_services_guide_6_salute_gam_4b9ff33a
+    %% Omitted for readability: 36 nodes, 0 edges
+    class s25edge_readme_es_s25_edge_battery_optimizer_deb_e4afc917 concept;
+    class s25edge_readme_es_c_mo_ejecutar_53e3bc6a concept;
+    class s25edge_readme_es_scripts_para_pc_10ae848e concept;
+    class s25edge_readme_es_aplicaci_n_android_shizuku_b9f13518 concept;
+    class readme_es_md_277b95e5 concept;
+    class s25edge_readme_es_codeblock_1_ff98aa49 concept;
+    class s25edge_readme_es_consejos_de_la_comunidad_para_bcadd9b3 concept;
+    class s25edge_samsung_zero_services_guide_guida_comple_6c4550b4 concept;
+    class s25edge_samsung_zero_services_guide_3_tastiera_m_c546879d concept;
+    class s25edge_samsung_zero_services_guide_1_assistente_d8d58124 concept;
+    class s25edge_samsung_zero_services_guide_2_account_sa_4b9a7c28 concept;
+    class s25edge_samsung_zero_services_guide_4_ecosistema_7a35050d concept;
+    class s25edge_samsung_zero_services_guide_6_salute_gam_4b9ff33a concept;
+    class s25edge_samsung_zero_services_guide_5_pagamenti_a0add9d3 concept;
+    class s25edge_s25_edge_battery_optimization_report_3_t_09689344 concept;
+    class s25edge_s25_edge_battery_optimization_report_sam_6b906ae2 concept;
+    class android_app_app_build_gradle_kts_07f824e2 function;
+    class android_app_build_gradle_kts_bffe1096 function;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>SAMSUNG_ZERO_SERVICES_GUIDE.md</code><br><small style="color:var(--muted)">SAMSUNG_ZERO_SERVICES_GUIDE.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing SAMSUNG_ZERO_SERVICES_GUIDE.md.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>Guida Completa &quot;Zero Servizi Samsung&quot; — Galaxy S25 Edge (One UI 9)</code><br><small style="color:var(--muted)">SAMSUNG_ZERO_SERVICES_GUIDE.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing Guida Completa &quot;Zero Servizi Samsung&quot; — Galaxy S25 Edge (One UI 9).</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>⚠️ Pacchetti Critici: COSA NON DISABILITARE MAI</code><br><small style="color:var(--muted)">SAMSUNG_ZERO_SERVICES_GUIDE.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing ⚠️ Pacchetti Critici: COSA NON DISABILITARE MAI.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>1. Assistente Vocale, Modelli IA e Bixby</code><br><small style="color:var(--muted)">SAMSUNG_ZERO_SERVICES_GUIDE.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing 1. Assistente Vocale, Modelli IA e Bixby.</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td><code>`com.samsung.android.bixby.agent`</code><br><small style="color:var(--muted)">SAMSUNG_ZERO_SERVICES_GUIDE.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing `com.samsung.android.bixby.agent`.</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td><code>`com.samsung.android.bixby.wakeup`</code><br><small style="color:var(--muted)">SAMSUNG_ZERO_SERVICES_GUIDE.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing `com.samsung.android.bixby.wakeup`.</td>
+</tr>
+<tr>
+  <td>7</td>
+  <td><code>`com.samsung.android.bixbyvision.framework` &amp; `visionintelligence`</code><br><small style="color:var(--muted)">SAMSUNG_ZERO_SERVICES_GUIDE.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing `com.samsung.android.bixbyvision.framework` &amp; `visionintelligence`.</td>
+</tr>
+<tr>
+  <td>8</td>
+  <td><code>`com.samsung.android.bixby.ondevice.*` (13 pacchetti linguistici)</code><br><small style="color:var(--muted)">SAMSUNG_ZERO_SERVICES_GUIDE.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing `com.samsung.android.bixby.ondevice.*` (13 pacchetti linguistici).</td>
+</tr>
+<tr>
+  <td>9</td>
+  <td><code>2. Account Samsung, Telemetria e Notifiche OTA</code><br><small style="color:var(--muted)">SAMSUNG_ZERO_SERVICES_GUIDE.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing 2. Account Samsung, Telemetria e Notifiche OTA.</td>
+</tr>
+<tr>
+  <td>10</td>
+  <td><code>`com.osp.app.signin`</code><br><small style="color:var(--muted)">SAMSUNG_ZERO_SERVICES_GUIDE.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing `com.osp.app.signin`.</td>
+</tr>
+<tr>
+  <td>11</td>
+  <td><code>`com.sec.android.app.samsungapps`</code><br><small style="color:var(--muted)">SAMSUNG_ZERO_SERVICES_GUIDE.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing `com.sec.android.app.samsungapps`.</td>
+</tr>
+<tr>
+  <td>12</td>
+  <td><code>`com.samsung.android.app.updatecenter`</code><br><small style="color:var(--muted)">SAMSUNG_ZERO_SERVICES_GUIDE.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing `com.samsung.android.app.updatecenter`.</td>
+</tr>
+<tr>
+  <td>13</td>
+  <td><code>`com.samsung.android.scpm` &amp; `statsd`</code><br><small style="color:var(--muted)">SAMSUNG_ZERO_SERVICES_GUIDE.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing `com.samsung.android.scpm` &amp; `statsd`.</td>
+</tr>
+<tr>
+  <td>14</td>
+  <td><code>3. Tastiera, Messaggi e Applicazioni Giornaliere</code><br><small style="color:var(--muted)">SAMSUNG_ZERO_SERVICES_GUIDE.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing 3. Tastiera, Messaggi e Applicazioni Giornaliere.</td>
+</tr>
+<tr>
+  <td>15</td>
+  <td><code>`com.samsung.android.honeyboard` (Tastiera Samsung)</code><br><small style="color:var(--muted)">SAMSUNG_ZERO_SERVICES_GUIDE.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing `com.samsung.android.honeyboard` (Tastiera Samsung).</td>
+</tr>
+<tr>
+  <td>16</td>
+  <td><code>`com.samsung.android.messaging` (Messaggi Samsung)</code><br><small style="color:var(--muted)">SAMSUNG_ZERO_SERVICES_GUIDE.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing `com.samsung.android.messaging` (Messaggi Samsung).</td>
+</tr>
+<tr>
+  <td>17</td>
+  <td><code>`com.samsung.android.calendar`</code><br><small style="color:var(--muted)">SAMSUNG_ZERO_SERVICES_GUIDE.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing `com.samsung.android.calendar`.</td>
+</tr>
+<tr>
+  <td>18</td>
+  <td><code>`com.samsung.android.app.reminder` &amp; `notes`</code><br><small style="color:var(--muted)">SAMSUNG_ZERO_SERVICES_GUIDE.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing `com.samsung.android.app.reminder` &amp; `notes`.</td>
+</tr>
+<tr>
+  <td>19</td>
+  <td><code>`com.sec.android.daemonapp` &amp; `com.samsung.android.weather`</code><br><small style="color:var(--muted)">SAMSUNG_ZERO_SERVICES_GUIDE.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing `com.sec.android.daemonapp` &amp; `com.samsung.android.weather`.</td>
+</tr>
+<tr>
+  <td>20</td>
+  <td><code>4. Ecosistema, Condivisione e Dispositivi Connessi</code><br><small style="color:var(--muted)">SAMSUNG_ZERO_SERVICES_GUIDE.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing 4. Ecosistema, Condivisione e Dispositivi Connessi.</td>
+</tr>
+<tr>
+  <td>21</td>
+  <td><code>`com.samsung.android.oneconnect` &amp; `service.stplatform`</code><br><small style="color:var(--muted)">SAMSUNG_ZERO_SERVICES_GUIDE.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing `com.samsung.android.oneconnect` &amp; `service.stplatform`.</td>
+</tr>
+<tr>
+  <td>22</td>
+  <td><code>`com.samsung.accessory.budsunitemgr`</code><br><small style="color:var(--muted)">SAMSUNG_ZERO_SERVICES_GUIDE.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing `com.samsung.accessory.budsunitemgr`.</td>
+</tr>
+<tr>
+  <td>23</td>
+  <td><code>`com.samsung.android.mcfds` (Multi Control) &amp; `oneconnect`</code><br><small style="color:var(--muted)">SAMSUNG_ZERO_SERVICES_GUIDE.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing `com.samsung.android.mcfds` (Multi Control) &amp; `oneconnect`.</td>
+</tr>
+<tr>
+  <td>24</td>
+  <td><code>`com.samsung.android.app.sharelive`</code><br><small style="color:var(--muted)">SAMSUNG_ZERO_SERVICES_GUIDE.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing `com.samsung.android.app.sharelive`.</td>
+</tr>
+<tr>
+  <td>25</td>
+  <td><code>5. Pagamenti e Gestione Password</code><br><small style="color:var(--muted)">SAMSUNG_ZERO_SERVICES_GUIDE.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing 5. Pagamenti e Gestione Password.</td>
+</tr>
+<tr>
+  <td>26</td>
+  <td><code>`com.samsung.android.spayfw` (Samsung Pay / Wallet)</code><br><small style="color:var(--muted)">SAMSUNG_ZERO_SERVICES_GUIDE.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing `com.samsung.android.spayfw` (Samsung Pay / Wallet).</td>
+</tr>
+<tr>
+  <td>27</td>
+  <td><code>`com.samsung.android.samsungpass`</code><br><small style="color:var(--muted)">SAMSUNG_ZERO_SERVICES_GUIDE.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing `com.samsung.android.samsungpass`.</td>
+</tr>
+<tr>
+  <td>28</td>
+  <td><code>6. Salute, Gaming e Display Edge</code><br><small style="color:var(--muted)">SAMSUNG_ZERO_SERVICES_GUIDE.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing 6. Salute, Gaming e Display Edge.</td>
+</tr>
+<tr>
+  <td>29</td>
+  <td><code>`com.sec.android.app.shealth` (Samsung Health)</code><br><small style="color:var(--muted)">SAMSUNG_ZERO_SERVICES_GUIDE.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing `com.sec.android.app.shealth` (Samsung Health).</td>
+</tr>
+<tr>
+  <td>30</td>
+  <td><code>`com.samsung.android.game.gos` &amp; `game.gametools`</code><br><small style="color:var(--muted)">SAMSUNG_ZERO_SERVICES_GUIDE.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing `com.samsung.android.game.gos` &amp; `game.gametools`.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>SAMSUNG_ZERO_SERVICES_GUIDE.md</code></td><td>33 nodes</td></tr>
+<tr><td><code>S25_Edge_Battery_Optimization_Report.md</code></td><td>10 nodes</td></tr>
+<tr><td><code>README-ES.md</code></td><td>9 nodes</td></tr>
+<tr><td><code>android-app/app/build.gradle.kts</code></td><td>1 nodes</td></tr>
+<tr><td><code>android-app/build.gradle.kts</code></td><td>1 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: contains x49. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 4. Analysis & Clustering ====== -->
+<h2 id="analysis-clustering">4. Analysis &amp; Clustering</h2>
+<p>Analysis &amp; Clustering groups implementation around readmemd, debloat, community, readme, mostly in README.md, README-IT.md, OneUI9_Community_Debloat_Guide.md. This section covers 68 nodes and 64 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Analysis &amp; Clustering (68 nodes, 64 edges)
+    subgraph analysis_clustering_OneUI9_Community_Debloat_Gui_3b7fece5["OneUI9_Community_Debloat_Guide.md"]
+        s25edge_oneui9_community_debloat_guide_one_ui_9_919bb130("One UI 9.0 (Android 17) Community Deblo...<br/><small>OneUI9_Community_Debloat_Guide.md</small>")
+        s25edge_oneui9_community_debloat_guide_3_tiered_2a1c4c17("3. Tiered Bloatware Package Matrix<br/><small>OneUI9_Community_Debloat_Guide.md</small>")
+        s25edge_oneui9_community_debloat_guide_1_the_one_9cb8887a("1. The One UI 9 Battery Phenomenon: Wha...<br/><small>OneUI9_Community_Debloat_Guide.md</small>")
+        s25edge_oneui9_community_debloat_guide_4_appops_86982909("4. AppOps &amp; NetPolicy: Taming Heavy Soc...<br/><small>OneUI9_Community_Debloat_Guide.md</small>")
+        s25edge_oneui9_community_debloat_guide_5_storage_085b9bd0("5. Storage Maintenance Post-Update<br/><small>OneUI9_Community_Debloat_Guide.md</small>")
+        s25edge_oneui9_community_debloat_guide_tier_1_10_2247d8da("Tier 1: 100% Safe Debloat (No Breakages)<br/><small>OneUI9_Community_Debloat_Guide.md</small>")
+        s25edge_oneui9_community_debloat_guide_tier_2_ec_d3b376d9("Tier 2: Ecosystem Debloat (Safe if not...<br/><small>OneUI9_Community_Debloat_Guide.md</small>")
+        s25edge_oneui9_community_debloat_guide_tier_3_s2_d953ffd9("Tier 3: S25 Edge Screen &amp; Specialty Mod...<br/><small>OneUI9_Community_Debloat_Guide.md</small>")
+    end
+    subgraph analysis_clustering_README_IT_md_7d8a3604["README-IT.md"]
+        s25edge_readme_it_s25_edge_battery_optimizer_deb_81884a9f("S25 Edge Battery Optimizer &amp; Debloat Suite<br/><small>README-IT.md</small>")
+        s25edge_readme_it_cosa_fa_la_suite_b5d4507a("🔧 Cosa fa la suite<br/><small>README-IT.md</small>")
+        s25edge_readme_it_come_eseguire_0deac36f("🚀 Come Eseguire<br/><small>README-IT.md</small>")
+        s25edge_readme_it_metodo_2_script_pc_con_1_clic_2f0fa0ad("Metodo 2: Script PC con 1 Clic (Windows...<br/><small>README-IT.md</small>")
+    end
+    subgraph analysis_clustering_README_md_f885348d["README.md"]
+        s25edge_readme_s25_edge_battery_optimizer_debloa_519a53ff("S25 Edge Battery Optimizer &amp; Debloat Suite<br/><small>README.md</small>")
+        s25edge_readme_what_it_does_d5f1bb1b("🔧 What it does<br/><small>README.md</small>")
+        s25edge_readme_how_to_run_2d9a9645("🚀 How to Run<br/><small>README.md</small>")
+        s25edge_readme_method_2_one_click_pc_scripts_win_e72eb3af("Method 2: One-Click PC Scripts (Windows...<br/><small>README.md</small>")
+    end
+    subgraph analysis_clustering_RELEASE_NOTES_v1_0_0_md_afa3e65b["RELEASE_NOTES_v1.0.0.md"]
+        s25edge_release_notes_v1_0_0_s25_edge_battery_op_225b6ae7("🔋 S25 Edge Battery Optimizer &amp; Debloat...<br/><small>RELEASE_NOTES_v1.0.0.md</small>")
+        s25edge_release_notes_v1_0_0_key_features_optimi_cf9ecf2b("✨ Key Features &amp; Optimizations<br/><small>RELEASE_NOTES_v1.0.0.md</small>")
+    end
+    s25edge_oneui9_community_debloat_guide_one_ui_9_919bb130 -->|contains| s25edge_oneui9_community_debloat_guide_1_the_one_9cb8887a
+    s25edge_oneui9_community_debloat_guide_one_ui_9_919bb130 -->|contains| s25edge_oneui9_community_debloat_guide_3_tiered_2a1c4c17
+    s25edge_oneui9_community_debloat_guide_one_ui_9_919bb130 -->|contains| s25edge_oneui9_community_debloat_guide_4_appops_86982909
+    s25edge_oneui9_community_debloat_guide_one_ui_9_919bb130 -->|contains| s25edge_oneui9_community_debloat_guide_5_storage_085b9bd0
+    s25edge_oneui9_community_debloat_guide_3_tiered_2a1c4c17 -->|contains| s25edge_oneui9_community_debloat_guide_tier_1_10_2247d8da
+    s25edge_oneui9_community_debloat_guide_3_tiered_2a1c4c17 -->|contains| s25edge_oneui9_community_debloat_guide_tier_2_ec_d3b376d9
+    s25edge_oneui9_community_debloat_guide_3_tiered_2a1c4c17 -->|contains| s25edge_oneui9_community_debloat_guide_tier_3_s2_d953ffd9
+    s25edge_readme_it_s25_edge_battery_optimizer_deb_81884a9f -->|contains| s25edge_readme_it_cosa_fa_la_suite_b5d4507a
+    s25edge_readme_it_s25_edge_battery_optimizer_deb_81884a9f -->|contains| s25edge_readme_it_come_eseguire_0deac36f
+    s25edge_readme_it_come_eseguire_0deac36f -->|contains| s25edge_readme_it_metodo_2_script_pc_con_1_clic_2f0fa0ad
+    s25edge_readme_s25_edge_battery_optimizer_debloa_519a53ff -->|contains| s25edge_readme_what_it_does_d5f1bb1b
+    s25edge_readme_s25_edge_battery_optimizer_debloa_519a53ff -->|contains| s25edge_readme_how_to_run_2d9a9645
+    s25edge_readme_how_to_run_2d9a9645 -->|contains| s25edge_readme_method_2_one_click_pc_scripts_win_e72eb3af
+    s25edge_release_notes_v1_0_0_s25_edge_battery_op_225b6ae7 -->|contains| s25edge_release_notes_v1_0_0_key_features_optimi_cf9ecf2b
+    %% Omitted for readability: 50 nodes, 0 edges
+    class s25edge_oneui9_community_debloat_guide_one_ui_9_919bb130 concept;
+    class s25edge_oneui9_community_debloat_guide_3_tiered_2a1c4c17 concept;
+    class s25edge_oneui9_community_debloat_guide_1_the_one_9cb8887a concept;
+    class s25edge_oneui9_community_debloat_guide_4_appops_86982909 concept;
+    class s25edge_oneui9_community_debloat_guide_5_storage_085b9bd0 concept;
+    class s25edge_oneui9_community_debloat_guide_tier_1_10_2247d8da concept;
+    class s25edge_oneui9_community_debloat_guide_tier_2_ec_d3b376d9 concept;
+    class s25edge_oneui9_community_debloat_guide_tier_3_s2_d953ffd9 concept;
+    class s25edge_readme_it_s25_edge_battery_optimizer_deb_81884a9f concept;
+    class s25edge_readme_it_cosa_fa_la_suite_b5d4507a concept;
+    class s25edge_readme_it_come_eseguire_0deac36f concept;
+    class s25edge_readme_it_metodo_2_script_pc_con_1_clic_2f0fa0ad concept;
+    class s25edge_readme_s25_edge_battery_optimizer_debloa_519a53ff concept;
+    class s25edge_readme_what_it_does_d5f1bb1b concept;
+    class s25edge_readme_how_to_run_2d9a9645 concept;
+    class s25edge_readme_method_2_one_click_pc_scripts_win_e72eb3af concept;
+    class s25edge_release_notes_v1_0_0_s25_edge_battery_op_225b6ae7 concept;
+    class s25edge_release_notes_v1_0_0_key_features_optimi_cf9ecf2b concept;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>README.md</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing README.md.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>S25 Edge Battery Optimizer &amp; Debloat Suite</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing S25 Edge Battery Optimizer &amp; Debloat Suite.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>📋 Compatibility</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing 📋 Compatibility.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>⚡ What Changed in One UI 9 &amp; The Community Fixes</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing ⚡ What Changed in One UI 9 &amp; The Community Fixes.</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td><code>🔧 What it does</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing 🔧 What it does.</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td><code>🛑 &quot;Zero Samsung Services&quot; Mode (Complete Breakdown &amp; Explanations)</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing 🛑 &quot;Zero Samsung Services&quot; Mode (Complete Breakdown &amp; Explanations).</td>
+</tr>
+<tr>
+  <td>7</td>
+  <td><code>Disabled Bloatware &amp; Samsung Services</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing Disabled Bloatware &amp; Samsung Services.</td>
+</tr>
+<tr>
+  <td>8</td>
+  <td><code>⚙️ System Settings (One UI 9 Community Recommendations)</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing ⚙️ System Settings (One UI 9 Community Recommendations).</td>
+</tr>
+<tr>
+  <td>9</td>
+  <td><code>🚫 Background Restricted (AppOps)</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing 🚫 Background Restricted (AppOps).</td>
+</tr>
+<tr>
+  <td>10</td>
+  <td><code>📊 Battery Telemetry — Before vs After</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing 📊 Battery Telemetry — Before vs After.</td>
+</tr>
+<tr>
+  <td>11</td>
+  <td><code>🚀 How to Run</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing 🚀 How to Run.</td>
+</tr>
+<tr>
+  <td>12</td>
+  <td><code>Method 1: Android Companion App (Shizuku — No PC needed after initial setup)</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing Method 1: Android Companion App (Shizuku — No PC needed after initial setup).</td>
+</tr>
+<tr>
+  <td>13</td>
+  <td><code>Method 2: One-Click PC Scripts (Windows / macOS / Linux)</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing Method 2: One-Click PC Scripts (Windows / macOS / Linux).</td>
+</tr>
+<tr>
+  <td>14</td>
+  <td><code>Windows (PowerShell or CMD as Admin):</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing Windows (PowerShell or CMD as Admin):.</td>
+</tr>
+<tr>
+  <td>15</td>
+  <td><code>code:powershell (# 1. Connect phone with USB Debugging enabled)</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing code:powershell (# 1. Connect phone with USB Debugging enabled).</td>
+</tr>
+<tr>
+  <td>16</td>
+  <td><code>macOS / Linux:</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing macOS / Linux:.</td>
+</tr>
+<tr>
+  <td>17</td>
+  <td><code>code:bash (chmod +x ./releases/s25-optimize.sh ./releases/s25-restore.s)</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing code:bash (chmod +x ./releases/s25-optimize.sh ./releases/s25-restore.s).</td>
+</tr>
+<tr>
+  <td>18</td>
+  <td><code>Method 3: Python Disk Cleanup &amp; Diagnostics</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing Method 3: Python Disk Cleanup &amp; Diagnostics.</td>
+</tr>
+<tr>
+  <td>19</td>
+  <td><code>code:powershell (# Run storage scan:)</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing code:powershell (# Run storage scan:).</td>
+</tr>
+<tr>
+  <td>20</td>
+  <td><code>❓ Frequently Asked Questions (FAQ)</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing ❓ Frequently Asked Questions (FAQ).</td>
+</tr>
+<tr>
+  <td>21</td>
+  <td><code>📂 Project Structure</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing 📂 Project Structure.</td>
+</tr>
+<tr>
+  <td>22</td>
+  <td><code>code:block4 (d:\s25edge/)</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing code:block4 (d:\s25edge/).</td>
+</tr>
+<tr>
+  <td>23</td>
+  <td><code>📜 License</code><br><small style="color:var(--muted)">README.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing 📜 License.</td>
+</tr>
+<tr>
+  <td>24</td>
+  <td><code>README-IT.md</code><br><small style="color:var(--muted)">README-IT.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing README-IT.md.</td>
+</tr>
+<tr>
+  <td>25</td>
+  <td><code>S25 Edge Battery Optimizer &amp; Debloat Suite</code><br><small style="color:var(--muted)">README-IT.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing S25 Edge Battery Optimizer &amp; Debloat Suite.</td>
+</tr>
+<tr>
+  <td>26</td>
+  <td><code>📋 Compatibilità</code><br><small style="color:var(--muted)">README-IT.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing 📋 Compatibilità.</td>
+</tr>
+<tr>
+  <td>27</td>
+  <td><code>⚡ Cosa Cambia in One UI 9 e Consigli della Community</code><br><small style="color:var(--muted)">README-IT.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing ⚡ Cosa Cambia in One UI 9 e Consigli della Community.</td>
+</tr>
+<tr>
+  <td>28</td>
+  <td><code>🔧 Cosa fa la suite</code><br><small style="color:var(--muted)">README-IT.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing 🔧 Cosa fa la suite.</td>
+</tr>
+<tr>
+  <td>29</td>
+  <td><code>🛑 Modalità &quot;Zero Servizi Samsung&quot; (Guida Dettagliata &amp; Spiegazioni)</code><br><small style="color:var(--muted)">README-IT.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing 🛑 Modalità &quot;Zero Servizi Samsung&quot; (Guida Dettagliata &amp; Spiegazioni).</td>
+</tr>
+<tr>
+  <td>30</td>
+  <td><code>Bloatware e Servizi Samsung Disabilitati</code><br><small style="color:var(--muted)">README-IT.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing Bloatware e Servizi Samsung Disabilitati.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>README.md</code></td><td>23 nodes</td></tr>
+<tr><td><code>README-IT.md</code></td><td>21 nodes</td></tr>
+<tr><td><code>OneUI9_Community_Debloat_Guide.md</code></td><td>16 nodes</td></tr>
+<tr><td><code>RELEASE_NOTES_v1.0.0.md</code></td><td>8 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: contains x64. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 5. Community 17 ====== -->
+<h2 id="community-17">5. Community 17</h2>
+<p>Community 17 groups implementation around readme, ptmd, s25, edge, mostly in README-PT.md. This section covers 9 nodes and 8 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Community 17 (9 nodes, 8 edges)
+    s25edge_readme_pt_s25_edge_battery_optimizer_deb_64a10079("S25 Edge Battery Optimizer &amp; Debloat Suite<br/><small>README-PT.md</small>")
+    s25edge_readme_pt_como_executar_358e373a("🚀 Como Executar<br/><small>README-PT.md</small>")
+    readme_pt_md_98cc6a07("README-PT.md")
+    s25edge_readme_pt_scripts_para_pc_eb932d45("Scripts para PC:<br/><small>README-PT.md</small>")
+    s25edge_readme_pt_compatibilidade_5e97cd2a("📋 Compatibilidade<br/><small>README-PT.md</small>")
+    s25edge_readme_pt_destaques_da_comunidade_one_ui_3dabc74a("⚡ Destaques da Comunidade One UI 9<br/><small>README-PT.md</small>")
+    s25edge_readme_pt_aplicativo_android_shizuku_e1ef2dfd("Aplicativo Android (Shizuku):<br/><small>README-PT.md</small>")
+    s25edge_readme_pt_codeblock_1_743091e7("code:powershell ( Otimização com 1 cli...<br/><small>README-PT.md</small>")
+    s25edge_readme_pt_licen_a_f0e50655("📜 Licença<br/><small>README-PT.md</small>")
+    readme_pt_md_98cc6a07 -->|contains| s25edge_readme_pt_s25_edge_battery_optimizer_deb_64a10079
+    s25edge_readme_pt_s25_edge_battery_optimizer_deb_64a10079 -->|contains| s25edge_readme_pt_compatibilidade_5e97cd2a
+    s25edge_readme_pt_s25_edge_battery_optimizer_deb_64a10079 -->|contains| s25edge_readme_pt_destaques_da_comunidade_one_ui_3dabc74a
+    s25edge_readme_pt_s25_edge_battery_optimizer_deb_64a10079 -->|contains| s25edge_readme_pt_como_executar_358e373a
+    s25edge_readme_pt_s25_edge_battery_optimizer_deb_64a10079 -->|contains| s25edge_readme_pt_licen_a_f0e50655
+    s25edge_readme_pt_como_executar_358e373a -->|contains| s25edge_readme_pt_scripts_para_pc_eb932d45
+    s25edge_readme_pt_como_executar_358e373a -->|contains| s25edge_readme_pt_aplicativo_android_shizuku_e1ef2dfd
+    s25edge_readme_pt_scripts_para_pc_eb932d45 -->|contains| s25edge_readme_pt_codeblock_1_743091e7
+    class s25edge_readme_pt_s25_edge_battery_optimizer_deb_64a10079 concept;
+    class s25edge_readme_pt_como_executar_358e373a concept;
+    class readme_pt_md_98cc6a07 concept;
+    class s25edge_readme_pt_scripts_para_pc_eb932d45 concept;
+    class s25edge_readme_pt_compatibilidade_5e97cd2a concept;
+    class s25edge_readme_pt_destaques_da_comunidade_one_ui_3dabc74a concept;
+    class s25edge_readme_pt_aplicativo_android_shizuku_e1ef2dfd concept;
+    class s25edge_readme_pt_codeblock_1_743091e7 concept;
+    class s25edge_readme_pt_licen_a_f0e50655 concept;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>README-PT.md</code><br><small style="color:var(--muted)">README-PT.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing README-PT.md.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>S25 Edge Battery Optimizer &amp; Debloat Suite</code><br><small style="color:var(--muted)">README-PT.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing S25 Edge Battery Optimizer &amp; Debloat Suite.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>📋 Compatibilidade</code><br><small style="color:var(--muted)">README-PT.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing 📋 Compatibilidade.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>⚡ Destaques da Comunidade One UI 9</code><br><small style="color:var(--muted)">README-PT.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing ⚡ Destaques da Comunidade One UI 9.</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td><code>🚀 Como Executar</code><br><small style="color:var(--muted)">README-PT.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing 🚀 Como Executar.</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td><code>Scripts para PC:</code><br><small style="color:var(--muted)">README-PT.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing Scripts para PC:.</td>
+</tr>
+<tr>
+  <td>7</td>
+  <td><code>code:powershell (# Otimização com 1 clique:)</code><br><small style="color:var(--muted)">README-PT.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing code:powershell (# Otimização com 1 clique:).</td>
+</tr>
+<tr>
+  <td>8</td>
+  <td><code>Aplicativo Android (Shizuku):</code><br><small style="color:var(--muted)">README-PT.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing Aplicativo Android (Shizuku):.</td>
+</tr>
+<tr>
+  <td>9</td>
+  <td><code>📜 Licença</code><br><small style="color:var(--muted)">README-PT.md</small></td>
+  <td><span class="tag tag-func">Concept</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Documentation node describing 📜 Licença.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>README-PT.md</code></td><td>9 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: contains x8. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 6. Community 29 ====== -->
+<h2 id="community-29">6. Community 29</h2>
+<p>Community 29 groups implementation around execute, cleanuppy, get, adb, mostly in execute_cleanup.py. This section covers 5 nodes and 6 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Community 29 (5 nodes, 6 edges)
+    s25edge_execute_cleanup_adb_shell_af0cf999("adb_shell()<br/><small>execute_cleanup.py</small>")
+    s25edge_execute_cleanup_get_first_device_1c8aa15b("get_first_device()<br/><small>execute_cleanup.py</small>")
+    s25edge_execute_cleanup_main_7fd5a029("main()<br/><small>execute_cleanup.py</small>")
+    execute_cleanup_py_0dddd94c("execute_cleanup.py")
+    s25edge_execute_cleanup_get_adb_e42d574c("get_adb()<br/><small>execute_cleanup.py</small>")
+    s25edge_execute_cleanup_get_first_device_1c8aa15b -->|calls| s25edge_execute_cleanup_main_7fd5a029
+    s25edge_execute_cleanup_adb_shell_af0cf999 -->|calls| s25edge_execute_cleanup_main_7fd5a029
+    class s25edge_execute_cleanup_adb_shell_af0cf999 function;
+    class s25edge_execute_cleanup_get_first_device_1c8aa15b function;
+    class s25edge_execute_cleanup_main_7fd5a029 function;
+    class execute_cleanup_py_0dddd94c module;
+    class s25edge_execute_cleanup_get_adb_e42d574c function;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>execute_cleanup.py</code><br><small style="color:var(--muted)">execute_cleanup.py</small></td>
+  <td><span class="tag tag-class">Module</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Module file in execute_cleanup.py.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>get_adb()</code><br><small style="color:var(--muted)">execute_cleanup.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>get_adb() node in execute_cleanup.py.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>get_first_device()</code><br><small style="color:var(--muted)">execute_cleanup.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>main()</code><br><small style="color:var(--muted)">execute_cleanup.py</small></td>
+  <td>get_first_device() node in execute_cleanup.py.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>adb_shell()</code><br><small style="color:var(--muted)">execute_cleanup.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>main()</code><br><small style="color:var(--muted)">execute_cleanup.py</small></td>
+  <td>adb_shell() node in execute_cleanup.py.</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td><code>main()</code><br><small style="color:var(--muted)">execute_cleanup.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>adb_shell()</code><br><small style="color:var(--muted)">execute_cleanup.py</small><br><code>get_first_device()</code><br><small style="color:var(--muted)">execute_cleanup.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>main() node in execute_cleanup.py.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>execute_cleanup.py</code></td><td>5 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: contains x4, calls x2. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 7. Community 30 ====== -->
+<h2 id="community-30">7. Community 30</h2>
+<p>Community 30 groups implementation around scan, s25, junkpy, get, mostly in scan_s25_junk.py. This section covers 5 nodes and 6 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Community 30 (5 nodes, 6 edges)
+    s25edge_scan_s25_junk_adb_shell_560eced3("adb_shell()<br/><small>scan_s25_junk.py</small>")
+    s25edge_scan_s25_junk_get_first_device_a81b9a38("get_first_device()<br/><small>scan_s25_junk.py</small>")
+    s25edge_scan_s25_junk_main_f831bc77("main()<br/><small>scan_s25_junk.py</small>")
+    s25edge_scan_s25_junk_get_adb_a1f863e7("get_adb()<br/><small>scan_s25_junk.py</small>")
+    scan_s25_junk_py_c44c6e83("scan_s25_junk.py")
+    s25edge_scan_s25_junk_adb_shell_560eced3 -->|calls| s25edge_scan_s25_junk_main_f831bc77
+    s25edge_scan_s25_junk_get_first_device_a81b9a38 -->|calls| s25edge_scan_s25_junk_main_f831bc77
+    class s25edge_scan_s25_junk_adb_shell_560eced3 function;
+    class s25edge_scan_s25_junk_get_first_device_a81b9a38 function;
+    class s25edge_scan_s25_junk_main_f831bc77 function;
+    class s25edge_scan_s25_junk_get_adb_a1f863e7 function;
+    class scan_s25_junk_py_c44c6e83 module;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>scan_s25_junk.py</code><br><small style="color:var(--muted)">scan_s25_junk.py</small></td>
+  <td><span class="tag tag-class">Module</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Module file in scan_s25_junk.py.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>get_adb()</code><br><small style="color:var(--muted)">scan_s25_junk.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>get_adb() node in scan_s25_junk.py.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>adb_shell()</code><br><small style="color:var(--muted)">scan_s25_junk.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>main()</code><br><small style="color:var(--muted)">scan_s25_junk.py</small></td>
+  <td>adb_shell() node in scan_s25_junk.py.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>get_first_device()</code><br><small style="color:var(--muted)">scan_s25_junk.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>main()</code><br><small style="color:var(--muted)">scan_s25_junk.py</small></td>
+  <td>get_first_device() node in scan_s25_junk.py.</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td><code>main()</code><br><small style="color:var(--muted)">scan_s25_junk.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>adb_shell()</code><br><small style="color:var(--muted)">scan_s25_junk.py</small><br><code>get_first_device()</code><br><small style="color:var(--muted)">scan_s25_junk.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>main() node in scan_s25_junk.py.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>scan_s25_junk.py</code></td><td>5 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: contains x4, calls x2. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 8. Community 33 ====== -->
+<h2 id="community-33">8. Community 33</h2>
+<p>Community 33 groups implementation around usb, proxypy, pipe, handle, mostly in usb_proxy.py. This section covers 5 nodes and 4 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Community 33 (5 nodes, 4 edges)
+    usb_proxy_py_10419b19("usb_proxy.py")
+    s25edge_usb_proxy_pipe_897c6207("pipe()<br/><small>usb_proxy.py</small>")
+    s25edge_usb_proxy_handle_client_7e8e3e5a("handle_client()<br/><small>usb_proxy.py</small>")
+    s25edge_usb_proxy_reporter_2451ceed("reporter()<br/><small>usb_proxy.py</small>")
+    s25edge_usb_proxy_main_67f87bb8("main()<br/><small>usb_proxy.py</small>")
+    usb_proxy_py_10419b19 -->|contains| s25edge_usb_proxy_pipe_897c6207
+    usb_proxy_py_10419b19 -->|contains| s25edge_usb_proxy_handle_client_7e8e3e5a
+    usb_proxy_py_10419b19 -->|contains| s25edge_usb_proxy_reporter_2451ceed
+    usb_proxy_py_10419b19 -->|contains| s25edge_usb_proxy_main_67f87bb8
+    class usb_proxy_py_10419b19 module;
+    class s25edge_usb_proxy_pipe_897c6207 function;
+    class s25edge_usb_proxy_handle_client_7e8e3e5a entry;
+    class s25edge_usb_proxy_reporter_2451ceed function;
+    class s25edge_usb_proxy_main_67f87bb8 function;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>usb_proxy.py</code><br><small style="color:var(--muted)">usb_proxy.py</small></td>
+  <td><span class="tag tag-class">Module</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Module file in usb_proxy.py.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>pipe()</code><br><small style="color:var(--muted)">usb_proxy.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>pipe() node in usb_proxy.py.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>handle_client()</code><br><small style="color:var(--muted)">usb_proxy.py</small></td>
+  <td><span class="tag tag-cmd">Entry</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>handle_client() node in usb_proxy.py.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>reporter()</code><br><small style="color:var(--muted)">usb_proxy.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>reporter() node in usb_proxy.py.</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td><code>main()</code><br><small style="color:var(--muted)">usb_proxy.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>main() node in usb_proxy.py.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>usb_proxy.py</code></td><td>5 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: contains x4. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 9. Community 34 ====== -->
+<h2 id="community-34">9. Community 34</h2>
+<p>Community 34 groups implementation around ssl, bypassinitgradle, android, app, mostly in android-app/gradle/ssl-bypass.init.gradle. This section covers 4 nodes and 3 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Community 34 (4 nodes, 3 edges)
+    android_app_gradle_ssl_bypass_init_gradle_ab473fee("ssl-bypass.init.gradle")
+    gradle_ssl_bypass_init_getacceptedissuers_58cefeaa("getAcceptedIssuers()<br/><small>android-app/gradle/ssl-bypass.init.gradle</small>")
+    gradle_ssl_bypass_init_checkclienttrusted_381e238e("checkClientTrusted()<br/><small>android-app/gradle/ssl-bypass.init.gradle</small>")
+    gradle_ssl_bypass_init_checkservertrusted_04f013a4("checkServerTrusted()<br/><small>android-app/gradle/ssl-bypass.init.gradle</small>")
+    android_app_gradle_ssl_bypass_init_gradle_ab473fee -->|contains| gradle_ssl_bypass_init_getacceptedissuers_58cefeaa
+    android_app_gradle_ssl_bypass_init_gradle_ab473fee -->|contains| gradle_ssl_bypass_init_checkclienttrusted_381e238e
+    android_app_gradle_ssl_bypass_init_gradle_ab473fee -->|contains| gradle_ssl_bypass_init_checkservertrusted_04f013a4
+    class android_app_gradle_ssl_bypass_init_gradle_ab473fee function;
+    class gradle_ssl_bypass_init_getacceptedissuers_58cefeaa function;
+    class gradle_ssl_bypass_init_checkclienttrusted_381e238e entry;
+    class gradle_ssl_bypass_init_checkservertrusted_04f013a4 function;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>ssl-bypass.init.gradle</code><br><small style="color:var(--muted)">android-app/gradle/ssl-bypass.init.gradle</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>ssl-bypass.init.gradle node in android-app/gradle/ssl-bypass.init.gradle.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>getAcceptedIssuers()</code><br><small style="color:var(--muted)">android-app/gradle/ssl-bypass.init.gradle</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>getAcceptedIssuers() node in android-app/gradle/ssl-bypass.init.gradle.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>checkClientTrusted()</code><br><small style="color:var(--muted)">android-app/gradle/ssl-bypass.init.gradle</small></td>
+  <td><span class="tag tag-cmd">Entry</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>checkClientTrusted() node in android-app/gradle/ssl-bypass.init.gradle.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>checkServerTrusted()</code><br><small style="color:var(--muted)">android-app/gradle/ssl-bypass.init.gradle</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>checkServerTrusted() node in android-app/gradle/ssl-bypass.init.gradle.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>android-app/gradle/ssl-bypass.init.gradle</code></td><td>4 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: contains x3. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 10. Community 35 ====== -->
+<h2 id="community-35">10. Community 35</h2>
+<p>Community 35 groups implementation around settingsgradlekts, android, app, getacceptedissuers, mostly in android-app/settings.gradle.kts. This section covers 4 nodes and 3 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Community 35 (4 nodes, 3 edges)
+    android_app_settings_gradle_kts_107e970c("settings.gradle.kts")
+    android_app_settings_gradle_getacceptedissuers_ead9ee36("getAcceptedIssuers()<br/><small>android-app/settings.gradle.kts</small>")
+    android_app_settings_gradle_checkclienttrusted_0436838d("checkClientTrusted()<br/><small>android-app/settings.gradle.kts</small>")
+    android_app_settings_gradle_checkservertrusted_e02c9177("checkServerTrusted()<br/><small>android-app/settings.gradle.kts</small>")
+    android_app_settings_gradle_kts_107e970c -->|contains| android_app_settings_gradle_getacceptedissuers_ead9ee36
+    android_app_settings_gradle_kts_107e970c -->|contains| android_app_settings_gradle_checkclienttrusted_0436838d
+    android_app_settings_gradle_kts_107e970c -->|contains| android_app_settings_gradle_checkservertrusted_e02c9177
+    class android_app_settings_gradle_kts_107e970c function;
+    class android_app_settings_gradle_getacceptedissuers_ead9ee36 function;
+    class android_app_settings_gradle_checkclienttrusted_0436838d entry;
+    class android_app_settings_gradle_checkservertrusted_e02c9177 function;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>settings.gradle.kts</code><br><small style="color:var(--muted)">android-app/settings.gradle.kts</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>settings.gradle.kts node in android-app/settings.gradle.kts.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>getAcceptedIssuers()</code><br><small style="color:var(--muted)">android-app/settings.gradle.kts</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>getAcceptedIssuers() node in android-app/settings.gradle.kts.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>checkClientTrusted()</code><br><small style="color:var(--muted)">android-app/settings.gradle.kts</small></td>
+  <td><span class="tag tag-cmd">Entry</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>checkClientTrusted() node in android-app/settings.gradle.kts.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>checkServerTrusted()</code><br><small style="color:var(--muted)">android-app/settings.gradle.kts</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>checkServerTrusted() node in android-app/settings.gradle.kts.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>android-app/settings.gradle.kts</code></td><td>4 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: contains x3. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 11. Community 37 ====== -->
+<h2 id="community-37">11. Community 37</h2>
+<p>Community 37 groups implementation around parse, cachespy, adb, get, mostly in parse_caches.py. This section covers 4 nodes and 4 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Community 37 (4 nodes, 4 edges)
+    s25edge_parse_caches_adb_shell_d0914565("adb_shell()<br/><small>parse_caches.py</small>")
+    s25edge_parse_caches_main_9b786429("main()<br/><small>parse_caches.py</small>")
+    s25edge_parse_caches_get_adb_47e433ce("get_adb()<br/><small>parse_caches.py</small>")
+    parse_caches_py_f619339b("parse_caches.py")
+    s25edge_parse_caches_adb_shell_d0914565 -->|calls| s25edge_parse_caches_main_9b786429
+    class s25edge_parse_caches_adb_shell_d0914565 function;
+    class s25edge_parse_caches_main_9b786429 function;
+    class s25edge_parse_caches_get_adb_47e433ce function;
+    class parse_caches_py_f619339b module;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>parse_caches.py</code><br><small style="color:var(--muted)">parse_caches.py</small></td>
+  <td><span class="tag tag-class">Module</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>Module file in parse_caches.py.</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td><code>get_adb()</code><br><small style="color:var(--muted)">parse_caches.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>get_adb() node in parse_caches.py.</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td><code>adb_shell()</code><br><small style="color:var(--muted)">parse_caches.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td><code>main()</code><br><small style="color:var(--muted)">parse_caches.py</small></td>
+  <td>adb_shell() node in parse_caches.py.</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td><code>main()</code><br><small style="color:var(--muted)">parse_caches.py</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td><code>adb_shell()</code><br><small style="color:var(--muted)">parse_caches.py</small></td>
+  <td>No direct outbound edge</td>
+  <td>main() node in parse_caches.py.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>parse_caches.py</code></td><td>4 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: contains x3, calls x1. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 12. Community 42 ====== -->
+<h2 id="community-42">12. Community 42</h2>
+<p>Community 42 groups implementation around s25, optimizesh, releases, mostly in releases/s25-optimize.sh. This section covers 1 nodes and 0 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Community 42 (1 nodes, 0 edges)
+    releases_s25_optimize_sh_1efb652b("s25-optimize.sh")
+    class releases_s25_optimize_sh_1efb652b function;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>s25-optimize.sh</code><br><small style="color:var(--muted)">releases/s25-optimize.sh</small></td>
+  <td><span class="tag tag-func">Function</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>s25-optimize.sh node in releases/s25-optimize.sh.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>releases/s25-optimize.sh</code></td><td>1 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: No high-confidence call edges detected. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<!-- ====== 13. Community 43 ====== -->
+<h2 id="community-43">13. Community 43</h2>
+<p>Community 43 groups implementation around s25, restoresh, releases, mostly in releases/s25-restore.sh. This section covers 1 nodes and 0 internal edges; the diagram shows only representative relationships to stay readable.</p>
+
+<div class="mermaid">
+%%{init: {"theme": "dark", "themeVariables": {"fontSize": "15.0px", "fontFamily": "Segoe UI, system-ui, sans-serif", "primaryColor": "#1e293b", "primaryTextColor": "#e2e8f0", "primaryBorderColor": "#38bdf8", "secondaryColor": "#0f172a", "tertiaryColor": "#334155", "lineColor": "#64748b", "textColor": "#e2e8f0"}, "flowchart": {"htmlLabels": true, "curve": "basis", "nodeSpacing": 48, "rankSpacing": 64, "padding": 14, "diagramPadding": 10, "useMaxWidth": true}}}%%
+flowchart LR
+    %% Section: Community 43 (1 nodes, 0 edges)
+    releases_s25_restore_sh_390cad34("s25-restore.sh")
+    class releases_s25_restore_sh_390cad34 ui;
+    classDef entry fill:#422006,stroke:#fbbf24,color:#fde68a,stroke-width:1px;
+    classDef api fill:#450a0a,stroke:#f87171,color:#fee2e2,stroke-width:1px;
+    classDef async fill:#2e1065,stroke:#a78bfa,color:#ede9fe,stroke-width:1px;
+    classDef klass fill:#064e3b,stroke:#34d399,color:#d1fae5,stroke-width:1px;
+    classDef ui fill:#831843,stroke:#f472b6,color:#fce7f3,stroke-width:1px;
+    classDef module fill:#172554,stroke:#60a5fa,color:#dbeafe,stroke-width:1px;
+    classDef test fill:#3f3f46,stroke:#a1a1aa,color:#f4f4f5,stroke-width:1px;
+    classDef concept fill:#292524,stroke:#a8a29e,color:#fafaf9,stroke-dasharray:4 3;
+    classDef function fill:#0f172a,stroke:#38bdf8,color:#e0f2fe,stroke-width:1px;
+</div>
+
+<h3>Call Details</h3>
+<table class="call-table">
+<tr>
+  <th style="width:5%">#</th>
+  <th style="width:28%">Node</th>
+  <th style="width:10%">Type</th>
+  <th style="width:17%">Caller</th>
+  <th style="width:20%">Callees</th>
+  <th style="width:20%">Description</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td><code>s25-restore.sh</code><br><small style="color:var(--muted)">releases/s25-restore.sh</small></td>
+  <td><span class="tag tag-hook">UI</span></td>
+  <td>External entry / no inbound edge</td>
+  <td>No direct outbound edge</td>
+  <td>s25-restore.sh node in releases/s25-restore.sh.</td>
+</tr>
+</table>
+
+<div class="grid">
+  <div class="card">
+    <h4>Key Files</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><th>File</th><th>Coverage</th></tr>
+      <tr><td><code>releases/s25-restore.sh</code></td><td>1 nodes</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Design Notes</h4>
+    <p>This section comes from graphify community clustering. Relationship summary: No high-confidence call edges detected. The diagram prioritizes high-confidence calls or usage relationships; the table keeps the broader node inventory.</p>
+  </div>
+</div>
+<hr>
+
+<h2 id="stats">Project Statistics</h2>
+
+<div class="grid">
+  <div class="card">
+    <h4>Graph</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><td>Nodes</td><td>427</td></tr>
+      <tr><td>Edges</td><td>555</td></tr>
+      <tr><td>Hyperedges</td><td>0</td></tr>
+      <tr><td>Communities</td><td>44</td></tr>
+      <tr><td>Documented Sections</td><td>12</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Edge Confidence</h4>
+    <table style="width:100%;font-size:0.85rem;">
+      <tr><td>EXTRACTED</td><td>528</td></tr>
+      <tr><td>INFERRED</td><td>27</td></tr>
+      <tr><td>AMBIGUOUS</td><td>0</td></tr>
+    </table>
+  </div>
+</div>
+
+<div style="text-align:center; padding:40px 0; color: var(--muted); font-size:0.9rem;">
+  <p>s25edge — Architecture Documentation</p>
+  <p>Generated: 2026-10-08 09:36 UTC · graphify callflow-html</p>
+</div>
+
+</div><!-- .container -->
+
+<script>
+(function () {
+  const mermaidConfig = {
+    startOnLoad: false,
+    theme: 'dark',
+    securityLevel: 'loose',
+    flowchart: { htmlLabels: true, useMaxWidth: true },
+    themeVariables: {
+      primaryColor: '#1e293b',
+      primaryTextColor: '#e2e8f0',
+      primaryBorderColor: '#38bdf8',
+      secondaryColor: '#0f172a',
+      tertiaryColor: '#334155',
+      lineColor: '#64748b',
+      textColor: '#e2e8f0',
+    }
+  };
+
+  mermaid.initialize(mermaidConfig);
+
+  function clamp(value, min, max) {
+    return Math.min(max, Math.max(min, value));
+  }
+
+  function enhanceMermaidDiagrams() {
+    document.querySelectorAll('.mermaid').forEach((container) => {
+      if (container.dataset.zoomReady === 'true') return;
+      const svg = container.querySelector('svg');
+      if (!svg) return;
+
+      container.dataset.zoomReady = 'true';
+      container.classList.add('is-enhanced');
+
+      const viewport = document.createElement('div');
+      viewport.className = 'mermaid-viewport';
+      svg.parentNode.insertBefore(viewport, svg);
+      viewport.appendChild(svg);
+
+      const toolbar = document.createElement('div');
+      toolbar.className = 'mermaid-toolbar';
+      toolbar.innerHTML = [
+        '<button type="button" data-action="zoom-out" title="Zoom out">-</button>',
+        '<span class="zoom-level" data-role="level">100%</span>',
+        '<button type="button" data-action="zoom-in" title="Zoom in">+</button>',
+        '<button type="button" data-action="fit" title="Fit width">Fit</button>',
+        '<button type="button" data-action="reset" title="Reset view">Reset</button>'
+      ].join('');
+      container.insertBefore(toolbar, viewport);
+
+      const state = { scale: 1, x: 0, y: 0, dragging: false, startX: 0, startY: 0, originX: 0, originY: 0 };
+      const level = toolbar.querySelector('[data-role="level"]');
+
+      function applyTransform() {
+        svg.style.transform = `translate(${state.x}px, ${state.y}px) scale(${state.scale})`;
+        level.textContent = `${Math.round(state.scale * 100)}%`;
+      }
+
+      function zoomBy(delta) {
+        state.scale = clamp(state.scale + delta, 0.25, 3);
+        applyTransform();
+      }
+
+      function reset() {
+        state.scale = 1;
+        state.x = 0;
+        state.y = 0;
+        applyTransform();
+      }
+
+      function fitWidth() {
+        const rawWidth = svg.viewBox && svg.viewBox.baseVal && svg.viewBox.baseVal.width
+          ? svg.viewBox.baseVal.width
+          : svg.getBoundingClientRect().width / state.scale;
+        if (!rawWidth) {
+          reset();
+          return;
+        }
+        state.scale = clamp((viewport.clientWidth - 48) / rawWidth, 0.25, 1.4);
+        state.x = 0;
+        state.y = 0;
+        applyTransform();
+      }
+
+      toolbar.addEventListener('click', (event) => {
+        const button = event.target.closest('button[data-action]');
+        if (!button) return;
+        const action = button.dataset.action;
+        if (action === 'zoom-in') zoomBy(0.15);
+        if (action === 'zoom-out') zoomBy(-0.15);
+        if (action === 'fit') fitWidth();
+        if (action === 'reset') reset();
+      });
+
+      viewport.addEventListener('wheel', (event) => {
+        if (!event.ctrlKey && !event.metaKey) return;
+        event.preventDefault();
+        zoomBy(event.deltaY < 0 ? 0.1 : -0.1);
+      }, { passive: false });
+
+      viewport.addEventListener('pointerdown', (event) => {
+        if (event.button !== 0) return;
+        state.dragging = true;
+        state.startX = event.clientX;
+        state.startY = event.clientY;
+        state.originX = state.x;
+        state.originY = state.y;
+        viewport.classList.add('is-dragging');
+        viewport.setPointerCapture(event.pointerId);
+      });
+
+      viewport.addEventListener('pointermove', (event) => {
+        if (!state.dragging) return;
+        state.x = state.originX + event.clientX - state.startX;
+        state.y = state.originY + event.clientY - state.startY;
+        applyTransform();
+      });
+
+      function endDrag(event) {
+        if (!state.dragging) return;
+        state.dragging = false;
+        viewport.classList.remove('is-dragging');
+        if (viewport.hasPointerCapture(event.pointerId)) {
+          viewport.releasePointerCapture(event.pointerId);
+        }
+      }
+
+      viewport.addEventListener('pointerup', endDrag);
+      viewport.addEventListener('pointercancel', endDrag);
+      applyTransform();
+    });
+  }
+
+  function renderMermaid() {
+    const result = mermaid.run
+      ? mermaid.run({ querySelector: '.mermaid' })
+      : Promise.resolve();
+    Promise.resolve(result)
+      .then(enhanceMermaidDiagrams)
+      .catch((error) => {
+        console.error('Mermaid render failed:', error);
+        enhanceMermaidDiagrams();
+      });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderMermaid);
+  } else {
+    renderMermaid();
+  }
+})();
+</script>
+
+</body>
+</html>

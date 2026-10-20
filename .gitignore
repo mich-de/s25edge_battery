@@ -1,0 +1,18 @@
+# Virtual environment
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Gradle & Android Studio
+.gradle/
+build/
+app/build/
+*.iml
+.idea/
+local.properties
+.vscode/
+
+# System / Temporary
+*.log
+scratch/

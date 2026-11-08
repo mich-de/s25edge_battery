@@ -343,6 +343,23 @@ fun DiagnosticsScreen(
             } else {
                 MetricRow("CPU", "%.1f mAh".format(p.cpuMah), TextPrimary)
                 MetricRow(t("Mobile radio", "Radio mobile"), "%.1f mAh".format(p.mobileRadioMah), TextPrimary)
+                // A healthy deep doze on this phone sits around 10-20 mAh/h; 87 was measured
+                // with WiFi Calling and the AI WiFi switch both on.
+                if (p.deepDozeMahPerHour > 0f) {
+                    MetricRow(
+                        t("Deep doze drain", "Consumo standby profondo"),
+                        "%.0f mAh/h".format(p.deepDozeMahPerHour),
+                        if (p.deepDozeMahPerHour > 30f) WarmAmber else TextPrimary,
+                    )
+                }
+                MetricRow(
+                    t("Network changes", "Cambi di rete"),
+                    p.connectivityChanges.toString(),
+                    if (p.connectivityChanges > 50) WarmAmber else TextPrimary,
+                )
+                if (p.topWakelock.isNotEmpty()) {
+                    MetricRow(t("Top wakelock", "Wakelock principale"), p.topWakelock, TextPrimary)
+                }
                 Spacer(Modifier.height(10.dp))
                 p.consumers.forEach { c ->
                     Row(

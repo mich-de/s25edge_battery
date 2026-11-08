@@ -1,4 +1,4 @@
-﻿package com.s25optimizer.ui.navigation
+package com.s25optimizer.ui.navigation
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
@@ -29,6 +29,9 @@ import com.s25optimizer.exec.AdbExecutor
 import com.s25optimizer.ui.*
 import com.s25optimizer.ui.screens.*
 
+import androidx.compose.material.icons.filled.Memory
+import androidx.compose.material.icons.outlined.Memory
+
 enum class Screen(
     val route: String,
     val labelEn: String,
@@ -39,6 +42,7 @@ enum class Screen(
     HOME("home", "Home", "Home", Icons.Filled.Home, Icons.Outlined.Home),
     DIAGNOSTICS("diagnostics", "Diag", "Diag", Icons.Filled.MonitorHeart, Icons.Outlined.MonitorHeart),
     OPTIMIZE("optimize", "Optimize", "Ottimizza", Icons.Filled.Tune, Icons.Outlined.Tune),
+    HOSTAI("hostai", "HostAI", "HostAI", Icons.Filled.Memory, Icons.Outlined.Memory),
     APPS("apps", "Apps", "App", Icons.Filled.Apps, Icons.Outlined.Apps),
     LOGS("logs", "Logs", "Log", Icons.Filled.Terminal, Icons.Outlined.Terminal),
 }
@@ -50,6 +54,7 @@ fun AppNavigation(
     executor: AdbExecutor,
     shizukuStatus: Boolean,
     appliedStates: Map<String, Boolean>,
+    unavailableIds: Set<String>,
     onAppliedStatesChanged: (Map<String, Boolean>) -> Unit,
     log: String,
     onLog: (String) -> Unit,
@@ -141,9 +146,17 @@ fun AppNavigation(
                     executor = executor,
                     shizukuStatus = shizukuStatus,
                     appliedStates = appliedStates,
+                    unavailableIds = unavailableIds,
                     onAppliedStatesChanged = onAppliedStatesChanged,
                     isRunning = isRunning,
                     onRunningChanged = onRunningChanged,
+                    onLog = onLog,
+                )
+            }
+            composable(Screen.HOSTAI.route) {
+                HostAiScreen(
+                    italian = italian,
+                    executor = executor,
                     onLog = onLog,
                 )
             }
@@ -166,4 +179,3 @@ fun AppNavigation(
         }
     }
 }
-

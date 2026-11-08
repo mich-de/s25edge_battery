@@ -11,8 +11,8 @@ android {
         applicationId = "com.s25optimizer"
         minSdk = 28
         targetSdk = 37
-        versionCode = 5
-        versionName = "3.0"
+        versionCode = 6
+        versionName = "3.1"
     }
 
     buildTypes {

@@ -1,6 +1,8 @@
 ﻿package com.s25optimizer.ui
 
 import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
+import com.s25optimizer.data.AppLog
 import com.s25optimizer.data.OptimizationRunner
 import com.s25optimizer.data.Optimizations
 import com.s25optimizer.exec.AdbExecutor
@@ -13,15 +15,18 @@ import kotlinx.coroutines.withContext
 private const val CHECK_CHUNK = 25
 
 @Composable
-fun MainScreen() {
+fun MainScreen(resumeCount: Int = 0) {
     var italian by remember { mutableStateOf(false) }
     val executor = AdbExecutor.instance
     var shizukuStatus by remember { mutableStateOf(executor.isConnected && executor.permissionsGranted) }
     var appliedStates by remember { mutableStateOf<Map<String, Boolean>>(emptyMap()) }
+    // Entries whose every target package is absent from this phone: shown, but greyed out.
+    var unavailableIds by remember { mutableStateOf<Set<String>>(emptySet()) }
     var log by remember { mutableStateOf("") }
     var isRunning by remember { mutableStateOf(false) }
 
     val allOptimizations = remember { Optimizations.getAll() }
+    val context = LocalContext.current.applicationContext
 
     // Periodic Shizuku status poll
     LaunchedEffect(Unit) {
@@ -31,10 +36,11 @@ fun MainScreen() {
         }
     }
 
-    // Load applied states when Shizuku connects.
+    // Load applied states when Shizuku connects and every time the app comes back to the
+    // front: a setting changed from One UI, or undone by it, must not keep a stale switch.
     // Every check is a blocking shell call, so this runs on IO and batches many checks
     // into a single shell rather than spawning one process per optimization.
-    LaunchedEffect(shizukuStatus) {
+    LaunchedEffect(shizukuStatus, resumeCount) {
         // Entries the app answers itself need no shell, so they are read before the
         // Shizuku guard: with the bridge down their box is still truthful.
         val local = allOptimizations.filter { it.local != null }
@@ -46,6 +52,14 @@ fun MainScreen() {
         if (!shizukuStatus) return@LaunchedEffect
 
         val shell = allOptimizations.filter { it.local == null }
+        val installed = withContext(Dispatchers.IO) {
+            executor.execute("pm list packages").stdout.lineSequence()
+                .map { it.removePrefix("package:").trim() }.toSet()
+        }
+        if (installed.isNotEmpty()) {
+            unavailableIds = shell.filter { o -> o.packages().let { it.isNotEmpty() && it.none(installed::contains) } }
+                .map { it.id }.toSet()
+        }
         val checkable = shell.filter { it.checkCommands.isNotEmpty() }
         val uncheckable = shell.filter { it.checkCommands.isEmpty() }
         if (uncheckable.isNotEmpty()) {
@@ -69,9 +83,13 @@ fun MainScreen() {
         executor = executor,
         shizukuStatus = shizukuStatus,
         appliedStates = appliedStates,
+        unavailableIds = unavailableIds,
         onAppliedStatesChanged = { update -> appliedStates = appliedStates + update },
         log = log,
-        onLog = { msg -> log += "$msg\n" },
+        onLog = { msg ->
+            log += "$msg\n"
+            AppLog.append(context, msg)
+        },
         onClearLog = { log = "" },
         isRunning = isRunning,
         onRunningChanged = { isRunning = it },

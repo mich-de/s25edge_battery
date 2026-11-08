@@ -79,7 +79,7 @@ object Optimizations {
                 + "pm enable com.samsung.android.bixby.ondevice.svse; "
                 + "pm enable com.samsung.android.bixby.ondevice.trtr; "
                 + "pm enable com.samsung.android.bixby.ondevice.zhhk",
-            """if pm list packages 2>/dev/null | grep -qF "package:com.samsung.android.bixby.ondevice.itit"; then pm list packages -d 2>/dev/null | grep -cFx "package:com.samsung.android.bixby.ondevice.itit"; else echo 1; fi"""",
+            """if pm list packages 2>/dev/null | grep -qF "package:com.samsung.android.bixby.ondevice.itit"; then pm list packages -d 2>/dev/null | grep -cFx "package:com.samsung.android.bixby.ondevice.itit"; else echo 1; fi""",
             group = "Bixby"),
 
         opt("vision_intel", Optimization.Category.BLOAT,
@@ -250,7 +250,7 @@ object Optimizations {
             "Contapassi, monitoraggio sonno, allenamenti. Tienilo se lo usi!",
             "pm disable-user --user 0 com.sec.android.app.shealth",
             "pm enable com.sec.android.app.shealth",
-            """if pm list packages 2>/dev/null | grep -qF "package:com.sec.android.app.shealth"; then pm list packages -d 2>/dev/null | grep -cFx "package:com.sec.android.app.shealth"; else echo 1; fi"""",
+            """if pm list packages 2>/dev/null | grep -qF "package:com.sec.android.app.shealth"; then pm list packages -d 2>/dev/null | grep -cFx "package:com.sec.android.app.shealth"; else echo 1; fi""",
             group = "Samsung Apps", groupIt = "App Samsung"),
 
         opt("chrome_custom", Optimization.Category.BLOAT,
@@ -378,7 +378,7 @@ object Optimizations {
             "App SMS di serie Samsung. Sicuro da disabilitare: usa Google Messaggi per supporto completo RCS e crittografia.",
             "pm disable-user --user 0 com.samsung.android.messaging",
             "pm enable com.samsung.android.messaging",
-            """if pm list packages 2>/dev/null | grep -qF "package:com.samsung.android.messaging"; then pm list packages -d 2>/dev/null | grep -cFx "package:com.samsung.android.messaging"; else echo 1; fi"""",
+            """if pm list packages 2>/dev/null | grep -qF "package:com.samsung.android.messaging"; then pm list packages -d 2>/dev/null | grep -cFx "package:com.samsung.android.messaging"; else echo 1; fi""",
             group = "Samsung Apps", groupIt = "App Samsung"),
 
         opt("samsung_calendar", Optimization.Category.BLOAT,
@@ -618,7 +618,7 @@ object Optimizations {
             group = "Microsoft"),
 
         opt("knox_reset", Optimization.Category.MAINTENANCE,
-            "Knox Matrix Reset", "Reset Knox Matrix",
+            "Reset Knox Matrix", "Resetta Knox Matrix",
             "Fixes April 2026 update battery drain loop. Clears cache (doesn't uninstall). Data auto-repopulates.",
             "Risolve loop drain da aggiornamento Aprile 2026. Pulisce cache (non disinstalla). Dati si ripopolano.",
             "pm clear com.samsung.android.knox.kpecore; pm clear com.samsung.android.knox.attestation; pm clear com.samsung.android.knox.pushmanager; pm clear com.samsung.android.knox.containercore; pm clear com.samsung.android.knox.analytics.uploader",
@@ -626,7 +626,7 @@ object Optimizations {
             group = "Resets", groupIt = "Reset"),
 
         opt("gms_reset", Optimization.Category.MAINTENANCE,
-            "Google Play Services Reset", "Reset Google Play Services",
+            "Reset Google Play Services", "Resetta Google Play Services",
             "Resets stuck foreground services. You'll need to re-login to Google Pay, Smart Lock, loyalty cards. Gmail/Drive auto-sync.",
             "Resetta FG services bloccati. Dovrai rifare login Google Pay, Smart Lock, carte fedeltà. Gmail/Drive si risincronizzano.",
             "am force-stop com.google.android.gms; pm clear com.google.android.gms",
@@ -639,7 +639,7 @@ object Optimizations {
         // `cmd deviceidle whitelist` prints "user,com.whatsapp,10423". So every one of them
         // returned 0 forever: the box could never tick, no matter what the device did.
         opt("bg_instagram", Optimization.Category.MAINTENANCE,
-            "Instagram Background Restrict", "Limita Background Instagram",
+            "Limit Instagram background", "Limita background Instagram",
             "Instagram used 771 mAh in 15h with 329K data packets in background. Blocks background activity, app works when opened.",
             "Instagram usava 771 mAh in 15h con 329K pacchetti dati in background. Blocca attività bg, app funziona quando aperta.",
             "appops set com.instagram.android RUN_ANY_IN_BACKGROUND deny",
@@ -656,7 +656,7 @@ object Optimizations {
         // The UID is looked up at run time rather than baked in: it is assigned at install
         // and changes if the app is reinstalled.
         opt("ig_bg_data", Optimization.Category.MAINTENANCE,
-            "Instagram Background Data OFF", "Dati Background Instagram OFF",
+            "Block Instagram background data", "Blocca dati in background Instagram",
             "Ticked: Instagram is denied mobile data while it is in the background. Stops the overnight prefetch (106 MB in one night). The feed still refreshes when you open the app, and WiFi is unaffected.",
             "Spuntato: a Instagram sono negati i dati mobili quando è in background. Ferma il prefetch notturno (106 MB in una notte). Il feed si aggiorna comunque quando apri l'app, e il WiFi non è toccato.",
             """cmd netpolicy add restrict-background-blacklist "$(pm list packages -U | grep -w "package:com.instagram.android" | sed "s/.*uid://")"""",
@@ -670,7 +670,7 @@ object Optimizations {
         // matter what was set. So this box unticks itself under those conditions — that is
         // the device's answer, not a failed write.
         opt("ig_standby_restricted", Optimization.Category.MAINTENANCE,
-            "Instagram Restricted Bucket", "Instagram Bucket Limitato",
+            "Restrict Instagram standby bucket", "Limita bucket standby Instagram",
             "Puts Instagram in the RESTRICTED standby bucket: its jobs and alarms get the smallest quota Android hands out. The system re-evaluates the bucket, so it reads as exempt while charging or just after you use the app.",
             "Mette Instagram nel bucket standby RESTRICTED: job e sveglie ricevono la quota più bassa prevista da Android. Il sistema rivaluta il bucket, quindi risulta esente mentre il telefono è in carica o subito dopo aver usato l'app.",
             "am set-standby-bucket com.instagram.android restricted",
@@ -682,7 +682,7 @@ object Optimizations {
         // Removed by hand on 12 August and back in the list by 13 August: Huawei Health
         // re-adds itself. Worth an entry precisely because it does not stay done.
         opt("huawei_doze_remove", Optimization.Category.MAINTENANCE,
-            "Huawei Health Doze Exempt OFF", "Huawei Health Esente Doze OFF",
+            "Remove Huawei Health Doze exemption", "Togli Huawei Health dall'esenzione Doze",
             "Ticked: Huawei Health is out of the Doze whitelist, so it sleeps like everything else. It drew 38 mAh overnight. The app re-adds itself, so expect to apply this again.",
             "Spuntato: Huawei Health è fuori dalla whitelist Doze, quindi dorme come tutto il resto. Consumava 38 mAh a notte. L'app si re-inserisce da sola, quindi aspettati di doverla riapplicare.",
             "cmd deviceidle whitelist -com.huawei.health",
@@ -695,7 +695,7 @@ object Optimizations {
             group = "Background"),
 
         opt("bg_tandem", Optimization.Category.MAINTENANCE,
-            "Tandem Background Restrict", "Limita Background Tandem",
+            "Limit Tandem background", "Limita background Tandem",
             "The Tandem language-exchange app, using 80.6 mAh in background. Blocks background activity; it still works when opened.",
             "L'app di scambio linguistico Tandem, con 80.6 mAh in background. Blocca l'attività in background; funziona comunque quando aperta.",
             "appops set net.tandem RUN_ANY_IN_BACKGROUND deny",
@@ -703,8 +703,46 @@ object Optimizations {
             """appops get net.tandem RUN_ANY_IN_BACKGROUND | grep -c ": deny"""",
             group = "Background"),
 
+        // 8 Nov 2026, S25 Edge: FX File Explorer showed 6.4% background CPU over 22 h in the
+        // Samsung UCPU dump — far too much for a file manager left closed.
+        opt("bg_fx_explorer", Optimization.Category.MAINTENANCE,
+            "Limit FX File Explorer background", "Limita background FX File Explorer",
+            "FX File Explorer used 6.4% CPU in background over 22 h on this phone. Blocks background activity; it still works when opened.",
+            "FX File Explorer usava il 6,4% di CPU in background in 22 h su questo telefono. Blocca l'attività in background; funziona comunque quando aperta.",
+            "appops set com.alphainventor.filemanager RUN_ANY_IN_BACKGROUND deny",
+            "appops set com.alphainventor.filemanager RUN_ANY_IN_BACKGROUND allow",
+            """appops get com.alphainventor.filemanager RUN_ANY_IN_BACKGROUND | grep -c ": deny"""",
+            group = "Background"),
+
+        opt("bg_suno", Optimization.Category.MAINTENANCE,
+            "Limit Suno background", "Limita background Suno",
+            "Suno used 2.8% CPU in background over 22 h. Blocks background activity; generation and playback work when the app is open.",
+            "Suno usava il 2,8% di CPU in background in 22 h. Blocca l'attività in background; generazione e ascolto funzionano ad app aperta.",
+            "appops set com.suno.android RUN_ANY_IN_BACKGROUND deny",
+            "appops set com.suno.android RUN_ANY_IN_BACKGROUND allow",
+            """appops get com.suno.android RUN_ANY_IN_BACKGROUND | grep -c ": deny"""",
+            group = "Background"),
+
+        opt("bg_edits", Optimization.Category.MAINTENANCE,
+            "Limit Edits (Instagram) background", "Limita background Edits (Instagram)",
+            "Meta's Edits video app (com.instagram.basel) woke the phone 14 times overnight alongside Instagram. Blocks background activity; it still works when opened.",
+            "L'app video Edits di Meta (com.instagram.basel) svegliava il telefono 14 volte a notte insieme a Instagram. Blocca l'attività in background; funziona comunque quando aperta.",
+            "appops set com.instagram.basel RUN_ANY_IN_BACKGROUND deny",
+            "appops set com.instagram.basel RUN_ANY_IN_BACKGROUND allow",
+            """appops get com.instagram.basel RUN_ANY_IN_BACKGROUND | grep -c ": deny"""",
+            group = "Background"),
+
+        opt("bg_amazon", Optimization.Category.MAINTENANCE,
+            "Limit Amazon Shopping background", "Limita background Amazon Shopping",
+            "Amazon Shopping drew 16 mAh in 8 h without being used. Blocks background activity; order notifications may arrive late.",
+            "Amazon Shopping consumava 16 mAh in 8 h senza essere usata. Blocca l'attività in background; le notifiche degli ordini possono arrivare in ritardo.",
+            "appops set com.amazon.mShop.android.shopping RUN_ANY_IN_BACKGROUND deny",
+            "appops set com.amazon.mShop.android.shopping RUN_ANY_IN_BACKGROUND allow",
+            """appops get com.amazon.mShop.android.shopping RUN_ANY_IN_BACKGROUND | grep -c ": deny"""",
+            group = "Background"),
+
         opt("wa_background_unrestricted", Optimization.Category.MAINTENANCE,
-            "WhatsApp Unrestricted Battery", "WhatsApp Batteria No Limit",
+            "Unrestrict WhatsApp battery", "Togli limiti batteria a WhatsApp",
             "Sets WhatsApp battery to 'Unrestricted' via appops. Prevents One UI from killing WhatsApp in background during calls. Equivalent to: Settings > Apps > WhatsApp > Battery > Unrestricted.",
             "Imposta batteria WhatsApp su 'Nessuna restrizione' via appops. Impedisce a One UI di uccidere WhatsApp in background durante le chiamate. Equivalente: Impostazioni > App > WhatsApp > Batteria > Nessuna restrizione.",
             "appops set com.whatsapp RUN_ANY_IN_BACKGROUND allow",
@@ -713,7 +751,7 @@ object Optimizations {
             group = "WhatsApp"),
 
         opt("wa_doze_whitelist", Optimization.Category.MAINTENANCE,
-            "WhatsApp Doze Exempt", "WhatsApp Esente Doze",
+            "Exempt WhatsApp from Doze", "Esenta WhatsApp da Doze",
             "Whitelists WhatsApp from Android Doze mode. Prevents system from delaying WhatsApp's network access when device is idle. Critical for reliable VoIP calls.",
             "Whitelista WhatsApp da Doze mode. Impedisce al sistema di ritardare l'accesso di rete di WhatsApp quando il dispositivo è in idle. Essenziale per chiamate VoIP affidabili.",
             "cmd deviceidle whitelist +com.whatsapp",
@@ -723,7 +761,7 @@ object Optimizations {
 
         // ── SYSTEM ──
         opt("auto_restrict", Optimization.Category.SYSTEM,
-            "App Auto Restriction ON", "Auto Limitazione App ON",
+            "Enable automatic app restriction", "Attiva limitazione automatica app",
             "Ticked: apps unused for 3+ days are put into standby automatically. More aggressive than Adaptive Battery. Unverified: the key holds the value but nothing on this device was seen to read it.",
             "Spuntato: le app non usate da 3+ giorni vengono messe in standby automaticamente. Più aggressiva della Batteria Adattiva. Non verificata: la chiave conserva il valore ma non risulta letta da nulla su questo dispositivo.",
             "settings put global app_auto_restriction_enabled 1",
@@ -737,7 +775,7 @@ object Optimizations {
         // reads — writing it makes the framework echo the value straight back, and
         // `dumpsys power` reports mSettingBatterySaverEnabled accordingly.
         opt("batt_saver", Optimization.Category.SYSTEM,
-            "Battery Saver ON", "Risparmio Energetico ON",
+            "Enable Power Saving", "Attiva Risparmio energetico",
             "Ticked: Battery Saver is on — lower brightness, slower CPU, background limited. Minor performance impact.",
             "Spuntato: il Risparmio Energetico è attivo — luminosità ridotta, CPU rallentata, background limitato. Leggero impatto sulle prestazioni.",
             "settings put global low_power 1",
@@ -746,7 +784,7 @@ object Optimizations {
             group = "Battery", groupIt = "Batteria"),
 
         opt("light_perf_profile", Optimization.Category.SYSTEM,
-            "Light Performance Profile ON", "Profilo Prestazioni Leggero ON",
+            "Enable light performance profile", "Attiva profilo prestazioni leggero",
             "Ticked: S25 Edge Performance Profile is set to Light. Caps peak SoC frequencies to lower heat and power consumption without sacrificing 120Hz LTPO display smoothness (Community Favorite).",
             "Spuntato: Il profilo prestazioni dell'S25 Edge è impostato su 'Leggero'. Abbassa le frequenze di picco del SoC riducendo calore e consumi senza intaccare la fluidità a 120Hz LTPO (Scelta consigliata dalla community).",
             "settings put global sem_low_power_mode 1",
@@ -755,7 +793,7 @@ object Optimizations {
             group = "Battery", groupIt = "Batteria"),
 
         opt("cpu_resp", Optimization.Category.SYSTEM,
-            "Enhanced CPU Responsiveness OFF", "Risposta CPU Migliorata OFF",
+            "Disable enhanced CPU responsiveness", "Disattiva risposta CPU migliorata",
             "Ticked: the CPU is no longer held at a high frequency for touch and gestures. Note: this device already ships with it off, so the tick reflects the factory state rather than a change made here.",
             "Spuntato: la CPU non viene più tenuta a frequenza alta per tocco e gesti. Nota: su questo dispositivo è già spenta di fabbrica, quindi la spunta riflette lo stato di serie, non una modifica fatta qui.",
             "settings put global sem_enhanced_cpu_responsiveness 0",
@@ -773,7 +811,7 @@ object Optimizations {
             group = "Edge Display", groupIt = "Display Edge"),
 
         opt("enhanced_proc", Optimization.Category.SYSTEM,
-            "Enhanced Processing OFF", "Elaborazione Migliorata OFF",
+            "Disable enhanced processing", "Disattiva elaborazione migliorata",
             "Ticked: CPU boosting for heavy apps (games, video) is off, for a quieter standby. Unverified: no system process was ever seen writing this key on this device, so the tick may mean nothing.",
             "Spuntato: il boosting CPU per app pesanti (giochi, video) è disattivato, per uno standby più tranquillo. Non verificata: nessun processo di sistema ha mai scritto questa chiave su questo dispositivo, quindi la spunta potrebbe non significare nulla.",
             "settings put global enhanced_processing 0",
@@ -789,7 +827,7 @@ object Optimizations {
         // is read and clears itself a few hours later, which the description has to say —
         // otherwise the box looks like it failed to apply.
         opt("ble_scan", Optimization.Category.SYSTEM,
-            "BLE Always-Scanning OFF", "Scansione BLE Continua OFF",
+            "Disable always-on BLE scanning", "Disattiva scansione BLE continua",
             "Ticked: continuous Bluetooth Low Energy scanning is off. One of the larger standby savings. Does not stay applied: the system turns it back on by itself after a few hours, so the tick will clear on its own and needs re-applying.",
             "Spuntato: la scansione Bluetooth Low Energy continua è disattivata. Uno dei risparmi maggiori in standby. Non resta applicata: il sistema la riattiva da solo dopo qualche ora, quindi la spunta si azzera da sé e va riapplicata.",
             "settings put global ble_scan_always_enabled 0",
@@ -799,7 +837,7 @@ object Optimizations {
             group = "Network", groupIt = "Rete"),
 
         opt("nr_5g_off", Optimization.Category.SYSTEM,
-            "Disable 5G Scanning (LTE/3G/2G Only)", "Disabilita Scansione 5G (Solo LTE/3G/2G)",
+            "Disable 5G (LTE/3G/2G only)", "Disattiva 5G (solo LTE/3G/2G)",
             "Ticked: 5G (NR) radio scanning is disabled, forcing the modem to LTE/3G/2G. Prevents massive RF power amplifier battery drain when in weak signal / cell edge areas.",
             "Spuntato: la scansione 5G (NR) è disattivata, forzando il modem su LTE/3G/2G. Evita il forte consumo dell'amplificatore RF quando il segnale è debole o a bordo cella.",
             "cmd phone set-allowed-network-types-for-users -s 0 01001111101111111111; cmd phone set-allowed-network-types-for-users -s 1 01001111101111111111",
@@ -809,7 +847,7 @@ object Optimizations {
             group = "Network", groupIt = "Rete"),
 
         opt("aod", Optimization.Category.SYSTEM,
-            "Always On Display OFF", "Always On Display OFF",
+            "Disable Always On Display", "Disattiva Always On Display",
             "Ticked: Always On Display is off, so the idle screen no longer shows clock and notifications. Saves ~3-5% battery/day.",
             "Spuntato: Always On Display disattivato, lo schermo a riposo non mostra più ora e notifiche. Risparmia ~3-5% di batteria al giorno.",
             // `global always_on_display_enabled` used to be written alongside this and was
@@ -821,7 +859,7 @@ object Optimizations {
             group = "Display", groupIt = "Schermo"),
 
         opt("screen_timeout", Optimization.Category.SYSTEM,
-            "Screen Timeout 30s", "Timeout Schermo 30s",
+            "Set screen timeout to 30s", "Imposta timeout schermo a 30s",
             "Screen turns off after 30 seconds of inactivity.",
             "Schermo si spegne dopo 30 secondi di inattività.",
             "settings put system screen_off_timeout 30000",
@@ -830,7 +868,7 @@ object Optimizations {
             group = "Display", groupIt = "Schermo"),
 
         opt("notif_led", Optimization.Category.SYSTEM,
-            "Notification LED OFF", "LED Notifiche OFF",
+            "Disable notification LED", "Disattiva LED notifiche",
             "Ticked: the notification LED no longer blinks. Minimal saving.",
             "Spuntato: il LED notifiche non lampeggia più. Risparmio minimo.",
             "settings put system notification_light_pulse 0",
@@ -845,7 +883,7 @@ object Optimizations {
         // which writes device_idle_constants — the keys DeviceIdleController parses.
 
         opt("animations", Optimization.Category.SYSTEM,
-            "Reduce Animations (0.5x)", "Riduci Animazioni (0.5x)",
+            "Reduce animations (0.5x)", "Riduci animazioni (0.5x)",
             "Halves animation speed. Saves GPU power. Phone feels slightly less smooth.",
             "Riduce velocità animazioni a metà. Risparmia GPU. Telefono leggermente meno fluido.",
             "settings put global window_animation_scale 0.5; settings put global transition_animation_scale 0.5; settings put global animator_duration_scale 0.5",
@@ -859,7 +897,7 @@ object Optimizations {
         // signature of a key nothing reads. Written to `global` the history records
         // `mode:update oldValue:0 newValue:1`, i.e. the system's own row changing.
         opt("reduce_transparency", Optimization.Category.SYSTEM,
-            "Reduce Transparency & Blur", "Riduci Trasparenza e Sfocatura",
+            "Reduce transparency and blur", "Riduci trasparenza e sfocatura",
             "Ticked: One UI's frosted-glass panels render opaque instead of blurred, so the GPU stops recompositing the wallpaper behind every panel it draws. Targets one of the drains One UI 8.5 introduced with its glass styling.",
             "Spuntato: i pannelli in vetro smerigliato di One UI sono opachi invece che sfocati, così la GPU smette di ricomporre lo sfondo dietro ogni pannello che disegna. Colpisce uno dei consumi introdotti da One UI 8.5 con lo stile vetro.",
             "settings put global accessibility_reduce_transparency 1",
@@ -874,7 +912,7 @@ object Optimizations {
         // not read by the charger: the cap was reported as applied while the phone kept
         // charging to 100%.
         opt("batt_protect", Optimization.Category.SYSTEM,
-            "Battery Protection 80%", "Protezione Batteria 80%",
+            "Limit charging to 80%", "Limita ricarica all'80%",
             "Stops charging at 80% (One UI \"Maximum\"). Extends battery lifespan. Replaces adaptive charging (needs ACTIVITY_RECOGNITION).",
             "Ferma ricarica a 80% (\"Massima\" in One UI). Prolunga vita batteria. Sostituisce ricarica adattiva (che serve ACTIVITY_RECOGNITION).",
             "settings put global protect_battery 1; settings put global battery_protection_threshold 80",
@@ -888,7 +926,7 @@ object Optimizations {
         // optimization. Reverting it means restoring 120, not 0.
 
         opt("fast_charge", Optimization.Category.SYSTEM,
-            "Adaptive Fast Charging OFF", "Ricarica Rapida Adattiva OFF",
+            "Disable adaptive fast charging", "Disattiva ricarica rapida adattiva",
             "Ticked: adaptive fast wired charging is off, so the phone charges slower and cooler. May extend battery lifespan when charging overnight.",
             "Spuntato: la ricarica rapida adattiva via cavo è disattivata, il telefono carica più lentamente e più freddo. Può allungare la vita della batteria caricando di notte.",
             "settings put system adaptive_fast_charging 0",
@@ -897,7 +935,7 @@ object Optimizations {
             group = "Battery", groupIt = "Batteria"),
 
         opt("extra_brightness", Optimization.Category.SYSTEM,
-            "Extra Brightness OFF", "Luminosità Extra OFF",
+            "Disable extra brightness", "Disattiva luminosità extra",
             "Ticked: brightness can no longer go above the normal maximum. Saves power outdoors.",
             "Spuntato: la luminosità non può più superare il massimo normale. Risparmia energia all'aperto.",
             "settings put secure screen_extra_brightness 0",
@@ -909,7 +947,7 @@ object Optimizations {
         // `screen_brightness_mode` (0 manual, 1 automatic), and `dumpsys display` reports
         // the resulting autoBrightness state.
         opt("auto_brightness_off", Optimization.Category.SYSTEM,
-            "Auto Brightness OFF", "Luminosità Automatica OFF",
+            "Disable auto brightness", "Disattiva luminosità automatica",
             "Ticked: automatic brightness is off, so the level stays where you put it. Saves the light sensor's draw, at the cost of adjusting by hand.",
             "Spuntato: la luminosità automatica è disattivata, il livello resta quello che imposti. Risparmia il consumo del sensore di luce, al prezzo di regolarla a mano.",
             "settings put system screen_brightness_mode 0",
@@ -918,7 +956,7 @@ object Optimizations {
             group = "Display", groupIt = "Schermo"),
 
         opt("battery_percent", Optimization.Category.SYSTEM,
-            "Show Battery Percentage", "Mostra Percentuale Batteria",
+            "Show battery percentage", "Mostra percentuale batteria",
             "Shows battery percentage inside the status bar icon.",
             "Mostra percentuale batteria dentro l'icona della barra di stato.",
             "settings put system display_battery_percentage 1",
@@ -930,7 +968,7 @@ object Optimizations {
         // NIGHT_YES — `dumpsys uimode` on this device prints mNightMode=1 (no) while the
         // entry claimed 1 meant dark. Applying "Dark Mode" forced light mode.
         opt("dark_mode", Optimization.Category.SYSTEM,
-            "Dark Mode (permanent)", "Modalità Scura (permanente)",
+            "Enable permanent dark mode", "Attiva modalità scura permanente",
             "Forces dark mode at all times. AMOLED black pixels save battery on the display.",
             "Forza modalità scura sempre. I pixel neri AMOLED risparmiano batteria sul display.",
             "settings put secure ui_night_mode 2",
@@ -939,7 +977,7 @@ object Optimizations {
             group = "Display", groupIt = "Schermo"),
 
         opt("double_tap_wake", Optimization.Category.SYSTEM,
-            "Double Tap to Wake OFF", "Doppio Tocco per Accendere OFF",
+            "Disable double tap to wake", "Disattiva doppio tocco per accendere",
             "Ticked: double-tapping no longer wakes the screen. Removes the touch digitizer's standby draw.",
             "Spuntato: il doppio tocco non accende più lo schermo. Elimina il consumo in standby del digitizer.",
             // The AOSP key is `secure double_tap_to_wake`, and writing it looks like it works:
@@ -954,7 +992,7 @@ object Optimizations {
 
         // ── NEW: Audio & Calls ──
         opt("call_extra_vol", Optimization.Category.SYSTEM,
-            "Call Extra Volume OFF", "Volume Chiamata Extra OFF",
+            "Disable call extra volume", "Disattiva volume chiamata extra",
             "Ticked: the extra loud call volume option is off. Slight speaker protection benefit.",
             "Spuntato: l'opzione volume extra in chiamata è disattivata. Leggera protezione dell'altoparlante.",
             "settings put system call_extra_volume 0",
@@ -963,7 +1001,7 @@ object Optimizations {
             group = "Calls", groupIt = "Chiamate"),
 
         opt("call_noise_off", Optimization.Category.SYSTEM,
-            "Call Noise Reduction OFF", "Riduzione Rumore OFF",
+            "Disable call noise reduction", "Disattiva riduzione rumore in chiamata",
             "Ticked: microphone noise suppression during calls is off. May improve battery on long calls.",
             "Spuntato: la soppressione del rumore del microfono in chiamata è disattivata. Può migliorare la batteria nelle chiamate lunghe.",
             "settings put system call_noise_reduction 0",
@@ -972,7 +1010,7 @@ object Optimizations {
             group = "Calls", groupIt = "Chiamate"),
 
         opt("call_vib_off", Optimization.Category.SYSTEM,
-            "Call Connect/Vibrate OFF", "Vibrazione Chiamata OFF",
+            "Disable call connect vibration", "Disattiva vibrazione alla connessione chiamata",
             "Ticked: the phone no longer vibrates when a call connects or ends. Saves a tiny amount of battery per call.",
             "Spuntato: il telefono non vibra più quando una chiamata si connette o finisce. Risparmio minimo per chiamata.",
             "settings put system call_answer_vib 0; settings put system call_end_vib 0",
@@ -982,7 +1020,7 @@ object Optimizations {
 
         // ── NEW: Gestures & Navigation ──
         opt("double_tap_sleep", Optimization.Category.SYSTEM,
-            "Double Tap to Sleep", "Doppio Tocco per Spegnere",
+            "Enable double tap to sleep", "Attiva doppio tocco per spegnere",
             "Double-tap on home screen or lock screen to turn screen off.",
             "Doppio tocco sulla schermata home o blocco per spegnere schermo.",
             // AOSP keeps this under `secure`, but One UI owns its own copy under `system`
@@ -994,7 +1032,7 @@ object Optimizations {
             group = "Gestures", groupIt = "Gesti"),
 
         opt("lift_wake_off", Optimization.Category.SYSTEM,
-            "Lift to Wake OFF", "Solleva per Accendere OFF",
+            "Disable lift to wake", "Disattiva solleva per accendere",
             "Ticked: picking the phone up no longer turns the screen on. Removes the accelerometer's standby draw.",
             "Spuntato: sollevare il telefono non accende più lo schermo. Elimina il consumo in standby dell'accelerometro.",
             "settings put system lift_to_wake 0",
@@ -1003,7 +1041,7 @@ object Optimizations {
             group = "Gestures", groupIt = "Gesti"),
 
         opt("smart_stay_off", Optimization.Category.SYSTEM,
-            "Smart Stay (Eye Tracking) OFF", "Smart Stay (Tracciamento Occhi) OFF",
+            "Disable Smart Stay (eye tracking)", "Disattiva Smart Stay (tracciamento occhi)",
             "Ticked: front-camera eye tracking no longer keeps the screen on while you look at it. Saves ~5% battery/day.",
             "Spuntato: il tracciamento occhi della fotocamera frontale non tiene più acceso lo schermo mentre guardi. Risparmia ~5% di batteria al giorno.",
             "settings put system intelligent_sleep_mode 0",
@@ -1012,7 +1050,7 @@ object Optimizations {
             group = "Gestures", groupIt = "Gesti"),
 
         opt("one_handed_off", Optimization.Category.SYSTEM,
-            "One-Handed Mode OFF", "Modalità Una Mano OFF",
+            "Disable one-handed mode", "Disattiva modalità una mano",
             "Ticked: the one-handed mode shortcut is off. Fewer accidental triggers, and one less background service.",
             "Spuntato: la scorciatoia della modalità una mano è disattivata. Meno attivazioni accidentali e un servizio in background in meno.",
             "settings put secure one_handed_mode_enabled 0",
@@ -1024,7 +1062,7 @@ object Optimizations {
         // `adaptive_battery_enabled` does not exist on this device — the row One UI keeps
         // (and Diagnostics already reads) is `adaptive_battery_management_enabled`.
         opt("adaptive_batt_off", Optimization.Category.SYSTEM,
-            "Adaptive Battery OFF", "Batteria Adattiva OFF",
+            "Disable Adaptive Battery", "Disattiva Batteria adattiva",
             "Ticked: Adaptive Battery is off, so One UI no longer limits background activity on its own. Can fix delayed notifications and VoIP call issues. Unverified: this row did not exist until the app wrote it, and no system package has ever touched it — One UI most likely keeps this switch outside the settings provider.",
             "Spuntato: la Batteria Adattiva è disattivata, One UI non limita più da sola l'attività in background. Può risolvere notifiche ritardate e problemi con le chiamate VoIP. Non verificata: questa riga non esisteva prima che la scrivesse l'app e nessun pacchetto di sistema l'ha mai toccata — One UI con ogni probabilità tiene questo interruttore fuori dal settings provider.",
             "settings put global adaptive_battery_management_enabled 0",
@@ -1042,7 +1080,7 @@ object Optimizations {
         // com.samsung.android.lool write is `ram_expand_size`, and its factory default is
         // 4096 — so reverting restores 4096, not "delete the key".
         opt("ram_plus_off", Optimization.Category.SYSTEM,
-            "RAM Plus OFF", "RAM Plus OFF",
+            "Disable RAM Plus", "Disattiva RAM Plus",
             "Ticked: RAM Plus (virtual RAM on storage) is off. Frees storage and reduces flash wear — Samsung's virtual RAM can slow the device down by using storage as swap. Needs a reboot to take effect.",
             "Spuntato: RAM Plus (RAM virtuale su storage) è disattivata. Libera spazio e riduce l'usura della flash — la RAM virtuale Samsung può rallentare il dispositivo usando lo storage come swap. Richiede un riavvio.",
             "settings put global ram_expand_size 0",
@@ -1055,7 +1093,7 @@ object Optimizations {
         // 1 on its own schedule — seen here 07-28 (0→1), then again after the app set it to
         // 0 on 13-08 — so the tick is real for a while and then quietly stops being true.
         opt("error_reports_off", Optimization.Category.SYSTEM,
-            "Crash Report Prompt OFF", "Richiesta Report Crash OFF",
+            "Disable crash report prompt", "Disattiva richiesta report crash",
             "Ticked: the \"send report\" prompt after an app crash or ANR is suppressed. Unverified: the key belongs to Google Play Services, not Samsung — GMS owns the row and puts it back to 1 by itself, so the tick does not hold.",
             "Spuntato: la richiesta \"invia report\" dopo un crash o un ANR non compare più. Non verificata: la chiave appartiene a Google Play Services, non a Samsung — GMS è proprietario della riga e la riporta a 1 da solo, quindi la spunta non regge nel tempo.",
             "settings put global send_action_app_error 0",
@@ -1065,7 +1103,7 @@ object Optimizations {
             group = "Privacy"),
 
         opt("hqm_telemetry_off", Optimization.Category.SYSTEM,
-            "Samsung HQM Telemetry OFF", "Telemetria HQM Samsung OFF",
+            "Disable Samsung HQM telemetry", "Disattiva telemetria HQM Samsung",
             "Ticked: High Quality Monitoring — Samsung's background usage data collection — is off. Pure telemetry, zero impact on features.",
             "Spuntato: High Quality Monitoring — la raccolta dati d'uso in background di Samsung — è disattivato. Solo telemetria, zero impatto sulle funzioni.",
             "settings put system samsung_eula_agree_hqm 0; settings put system samsung_errorlog_agree 0",
@@ -1077,7 +1115,7 @@ object Optimizations {
         // row for this name carrying `default:`/`defaultSystemSet:`, so the unverified note
         // below stands rather than having been fixed by a later firmware.
         opt("nearby_scan_off", Optimization.Category.SYSTEM,
-            "Nearby Scan OFF", "Scansione Vicinanza OFF",
+            "Disable nearby device scanning", "Disattiva scansione dispositivi vicini",
             "Ticked: Nearby Device Scanning is off, so the phone stops scanning over Bluetooth for Samsung devices. Significant saving if you do not use Galaxy Buds/Watch daily. Unverified: the key holds the value but no reader for it was found on this device.",
             "Spuntato: la Scansione Dispositivi Vicini è disattivata, il telefono smette di cercare dispositivi Samsung via Bluetooth. Risparmio notevole se non usi Galaxy Buds/Watch ogni giorno. Non verificata: la chiave conserva il valore ma non è stato trovato nulla che la legga.",
             "settings put global nearby_scanning_enabled 0",
@@ -1088,7 +1126,7 @@ object Optimizations {
 
         // ── NEW: Connectivity ──
         opt("wifi_scan_throttle", Optimization.Category.SYSTEM,
-            "WiFi Scan Throttle ON", "Limite Scansione WiFi ON",
+            "Throttle WiFi scanning", "Limita scansione WiFi",
             "Ticked: WiFi scan frequency is capped. Less drain from constant network scanning. Unverified: the key holds the value but no reader for it was found on this device.",
             "Spuntato: la frequenza di scansione WiFi è limitata. Meno consumo dalla scansione di rete costante. Non verificata: la chiave conserva il valore ma non è stato trovato nulla che la legga.",
             "settings put global wifi_scan_throttle_enabled 1",
@@ -1101,7 +1139,7 @@ object Optimizations {
         // exist here — and the check read that half, so the box never ticked even when the
         // other half had applied. Only the key this device actually has is left.
         opt("wifi_switch_off", Optimization.Category.SYSTEM,
-            "Auto WiFi Switch OFF", "Commuta WiFi Auto OFF",
+            "Disable auto WiFi → mobile switch", "Disattiva passaggio auto WiFi → dati",
             "Ticked: the phone no longer drops WiFi for mobile data when the connection is weak. Less background scanning.",
             "Spuntato: il telefono non passa più dal WiFi ai dati mobili quando la connessione è debole. Meno scansione in background.",
             "settings put global wifi_switch_to_mobile_data_ins 0",
@@ -1109,9 +1147,37 @@ object Optimizations {
             """settings get global wifi_switch_to_mobile_data_ins | grep -cFx "0"""",
             group = "Network", groupIt = "Rete"),
 
+        // On the S25 Edge (One UI 9) the switch the Settings screen drives is the AI one:
+        // `wifi_switch_to_mobile_data_ai_mode_2` was 1 while `_ins` above was already 0, and
+        // the phone logged 275 connectivity changes in 8 h. The poor-network watchdog is
+        // what keeps probing the link to feed that decision.
+        opt("wifi_switch_ai_off", Optimization.Category.SYSTEM,
+            "Disable AI WiFi → mobile switch", "Disattiva passaggio AI WiFi → dati",
+            "Ticked: the AI switch to mobile data and the poor-network probe are off. On this phone they caused 275 network changes in 8 h and kept the modem from sleeping. If WiFi is slow you stay on WiFi.",
+            "Spuntato: il passaggio AI ai dati mobili e il test di rete scarsa sono spenti. Su questo telefono causavano 275 cambi di rete in 8 h e impedivano al modem di dormire. Se il WiFi è lento resti sul WiFi.",
+            "settings put global wifi_switch_to_mobile_data_ai_mode_2 0; settings put global wifi_watchdog_poor_network_test_enabled 0",
+            "settings put global wifi_switch_to_mobile_data_ai_mode_2 1; settings put global wifi_watchdog_poor_network_test_enabled 1",
+            """settings get global wifi_switch_to_mobile_data_ai_mode_2 | grep -cFx "0"; settings get global wifi_watchdog_poor_network_test_enabled | grep -cFx "0"""",
+            icon = Icons.Default.NetworkCheck,
+            group = "Network", groupIt = "Rete"),
+
+        // `/system/bin/eris` is the ePDG daemon behind WiFi Calling (init.rilepdg.rc). With
+        // the call service registered it took a 10 s wakelock every ~10 s: 51 min held in
+        // 5 h of deep doze on 8 Nov. The key is Samsung's own row, but whether ePDG tears the
+        // tunnel down on a shell write rather than on the Settings toggle is unproven.
+        opt("wifi_calling_off", Optimization.Category.SYSTEM,
+            "Disable WiFi Calling", "Disattiva Chiamate WiFi",
+            "Ticked: WiFi Calling (VoWiFi) is off, so the 'eris' ePDG daemon stops keeping an IPsec tunnel alive. It held the phone awake 51 min out of 5 h of standby. Calls go over the mobile network only: avoid if indoor coverage is poor.",
+            "Spuntato: le Chiamate WiFi (VoWiFi) sono spente, quindi il demone ePDG 'eris' smette di tenere vivo il tunnel IPsec. Teneva sveglio il telefono 51 min su 5 h di standby. Le chiamate passano solo dalla rete mobile: evitalo se in casa la copertura è scarsa.",
+            "settings put system wifi_call_enable2 0",
+            "settings put system wifi_call_enable2 1",
+            """settings get system wifi_call_enable2 | grep -cFx "0"""",
+            verified = false,
+            group = "Network", groupIt = "Rete"),
+
         // ── NEW: Touch ──
         opt("touch_sensitivity", Optimization.Category.SYSTEM,
-            "Touch Sensitivity (Low)", "Sensibilità Tocco (Bassa)",
+            "Lower touch sensitivity", "Riduci sensibilità tocco",
             "Reduces touch sensitivity. May prevent accidental touches. Slight digitizer power saving.",
             "Riduce sensibilità tocco. Previene tocchi accidentali. Leggero risparmio digitizer.",
             "settings put system auto_adjust_touch 0",
@@ -1124,7 +1190,7 @@ object Optimizations {
         // old apply/revert created one for themselves and the check read it straight back.
         // Master sync only moves through ContentResolver — see [MasterSync].
         opt("auto_sync_off", Optimization.Category.SYSTEM,
-            "Auto Sync OFF", "Sincronizzazione Auto OFF",
+            "Disable auto sync", "Disattiva sincronizzazione automatica",
             "Ticked: automatic account sync is off, so apps no longer refresh in the background. One of the larger savings.",
             "Spuntato: la sincronizzazione automatica degli account è disattivata, le app non si aggiornano più in background. Uno dei risparmi maggiori.",
             "", "", "",
@@ -1134,7 +1200,7 @@ object Optimizations {
 
         // ── REDDIT JULY 2026: Samsung Customization Service Fix ──
         opt("customization_svc_activity", Optimization.Category.SYSTEM,
-            "Customization Service Fix", "Fix Customization Service",
+            "Revoke activity tracking from Customization Service", "Revoca rilevamento attività a Customization Service",
             "Samsung Customization Service wakes Play Services every 15min via Physical Activity tracking. Revoking ACTIVITY_RECOGNITION stops this drain loop. Biggest standby fix found on Reddit July 2026.",
             "Customization Service sveglia Play Services ogni 15min tramite Physical Activity. Revocare ACTIVITY_RECOGNITION ferma il loop. Più grande fix standby trovato su Reddit luglio 2026.",
             "pm revoke com.samsung.android.rubin.app android.permission.ACTIVITY_RECOGNITION",
@@ -1151,16 +1217,27 @@ object Optimizations {
 
         // ── REFRESH RATE (from Galaxy Max Hz) ──
         opt("adaptive_120", Optimization.Category.REFRESH_RATE,
-            "Adaptive 120Hz", "120Hz Adattivo",
+            "Set adaptive 120Hz", "Imposta 120Hz adattivo",
             "Variable refresh rate 10-120Hz: 120Hz when touching, drops to 10Hz when idle. Best balance of smoothness and battery.",
             "Frequenza variabile 10-120Hz: 120Hz al tocco, scende a 10Hz a schermo fermo. Miglior bilanciamento tra fluidità e batteria.",
             "settings put secure refresh_rate_mode 1; settings put system peak_refresh_rate 120.0; settings put system user_refresh_rate 120.0",
             "settings put secure refresh_rate_mode 0; settings put system peak_refresh_rate 60.0; settings put system user_refresh_rate 60.0",
-            """settings get secure refresh_rate_mode | grep -cFx "1"""",
+            // The peak is part of the check: with the 80 Hz entry below, mode 1 alone would
+            // tick both boxes at once.
+            """settings get secure refresh_rate_mode | grep -cFx "1"; settings get system peak_refresh_rate | grep -cE "^120(\.0)?$"""",
             icon = Icons.AutoMirrored.Filled.ShowChart),
 
+        opt("adaptive_80", Optimization.Category.REFRESH_RATE,
+            "Set adaptive 80Hz", "Imposta 80Hz adattivo",
+            "Variable refresh rate capped at 80Hz, the only step this panel has between 60 and 120 (its modes are 10/24/30/48/60/80/120; a 90Hz cap lands on 80). Smoother than 60Hz, cheaper than 120Hz while scrolling.",
+            "Frequenza variabile con massimo 80Hz, l'unico gradino che questo pannello ha tra 60 e 120 (modalità 10/24/30/48/60/80/120; un limite a 90 finisce comunque a 80). Più fluida di 60Hz, consuma meno di 120Hz nello scorrimento.",
+            "settings put secure refresh_rate_mode 1; settings put system peak_refresh_rate 80.0; settings put system user_refresh_rate 80.0",
+            "settings put secure refresh_rate_mode 1; settings put system peak_refresh_rate 120.0; settings put system user_refresh_rate 120.0",
+            """settings get secure refresh_rate_mode | grep -cFx "1"; settings get system peak_refresh_rate | grep -cE "^80(\.0)?$"""",
+            icon = Icons.Default.Speed),
+
         opt("standard_60", Optimization.Category.REFRESH_RATE,
-            "Standard 60Hz", "Standard 60Hz",
+            "Set standard 60Hz", "Imposta 60Hz standard",
             "Fixed 60Hz peak refresh rate (scales 10-60Hz on LTPO). Maximum battery savings.",
             "Frequenza massima 60Hz (scala 10-60Hz su LTPO). Massimo risparmio batteria.",
             "settings put secure refresh_rate_mode 0; settings put system peak_refresh_rate 60.0; settings put system user_refresh_rate 60.0",
@@ -1169,7 +1246,7 @@ object Optimizations {
             icon = Icons.Default.Pause),
 
         opt("psm_hz_override", Optimization.Category.REFRESH_RATE,
-            "High Hz on Power Saving", "Alta Frequenza in PSM",
+            "Keep high Hz in Power Saving", "Mantieni alta frequenza in Risparmio energetico",
             "Samsung locks refresh rate to 60Hz when Power Saving Mode is on. This override keeps your selected high refresh rate active even in PSM. Equivalent to Galaxy Max Hz 'Keep Motion Smoothness on PSM'.",
             "Samsung blocca a 60Hz quando il Risparmio Energetico è attivo. Questa mod mantiene l'alta frequenza anche in PSM. Equivalente a 'Mantieni Fluidità in PSM' di Galaxy Max Hz.",
             "settings put global pms_settings_refresh_rate_enabled 0; settings put global psm_refresh_rate_tag 0",
@@ -1178,7 +1255,7 @@ object Optimizations {
             icon = Icons.Default.PowerSettingsNew),
 
         opt("quick_doze", Optimization.Category.SYSTEM,
-            "Quick Doze 30s ON", "Doze Rapido 30s ON",
+            "Enable quick Doze (30s)", "Attiva Doze rapido (30s)",
             "Ticked: Doze starts 30 seconds after the screen goes off, instead of the stock 60+ minutes. Large standby drain reduction.",
             "Spuntato: il Doze parte 30 secondi dopo lo spegnimento dello schermo, invece dei 60+ minuti di serie. Grande riduzione del consumo in standby.",
             "settings put global device_idle_constants inactive_to=30000,sensing_to=30000,idle_after_inactive_to=3000,idle_pending_to=30000,max_idle_pending_to=30000,max_idle_to=14400000",
@@ -1188,7 +1265,7 @@ object Optimizations {
             group = "Battery", groupIt = "Batteria"),
 
         opt("perf_restrict", Optimization.Category.SYSTEM,
-            "Unlock CPU in PSM", "Sblocca CPU in PSM",
+            "Unlock CPU in Power Saving", "Sblocca CPU in Risparmio energetico",
             "Power Saving Mode normally restricts CPU performance. Keeps full CPU speed while still saving battery on screen/app behavior.",
             "Il Risparmio Energetico normalmente limita la CPU. Mantiene la CPU piena risparmiando comunque su schermo/app.",
             "settings put global restricted_device_performance 0,1",
@@ -1199,7 +1276,7 @@ object Optimizations {
 
         // ── PER-APP REFRESH RATE ──
         opt("per_app_refresh_rate", Optimization.Category.PER_APP_RR,
-            "Per-App Refresh Rate", "Frequenza Personalizzata per App",
+            "Enable per-app refresh rate", "Attiva frequenza per app",
             "Assign different refresh rates (60/96/120Hz) to individual apps. Uses AccessibilityService to detect foreground app and apply its rate. Requires enabling in System Settings → Accessibility → Installed Apps.",
             "Assegna frequenze diverse (60/96/120Hz) a singole app. Usa AccessibilityService per rilevare l'app in primo piano. Richiede attivazione in Impostazioni → Accessibilità → App installate.",
             "settings put secure s24opt_per_app_rr_enabled 1",
@@ -1209,7 +1286,7 @@ object Optimizations {
 
         // ── ADVANCED GMH FEATURES ──
         opt("resolution_720p", Optimization.Category.ADVANCED,
-            "720p Resolution (Battery Save)", "Risoluzione 720p (Risparmio)",
+            "Set 720p resolution", "Imposta risoluzione 720p",
             "Sets display to 720p. Fewer pixels = less GPU work = significant battery savings. Good for media consumption. Uses wm size command.",
             "Imposta display a 720p. Meno pixel = meno GPU = notevole risparmio batteria. Ideale per video. Usa comando wm size.",
             "wm size 720x1560; wm density 320",
@@ -1225,7 +1302,7 @@ object Optimizations {
         // entry already runs `wm size reset; wm density reset`.
 
         opt("net_speed", Optimization.Category.ADVANCED,
-            "Network Speed Indicator ON", "Indicatore Velocità Rete ON",
+            "Show network speed", "Mostra velocità di rete",
             "Ticked: the status bar shows real-time network speed. Equivalent to Galaxy Max Hz's Net Speed indicator. Unverified: the key holds the value but this One UI build's status bar was not seen to read it.",
             "Spuntato: la barra di stato mostra la velocità di rete in tempo reale. Equivalente all'indicatore Net Speed di Galaxy Max Hz. Non verificata: la chiave conserva il valore ma la barra di stato di questa build One UI non risulta leggerla.",
             "settings put secure sysui_net_speed 1",
@@ -1236,7 +1313,7 @@ object Optimizations {
             group = "Network", groupIt = "Rete"),
 
         opt("force_resizable", Optimization.Category.ADVANCED,
-            "Force Resizable Activities ON", "Forza Attività Ridimensionabili ON",
+            "Force resizable activities", "Forza attività ridimensionabili",
             "Ticked: every app can be used in split-screen and multi-window, including the ones that declare they do not support it. Equivalent to Galaxy Max Hz's 'Keep Force Resizable Activities'.",
             "Spuntato: tutte le app possono essere usate in split-screen e multi-finestra, anche quelle che dichiarano di non supportarlo. Equivalente a 'Keep Force Resizable Activities' di Galaxy Max Hz.",
             "settings put global force_resizable_activities 1",
@@ -1246,7 +1323,7 @@ object Optimizations {
             group = "Display", groupIt = "Schermo"),
 
         opt("anim_off", Optimization.Category.ADVANCED,
-            "Disable Animations (0x)", "Annulla Animazioni (0x)",
+            "Disable animations (0x)", "Disattiva animazioni (0x)",
             "Turns off all window/transition animations. Maximum GPU savings but phone feels instant/jarring. Equivalent to Galaxy Max Hz Animation Mod.",
             "Spegne tutte le animazioni. Massimo risparmio GPU ma il telefono sembra immediato/scattoso. Equivalente al Mod Animazioni di Galaxy Max Hz.",
             "settings put global window_animation_scale 0; settings put global transition_animation_scale 0; settings put global animator_duration_scale 0",
@@ -1256,7 +1333,7 @@ object Optimizations {
             group = "Display", groupIt = "Schermo"),
 
         opt("batt_protect_85", Optimization.Category.ADVANCED,
-            "Battery Protection 85%", "Protezione Batteria 85%",
+            "Limit charging to 85%", "Limita ricarica all'85%",
             "Stops charging at 85%. More usable capacity than 80% while still protecting battery lifespan.",
             "Ferma ricarica a 85%. Più capacità utilizzabile dell'80% proteggendo comunque la batteria.",
             "settings put global protect_battery 1; settings put global battery_protection_threshold 85",
@@ -1266,7 +1343,7 @@ object Optimizations {
             group = "Battery Protection", groupIt = "Protezione batteria"),
 
         opt("batt_protect_90", Optimization.Category.ADVANCED,
-            "Battery Protection 90%", "Protezione Batteria 90%",
+            "Limit charging to 90%", "Limita ricarica al 90%",
             "Stops charging at 90%. Good balance for daily use while still extending battery lifespan.",
             "Ferma ricarica a 90%. Buon bilanciamento per uso quotidiano allungando comunque la vita batteria.",
             "settings put global protect_battery 1; settings put global battery_protection_threshold 90",
@@ -1276,7 +1353,7 @@ object Optimizations {
             group = "Battery Protection", groupIt = "Protezione batteria"),
 
         opt("batt_protect_95", Optimization.Category.ADVANCED,
-            "Battery Protection 95%", "Protezione Batteria 95%",
+            "Limit charging to 95%", "Limita ricarica al 95%",
             "Stops charging at 95%. Minimal protection but maximum daily range.",
             "Ferma ricarica a 95%. Protezione minima ma massima autonomia giornaliera.",
             "settings put global protect_battery 1; settings put global battery_protection_threshold 95",
@@ -1287,7 +1364,7 @@ object Optimizations {
 
         // ── SCREEN-OFF MODS (require persistent service) ──
         opt("screen_off_low_hz", Optimization.Category.ADVANCED,
-            "Screen-Off Low Hz", "Bassa Hz Schermo Spento",
+            "Lower Hz when screen is off", "Abbassa Hz a schermo spento",
             "Forces the lowest refresh rate when screen turns off (60Hz). Samsung stock behavior locks to HIGHEST Hz on screen-off — this overrides it. Requires background service (notification will appear). Equivalent to Galaxy Max Hz Screen-Off Refresh Mod.",
             "Forza 60Hz a schermo spento. Samsung normalmente forza la MASSIMA frequenza — questa mod la annulla. Richiede servizio in background (apparirà notifica). Equivalente a Galaxy Max Hz.",
             "settings put secure s24opt_screen_off_low_hz 1",
@@ -1297,7 +1374,7 @@ object Optimizations {
             group = "Screen-Off", groupIt = "Schermo spento"),
 
         opt("screen_off_psm", Optimization.Category.ADVANCED,
-            "Auto PSM on Screen-Off", "PSM Automatico a Schermo Spento",
+            "Enable Power Saving when screen is off", "Attiva Risparmio energetico a schermo spento",
             "Automatically enables Power Saving Mode when screen turns off and disables it when screen turns on. Requires background service (notification will appear). Equivalent to Galaxy Max Hz Auto PSM.",
             "Attiva PSM a schermo spento, lo disattiva a schermo acceso. Richiede servizio in background (apparirà notifica). Equivalente a Galaxy Max Hz.",
             "settings put secure s24opt_screen_off_psm 1",
@@ -1307,7 +1384,7 @@ object Optimizations {
             group = "Screen-Off", groupIt = "Schermo spento"),
 
         opt("screen_off_sync", Optimization.Category.ADVANCED,
-            "Auto Sync Off on Screen-Off", "Sincr. Off a Schermo Spento",
+            "Disable sync when screen is off", "Disattiva sincronizzazione a schermo spento",
             "Disables account sync when screen turns off, re-enables when screen turns on. Saves sync drain. Requires background service (notification will appear). Equivalent to Galaxy Max Hz.",
             "Disattiva sync a schermo spento, riattiva a schermo acceso. Richiede servizio in background (apparirà notifica). Equivalente a Galaxy Max Hz.",
             "settings put secure s24opt_screen_off_sync 1",
@@ -1332,7 +1409,10 @@ object Optimizations {
     ) = Optimization(id, titleEn, titleIt, descEn, descIt, cat,
         apply.split("; ").filter { it.isNotBlank() },
         revert.split("; ").filter { it.isNotBlank() },
-        check.split("; ").filter { it.isNotBlank() },
+        // An `if …; then …; fi` check is one shell statement: split on "; " it became four
+        // syntax errors and the box could never tick.
+        if (check.trimStart().startsWith("if ")) listOf(check)
+        else check.split("; ").filter { it.isNotBlank() },
         icon, group, groupIt, verified, local, selfHeals)
 
     fun byCategory(): Map<Optimization.Category, List<Optimization>> =

@@ -9,6 +9,10 @@ import androidx.compose.material.icons.filled.PhoneAndroid
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 
+private val PACKAGE_ARG = Regex(
+    """(?:disable-user --user 0|appops set|force-stop|uninstall(?: -k)? --user 0|set-standby-bucket|deviceidle whitelist)\s+[+-]?([a-zA-Z]\w*(?:\.\w+)+)"""
+)
+
 /**
  * One toggleable change to the device.
  *
@@ -94,6 +98,10 @@ data class Optimization(
         val conditions = checkCommands.joinToString(" && ") { "[ \"\$($it)\" = \"1\" ]" }
         return "if $conditions; then echo 1; else echo 0; fi"
     }
+
+    /** Packages the apply half acts on. Empty for entries that only touch settings. */
+    fun packages(): List<String> =
+        applyCommands.flatMap { cmd -> PACKAGE_ARG.findAll(cmd).map { it.groupValues[1] }.toList() }.distinct()
 
     enum class Category(val labelEn: String, val labelIt: String) {
         // Every entry here is named after the package it turns off, which on its own would

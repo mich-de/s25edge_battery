@@ -55,6 +55,11 @@ object Diagnostics {
         val mobileRadioMah: Float,
         val screenOnDuration: String,
         val consumers: List<Consumer>,
+        /** Discharge in deep doze divided by time spent there; 0 when it never dozed. */
+        val deepDozeMahPerHour: Float = 0f,
+        val connectivityChanges: Int = 0,
+        /** Longest-held partial wakelock, e.g. `1000 eris: 51m 17s`. */
+        val topWakelock: String = "",
     )
 
     enum class Severity { INFO, WARNING, CRITICAL }
@@ -118,10 +123,27 @@ object Diagnostics {
         // than the per-screen-state breakdowns nested under them.
         val out = exec.execute(
             "dumpsys batterystats | grep -E " +
-                "'Capacity: |^    cpu: |^    mobile_radio: |^  UID |Screen on: ' | head -20",
+                "'Capacity: |^    cpu: |^    mobile_radio: |^  UID |Screen on: |" +
+                "Device deep doze discharge: |Idle mode full time: |Connectivity changes: ' | head -24; " +
+                // The list is sorted by held time, so the line after the header is the worst.
+                "dumpsys batterystats | grep -A1 -m1 'All partial wake locks:' | tail -1",
             timeoutMs = 30_000L,
         ).stdout
         if (out.isBlank()) return null
+
+        fun hours(text: String): Float {
+            var h = 0f
+            Regex("""(\d+)([hms])\b""").findAll(text).forEach {
+                val n = it.groupValues[1].toFloat()
+                h += when (it.groupValues[2]) { "h" -> n; "m" -> n / 60f; else -> n / 3600f }
+            }
+            return h
+        }
+        val dozeMah = Regex("""Device deep doze discharge: ([\d.]+)""").find(out)?.groupValues?.get(1)?.toFloatOrNull() ?: 0f
+        val dozeHours = hours(Regex("""Idle mode full time: ([^(]+)""").find(out)?.groupValues?.get(1).orEmpty())
+        val wakelock = Regex("""Wake lock (\S+ [^:]+): (\S+ \S+ \S+)""").find(out)?.let {
+            "${it.groupValues[1].take(48)}: ${it.groupValues[2]}"
+        }.orEmpty()
 
         fun f(pattern: String): Float =
             Regex(pattern).find(out)?.groupValues?.getOrNull(1)?.toFloatOrNull() ?: 0f
@@ -149,6 +171,9 @@ object Diagnostics {
             mobileRadioMah = f("""(?m)^    mobile_radio: ([\d.]+)"""),
             screenOnDuration = Regex("""Screen on: (\S+)""").find(out)?.groupValues?.getOrNull(1).orEmpty(),
             consumers = consumers,
+            deepDozeMahPerHour = if (dozeHours > 0.25f) dozeMah / dozeHours else 0f,
+            connectivityChanges = Regex("""Connectivity changes: (\d+)""").find(out)?.groupValues?.get(1)?.toIntOrNull() ?: 0,
+            topWakelock = wakelock,
         )
     }
 

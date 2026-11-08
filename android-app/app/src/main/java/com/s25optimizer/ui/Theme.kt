@@ -16,22 +16,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// ── Color Palette ──
-val ElectricBlue = Color(0xFF00D4FF)
-val NeonCyan = Color(0xFF00E5A0)
-val DeepPurple = Color(0xFF7C4DFF)
-val WarmAmber = Color(0xFFFFB74D)
-val CoralAccent = Color(0xFFFF6B6B)
-val SurfaceDark = Color(0xFF0A0E14)
-val SurfaceCard = Color(0xFF131920)
-val SurfaceElevated = Color(0xFF1A2230)
-val OutlineDim = Color(0xFF2A3545)
-val TextPrimary = Color(0xFFE6EDF3)
-val TextSecondary = Color(0xFF8B949E)
+// ── Color Palette (Technical Minimal / Teenage Engineering Style) ──
+val ElectricBlue = Color(0xFFFF5A1F)
+val NeonCyan = Color(0xFFFF7A45)
+val DeepPurple = Color(0xFFB3360F)
+val WarmAmber = Color(0xFFFF5A1F)
+val CoralAccent = Color(0xFFE5481A)
+val SurfaceDark = Color(0xFF0E0E0E)
+val SurfaceCard = Color(0xFF151515)
+val SurfaceElevated = Color(0xFF1C1C1C)
+val OutlineDim = Color(0xFF262626)
+val TextPrimary = Color(0xFFECEBE8)
+val TextSecondary = Color(0xFF9A968F)
 
 // ── Gradients ──
-val GlowBlue = Color(0xFF00D4FF).copy(alpha = 0.15f)
-val GlowCyan = Color(0xFF00E5A0).copy(alpha = 0.10f)
+val GlowBlue = Color(0xFFFF5A1F).copy(alpha = 0.15f)
+val GlowCyan = Color(0xFFFF7A45).copy(alpha = 0.10f)
 
 private val DarkColors = darkColorScheme(
     primary = ElectricBlue,
@@ -81,39 +81,22 @@ val AppTypography = Typography(
     labelSmall = TextStyle(fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Normal, fontSize = 11.sp, letterSpacing = 0.5.sp),
 )
 
-// ── Shapes ──
+// ── Shapes (Technical Minimal Sharp 6dp / 10dp) ──
 val AppShapes = Shapes(
-    extraSmall = RoundedCornerShape(6.dp),
-    small = RoundedCornerShape(10.dp),
-    medium = RoundedCornerShape(16.dp),
-    large = RoundedCornerShape(20.dp),
-    extraLarge = RoundedCornerShape(28.dp),
+    extraSmall = RoundedCornerShape(4.dp),
+    small = RoundedCornerShape(6.dp),
+    medium = RoundedCornerShape(10.dp),
+    large = RoundedCornerShape(12.dp),
+    extraLarge = RoundedCornerShape(16.dp),
 )
 
 @Composable
 fun S25EdgeTheme(content: @Composable () -> Unit) {
-    val colorScheme = if (Build.VERSION.SDK_INT >= 31) {
-        // Dynamic Color: use wallpaper-derived dark palette for a native feel
-        val dynamicColors = dynamicDarkColorScheme(LocalContext.current)
-        dynamicColors.copy(
-            background = SurfaceDark,
-            surface = SurfaceCard,
-            surfaceVariant = SurfaceElevated,
-            surfaceContainerHigh = SurfaceElevated,
-            surfaceContainerLow = SurfaceCard,
-            surfaceContainer = SurfaceCard,
-            outline = OutlineDim,
-            outlineVariant = OutlineDim.copy(alpha = 0.5f),
-        )
-    } else {
-        DarkColors
-    }
-
+    // Pure Technical Minimal dark scheme (#0E0E0E, #151515, #FF5A1F)
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = DarkColors,
         typography = AppTypography,
         shapes = AppShapes,
         content = content,
     )
 }
-

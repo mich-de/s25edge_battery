@@ -1,4 +1,4 @@
-﻿package com.s25optimizer.ui
+package com.s25optimizer.ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -48,6 +48,7 @@ enum class PerfMode(val labelEn: String, val labelIt: String, val value: Int) {
 
 enum class RefreshRate(val labelEn: String, val labelIt: String, val hz: Int) {
     HZ_60("60Hz", "60Hz", 60),
+    HZ_80("80Hz", "80Hz", 80),
     HZ_120("120Hz", "120Hz", 120);
 }
 
@@ -69,7 +70,18 @@ fun QuickSettingsBar(
     val scope = rememberCoroutineScope()
 
     var perfMode by remember { mutableStateOf(PerfMode.entries.getOrElse(prefs.getInt("perf_mode", 1)) { PerfMode.STANDARD }) }
-    var refreshRate by remember { mutableStateOf(if (prefs.getBoolean("hz120", false)) RefreshRate.HZ_120 else RefreshRate.HZ_60) }
+    var refreshRate by remember {
+        val saved = prefs.getInt("refresh_hz", if (prefs.getBoolean("hz120", false)) 120 else 60)
+        mutableStateOf(RefreshRate.entries.firstOrNull { it.hz == saved } ?: RefreshRate.HZ_60)
+    }
+    // The cap can be changed from Settings or adb, so the device's value wins over the pref.
+    LaunchedEffect(Unit) {
+        if (!executor.permissionsGranted) return@LaunchedEffect
+        val peak = withContext(Dispatchers.IO) {
+            executor.execute("settings get system peak_refresh_rate").stdout.trim().toFloatOrNull()
+        } ?: return@LaunchedEffect
+        RefreshRate.entries.firstOrNull { it.hz == peak.toInt() }?.let { refreshRate = it }
+    }
     var photoQuality by remember { mutableStateOf(PhotoQuality.entries.getOrElse(prefs.getInt("photo_quality", 0)) { PhotoQuality.MP_12 }) }
 
     val t = { en: String, it: String -> if (italian) it else en }
@@ -107,10 +119,16 @@ fun QuickSettingsBar(
                 RefreshRate.HZ_60 -> listOf(
                     "settings put secure refresh_rate_mode 0",
                     "settings put global pms_settings_refresh_rate_enabled 0",
+                    "settings put system peak_refresh_rate 60.0",
+                    "settings put system user_refresh_rate 60.0",
                 )
-                RefreshRate.HZ_120 -> listOf(
+                // The peak must be written too: adaptive mode alone keeps whatever cap was
+                // last set, so 120Hz after an 80Hz cap stayed at 80.
+                RefreshRate.HZ_80, RefreshRate.HZ_120 -> listOf(
                     "settings put secure refresh_rate_mode 1",
                     "settings put global pms_settings_refresh_rate_enabled 1",
+                    "settings put system peak_refresh_rate ${rate.hz}.0",
+                    "settings put system user_refresh_rate ${rate.hz}.0",
                 )
             }
             for (cmd in cmds) {
@@ -195,7 +213,7 @@ fun QuickSettingsBar(
                         enabled = !isRunning,
                         onClick = {
                             refreshRate = rate
-                            prefs.edit().putBoolean("hz120", rate == RefreshRate.HZ_120).apply()
+                            prefs.edit().putInt("refresh_hz", rate.hz).apply()
                             applyRefreshRate(rate)
                         },
                     )

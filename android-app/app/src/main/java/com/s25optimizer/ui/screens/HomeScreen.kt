@@ -1,4 +1,4 @@
-﻿package com.s25optimizer.ui.screens
+package com.s25optimizer.ui.screens
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
@@ -92,7 +92,7 @@ fun HomeScreen(
                     fontWeight = FontWeight.Bold,
                 )
                 Text(
-                    "v2.3 • Galaxy S25 Edge",
+                    "v3.1 • Galaxy S25 Edge",
                     style = MaterialTheme.typography.labelMedium,
                     color = TextSecondary,
                 )
@@ -314,7 +314,7 @@ fun HomeScreen(
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
                 Text(
-                    "S25 Edge Optimizer v2.3",
+                    "S25 Edge Optimizer v3.1",
                     style = MaterialTheme.typography.labelSmall,
                     color = TextSecondary,
                 )

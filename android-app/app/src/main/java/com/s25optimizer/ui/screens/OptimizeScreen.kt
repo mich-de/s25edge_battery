@@ -1,4 +1,4 @@
-﻿package com.s25optimizer.ui.screens
+package com.s25optimizer.ui.screens
 
 import android.content.Intent
 import androidx.compose.animation.*
@@ -47,6 +47,7 @@ fun OptimizeScreen(
     executor: AdbExecutor,
     shizukuStatus: Boolean,
     appliedStates: Map<String, Boolean>,
+    unavailableIds: Set<String> = emptySet(),
     onAppliedStatesChanged: (Map<String, Boolean>) -> Unit,
     isRunning: Boolean,
     onRunningChanged: (Boolean) -> Unit,
@@ -64,6 +65,12 @@ fun OptimizeScreen(
     // Ids currently being written to the device. A row shows a spinner instead of its box
     // while it is in here, so the box never sits on a value the device has not confirmed.
     var busyIds by remember { mutableStateOf(setOf<String>()) }
+
+    // Why the last attempt on an entry did not stick, shown under its title until it does.
+    var failures by remember { mutableStateOf(mapOf<String, String>()) }
+    fun noteResult(id: String, reason: String?) {
+        failures = if (reason == null) failures - id else failures + (id to reason)
+    }
 
     // Filter out PER_APP_RR — that has its own screen
     val categories = remember {
@@ -84,7 +91,8 @@ fun OptimizeScreen(
         scope.launch(Dispatchers.IO) {
             onRunningChanged(true)
             try {
-                runOne(context, executor, opt, turnOn, onAppliedStatesChanged, onLog)
+                val reason = runOne(context, executor, opt, turnOn, onAppliedStatesChanged, onLog)
+                withContext(Dispatchers.Main) { noteResult(opt.id, reason) }
             } finally {
                 withContext(Dispatchers.Main) {
                     busyIds = busyIds - opt.id
@@ -96,15 +104,15 @@ fun OptimizeScreen(
 
     /** Same thing for a whole category, one entry after another. */
     fun toggleAll(opts: List<Optimization>, turnOn: Boolean) {
-        val targets = opts.filter { runnableNow(it, shizukuStatus) && (appliedStates[it.id] == true) != turnOn }
+        val targets = opts.filter { runnableNow(it, shizukuStatus) && it.id !in unavailableIds && (appliedStates[it.id] == true) != turnOn }
         if (targets.isEmpty()) return
         busyIds = busyIds + targets.map { it.id }
         scope.launch(Dispatchers.IO) {
             onRunningChanged(true)
             try {
                 for (opt in targets) {
-                    runOne(context, executor, opt, turnOn, onAppliedStatesChanged, onLog)
-                    withContext(Dispatchers.Main) { busyIds = busyIds - opt.id }
+                    val reason = runOne(context, executor, opt, turnOn, onAppliedStatesChanged, onLog)
+                    withContext(Dispatchers.Main) { busyIds = busyIds - opt.id; noteResult(opt.id, reason) }
                 }
             } finally {
                 withContext(Dispatchers.Main) {
@@ -329,7 +337,9 @@ fun OptimizeScreen(
                                     opt = entry,
                                     applied = appliedStates[entry.id] == true,
                                     busy = entry.id in busyIds,
-                                    enabled = runnableNow(entry, shizukuStatus),
+                                    enabled = runnableNow(entry, shizukuStatus) && entry.id !in unavailableIds,
+                                    unavailable = entry.id in unavailableIds,
+                                    failure = failures[entry.id],
                                     italian = italian,
                                     onToggle = { on -> toggle(entry, on) },
                                 )
@@ -363,7 +373,7 @@ private suspend fun runOne(
     turnOn: Boolean,
     onAppliedStatesChanged: (Map<String, Boolean>) -> Unit,
     onLog: (String) -> Unit,
-) {
+): String? {
     val lines = mutableListOf<String>()
     val ok =
         if (turnOn) OptimizationRunner.apply(executor, opt) { lines += it }
@@ -397,7 +407,15 @@ private suspend fun runOne(
     // rather than as an option the user simply never enabled.
     if (turnOn && observed) AppliedHistory.markApplied(context, opt.id)
     if (!turnOn) AppliedHistory.markReverted(context, opt.id)
+
+    if (opt.isOneShot() || observed == turnOn) return null
+    // The first line the shell complained on says more than a generic "did not apply".
+    return lines.firstOrNull { l -> FAILURE_HINTS.any { l.contains(it, ignoreCase = true) } }
+        ?.trim()?.take(140)
+        ?: ""
 }
+
+private val FAILURE_HINTS = listOf("ERR", "Failure", "Exception", "Error", "not found", "denied", "Unknown")
 
 // ── Single Optimization Item ──
 @Composable
@@ -406,6 +424,8 @@ private fun OptimizationItem(
     applied: Boolean,
     busy: Boolean,
     enabled: Boolean,
+    unavailable: Boolean = false,
+    failure: String? = null,
     italian: Boolean,
     onToggle: (Boolean) -> Unit,
 ) {
@@ -449,7 +469,11 @@ private fun OptimizationItem(
         Column(modifier = Modifier.weight(1f).padding(vertical = 12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = if (italian) opt.titleIt else opt.titleEn,
+                    text = (if (italian) opt.titleIt else opt.titleEn).let { title ->
+                        // The switch turns these apps off, so the row says so: ON = disabled.
+                        if (opt.category == Optimization.Category.BLOAT) (if (italian) "Disattiva " else "Disable ") + title
+                        else title
+                    },
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Medium,
                     color = if (applied) TextPrimary else TextPrimary.copy(alpha = 0.85f),
@@ -497,7 +521,18 @@ private fun OptimizationItem(
                 // say it continued, so a row looked like it had a truncated sentence in it.
                 overflow = TextOverflow.Ellipsis,
             )
-            if (!enabled) {
+            val (statusText, statusColor) = when {
+                unavailable -> (if (italian) "App non installata su questo telefono" else "App not installed on this phone") to TextSecondary
+                failure != null -> (if (italian) "Non applicata: " else "Not applied: ") +
+                    failure.ifEmpty { if (italian) "il telefono non ha accettato la modifica" else "the phone did not take the change" } to CoralAccent
+                opt.isOneShot() -> "" to TextSecondary
+                applied -> (if (italian) "● Applicata" else "● Applied") to accent
+                else -> (if (italian) "○ Non applicata" else "○ Not applied") to TextSecondary
+            }
+            if (statusText.isNotEmpty()) {
+                Text(statusText, style = MaterialTheme.typography.labelSmall, color = statusColor, maxLines = 2, overflow = TextOverflow.Ellipsis)
+            }
+            if (!enabled && !unavailable) {
                 Text(
                     if (italian) "Richiede Shizuku" else "Needs Shizuku",
                     style = MaterialTheme.typography.labelSmall,

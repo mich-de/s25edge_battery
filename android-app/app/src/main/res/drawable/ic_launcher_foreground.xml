@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Technical Minimal launcher icon: accent dot, "S25", hairline battery, "EDGE·OPT".
+     Everything sits inside the 66dp adaptive-icon safe circle (centre 54,54). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- accent dot -->
+    <path
+        android:fillColor="#FF5A1F"
+        android:pathData="M36,37m-3,0a3,3 0,1 1,6 0a3,3 0,1 1,-6 0" />
+
+    <!-- "S25" in segment strokes -->
+    <path
+        android:strokeColor="#F2F2F2"
+        android:strokeWidth="1.6"
+        android:strokeLineCap="square"
+        android:pathData="M55,33h5 M55,33v4 M55,37h5 M60,37v4 M55,41h5
+            M63,33h5 M68,33v4 M63,37h5 M63,37v4 M63,41h5
+            M71,33h5 M71,33v4 M71,37h5 M76,37v4 M71,41h5" />
+
+    <!-- battery body and terminal -->
+    <path
+        android:strokeColor="#F2F2F2"
+        android:strokeWidth="1.6"
+        android:pathData="M34,47h40a2,2 0,0 1,2 2v10a2,2 0,0 1,-2 2h-40a2,2 0,0 1,-2 -2v-10a2,2 0,0 1,2 -2z" />
+    <path
+        android:fillColor="#F2F2F2"
+        android:pathData="M77.5,51h2v6h-2z" />
+
+    <!-- charge: five solid cells -->
+    <path
+        android:fillColor="#F2F2F2"
+        android:pathData="M35,50h3.4v8h-3.4z M40.6,50h3.4v8h-3.4z M46.2,50h3.4v8h-3.4z
+            M51.8,50h3.4v8h-3.4z M57.4,50h3.4v8h-3.4z" />
+    <!-- remaining capacity: dim dots -->
+    <path
+        android:fillColor="#5A5A5A"
+        android:pathData="M63.4,53.4h1.2v1.2h-1.2z M66.9,53.4h1.2v1.2h-1.2z M70.4,53.4h1.2v1.2h-1.2z" />
+
+    <!-- "EDGE·OPT" -->
+    <path
+        android:strokeColor="#BDBDBD"
+        android:strokeWidth="1.1"
+        android:strokeLineCap="square"
+        android:strokeLineJoin="miter"
+        android:pathData="M32,67h3.6 M32,67v5 M32,69.5h3 M32,72h3.6
+            M37.4,67h2.6l1,1v3l-1,1h-2.6z
+            M46.4,67h-3.6v5h3.6v-2.5h-1.6
+            M48.2,67h3.6 M48.2,67v5 M48.2,69.5h3 M48.2,72h3.6
+            M57,67h3.6v5h-3.6z
+            M62.4,72v-5h3.6v2.5h-3.6
+            M67.8,67h3.6 M69.6,67v5" />
+    <path
+        android:fillColor="#FF5A1F"
+        android:pathData="M54.2,68.9h1.2v1.2h-1.2z" />
+</vector>
